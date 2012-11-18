@@ -35,7 +35,7 @@ INPUTS    :=
 BIBFILE   := dissertation.bib  
 BIBSTYLES := ThesisPUC_uk.bst
 INPUTENCS := noaccent.def
-EPSPICS   := ctor4_none.eps puc.ps  
+EPSPICS   := puc.ps  
 
 # END DEPENDENCIES
 

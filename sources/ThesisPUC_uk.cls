@@ -119,7 +119,7 @@
 
 % fonts and symbols
 \RequirePackage{amsfonts}
-\RequirePackage[latin1]{inputenc}
+\RequirePackage[utf8]{inputenc}
 
 % graphics inclusion (in particular the PUC logo)
 \RequirePackage[dvipdfm]{graphicx}
