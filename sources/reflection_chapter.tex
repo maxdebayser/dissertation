@@ -1,0 +1,52 @@
+\documentclass[a4paper,6pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{amssymb}
+\bibliographystyle{unsrt}
+\usepackage{listings}
+\usepackage{fullpage}
+\usepackage[bookmarks]{hyperref}
+
+\usepackage[section]{minted}
+
+\title{
+  \begin{center}
+    \includegraphics[width=200pt]{graphics_tables/bras_vert_cor.eps}
+  \end{center}
+  \begin{center}
+  \end{center}
+   Research Design and Academic Writing 2012.2\\
+  \textit{Runtime introspection for C++11}
+}
+
+\author{Maximilien de Bayser}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\begin{abstract}
+Many object-oriented languages support some kind of runtime introspection that allows programmers to
+navigate through meta-data describing the available classes, their attributes and methods. In general,
+the meta-data can be used to instantiate new objects, manipulate their attributes and call their methods.
+The meta-programming enabled by this kind of reflection has proven itself useful in a variety of applications
+such as object-relational mappings and inversion-of-control containers and test automation
+
+Motivated by the need of programmatic support for composition and configuration of software components
+at runtime, in this work we show how to implement a runtime reflection support for \texttt{C++11}, using the available
+runtime type information, template metaprogramming and source code analysis. We will show the capabilities
+of the reflection \texttt{API} and the memory footprint for different kinds of meta-data.
+The API relies on a few features introduced by C++11, the new ISO standard for C++.
+Our reflection system is not invasive as it requires no modifications whatsoever of the application code. 
+\end{abstract}
+
+
+\section{Introduction}
+
+\input{reflection}
+
+\bibliography{dissertation}
+
+\end{document}

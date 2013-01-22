@@ -11,7 +11,7 @@
 
 ######################### Programs ################################
 
-LATEX	    = latex -src-specials -interaction=nonstopmode
+LATEX	    = latex -src-specials -interaction=nonstopmode -shell-escape
 BIBTEX	  = bibtex
 MAKEINDEX = makeindex
 XDVI	    = xdvi -gamma 4
