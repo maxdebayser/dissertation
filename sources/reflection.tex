@@ -1,3 +1,5 @@
+% talvez seja uma boa usar as definicoes e termos do Lakos da secao 5.4
+
 Every computational system is built to solve a particular problem. As a consequence, all data structures and procedures
 of a program represent this particular problem domain. A reflective system is one that is augmented with a representation
 of itself. In other words, a reflective program can perform computations about its own computation.
@@ -456,7 +458,7 @@ by types or integer constants. This makes it possible, for example, to write a l
 to \texttt{void*} pointers as is common in \texttt{C}. With the intention of allowing reusable data structures and algorithms, the designers
 of \texttt{C++} introduced a Turing-complete compile-time language. This has originated a number of interesting techniques called template
 meta-programming, that were exploited to generate optimal linear algebra code\cite{veldhuizen}, create concrete products out of product
-lines\cite{czarnecki} and implement object-oriented design patterns efficiently \cite{alexbook}. The introduction of templates that accept
+lines\cite{Czarnecki98} and implement object-oriented design patterns efficiently \cite{alexbook}. The introduction of templates that accept
 a variable number of arguments in \texttt{C++11}, known as \emph{variadic templates}, has greatly improved the programming style for an unknown number
 of arguments.
 
@@ -1228,6 +1230,40 @@ constant increment for each added parameter.
 While this overhead can be prohibitive for calling small functions in tight inner loops, it should be acceptable for the configuration and composition
 of components as these are typically done only once at start-up.
 
+% analise mais qualitativa
+
+For a more qualitative analysis we can adopt the following design principles for a reflection \texttt{API} by Bracha and Ungar \cite{Bracha}:
+
+\begin{enumerate}
+ \item \textbf{Encapsulation} Meta-level facilities must encapsulate their implementation
+ \item \textbf{Stratification} Meta-level facilities must be separated from base-level functionality
+ \item \textbf{Ontological Correspondence} The ontology of meta-level facilities should correspond to the ontology of the language they manipulate
+\end{enumerate}
+
+The encapsulation principle requires that the reflection \texttt{API} should not be tied to any particular implementation. It should be possible
+to use several plugable sources of reflection data. For example, it should be possible to use a remote meta-data source for remote objects.
+Although \texttt{SelfPortrait} at the present time only uses one back-end for meta-data obtention, its \texttt{API} is in not tied to it. All \texttt{API}
+classes are just handle that contain opaque pointers to the actual meta-data classes. In principle, this allows to change the back-end or even
+support plugable back-ends without requiring any change to user code.
+
+The stratification principles dictates that the access to meta-data should be kept separate from a language's basic constructs. The reasoning behind this
+is that it should be possible to safely discard meta-data if it isn't used by an application, reducing it's memory footprint. Bracha and Ungar point out
+that this is difficult in \texttt{Java} because the access to meta-data is given by a method of the \texttt{java.lang.Object} universal base class.
+Proving that a program written in \texttt{Java} does not need the meta-data would require static analysis to prove that this method is never invoked.
+In our approach all access to meta-data requires the inclusion of the \texttt{reflection.h} header file and the invocation of static member functions
+of the \texttt{Class} and \texttt{Function} meta-classes, making it easy to determine whether this functionality is used or not. In addition,
+the meta-data for a module can be kept in a separate module and linked only if required by an application. And finally, because \texttt{SelfPortrait} is
+implemented as a library, it can be left out completely.
+
+Ontological correspondence requires that the entire language be reflected, including not only classes and method but also source-code entities such
+as statements and expressions. Although in many cases it would be useful to have such a complete reflection of the language, for our purposes we
+are only interested in reflecting the kind of entities that can be manipulated at runtime. Furthermore, the development effort of reflecting a such a
+complex language as \texttt{C++} in its entirety would hardly be justified in our case. Nonetheless, reflecting the whole language at compile-time
+and runtime levels could be an interesting prospect.
+
+
+
+% seria legal adicionar uma pequena secao com o binding de Lua.
 
 \section{Conclusion}
 \label{conclusion}
