@@ -1,1 +1,159 @@
-\chapter{Introduction}
+This dissertation is about the reuse of high performance software, or more specifically about
+high performance software components. In the past 15 years several languages
+based on virtual machines became popular making it easier to write portable and reusable code.
+In addition, these languages where developed having programmer productivity in mind, featuring garbage
+collection, dynamic typing, built-in reflection support, unified standard libraries and a syntax more
+ameniable for development tools. All this flexibility is possible because these languages are farther
+away from the underlying hardware, but this comes at a performance price. Even if techniques such
+as just-in-time compiling \cite{Aycock} can significantly improve CPU intensive micro-becnhmarks,
+these languages can introduce a significant overhead in memory acces operations. In the past
+years we have seen huge improvements in processor speed but the RAM access speed has increased at
+a smaller rate. To counter this problem modern processors typically have three levels of cache to increase
+memory access operation. Altough caching improves performance, it also makes it very sensitive to the memory
+layout of data structures. High performance data structures have to maximise cache hits. Even worse
+is that multicore processors have separate level-one caches for each core. Every time a core updates
+a memory location the other caches must be updated if they are caching this same location, causing
+memory access stalls. Because cache lines contain several words, it can happen that two cores update
+different memory locations that happen to fall into the same cache unit. When this happens, both caches
+are constantly synchronized causing considerable slowdown. This is called \emph{false sharing}.
+By denying programmers the possibility to fine-tune the memory layout of their data structures,
+higher-level languages can impose a significant performance overhead. These languages also require
+a more sofisticated infrastructure that can make them unsuitable for embedded devices.
+When more control is needed languages closer to the hardware have to be employed at the expense
+of flexibility and programmer productivity.
+
+Of course, choosing a language is an engineering trade-off. Often it is cheaper to maximise programmer
+productivity. The problem is that today's low level programming languages are more complicated than
+strictly necessary. Basically today the options are pure C or C++. Fortran and Objective-C are also
+important native languages but are more restricted to specific markets. Google's Go language could
+has still to get a more widespread adoption. While C is very successful as a ``high-level assembler'',
+it has no support for object-oriented programming and therefore is not very suitable for component
+based development. C++ on the other hand supports programming at a higher level of abstraction but
+suffers from several problems such as a very convoluted syntax that makes it difficult to develop
+tooling and represents a steep learning curve. In addition it has no complete introspection support.
+Altough the language can be difficult to master the primary reason why it is difficult to develop
+reusable components in C++ is because the language encourages a strong coupling of application code
+to infrastructure API's. Due to the difficulty of tool development and the lack of introspection
+it is easier for framework developers to leave the development of glue code to the application
+programmer. To save time this glue code is usually tangled with application code instead of
+being an insulating layer. The result is that software in C++ is usually tightly coupled to
+the infrastructure. In other languages such as Java, techniques relying on introspection
+make it possible to develop frameworks that adapt themeselves to the business code instead of
+the other way around. The result is that business code can be kept clean of references to infrastructure
+code resulting on components that are portable between different frameworks and more reusable.
+
+The present work attempts to improve the situation of C++ development by providing a portable
+introspection support on which non-invasive frameworks can be based. In addition we have developed
+a component container that supports the composition and configuration of components without requiring
+components to be explicitly develiped for it.
+
+What we want to be able to do is:
+
+\begin{itemize}
+ \item Develop components that are truly independently deployable
+ \item To compose independently developed components
+\end{itemize}
+
+In the past two decades, with the success of object-oriented programming, remote method invocation (\texttt{RMI})
+has proven itself an effective way of building distributed systems. Even if inherent characteristics
+of remote communication cannot be made totally transparent \cite{Kendall}, remote method
+invocation is a powerful abstraction because it is easy to reason about. Applying the same object-oriented
+methodology across process boundaries, the programmer can effectively think about his application as
+a set of interacting objects at all levels.
+
+Unsurprisingly, there are many different and incompatible middleware platforms based on \texttt{RMI}. They differ
+in communication protocol and secondary services they offer, but core functionality is mostly the
+same. Many applications would be equally well served by several \texttt{RMI} implementations and ideally they should
+be portable between them. Like everything else, middleware platforms are subject to
+the law of evolution, and may prevail or disappear over time. Being portable is, consequently, a matter of
+minimizing the risk of being stuck with an abandoned middleware.
+
+While portability is mostly a long-term concern, the incompatibility of middleware platforms introduces
+the more immediate problem of interoperability, or the lack thereof. Dependencies frequently pose a problem
+for effective software reuse and with distributed objects this is even more so. Distributed objects are used through
+the middleware they are built on and, therefore, the interoperability is limited to software built using the
+same platform. In fact, it is interesting to note that some middlewares impose such a strong coupling of objects to
+their \texttt{API} that it becomes difficult to call methods in the same process with no remote communication at all.
+
+To relieve the problem of interoperability several solutions involving the translation of messages have been
+proposed. The simplest solution is to forward messages for a specific object. For example, a \texttt{SOAP} front-end can
+be created for a specific \texttt{CORBA} object. A more general approach is to translate the messages transparently
+from one middleware protocol to another. As more middleware protocols are added, however, the number of translators
+needed rises quadratically. To address this problem, some solutions translate all messages to an intermediate format,
+which must be a functional subset of all supported formats, at the expense of expressivity. While these solutions
+are certainly needed for the integration of legacy systems, they don`t address the source of the interoperability
+problem which is the tight coupling that most middlewares impose on distributed applications. If applications were
+easily portable between middlewares, there would be no need to translate messages.
+
+The recommended solution in software engineering is to build layers to insulate
+the application code from third-party libraries that could become an undesirable dependency \cite{Sommerville}.
+Building such a layer, however, is often too labour-intensive and cannot realistically be expected from programmers
+who already struggle with short deadlines to deliver the code that really matters, which is the application code.
+Ideally, the insulation layer would be generated automatically, and in fact it should not be too difficult. In order
+to un-marshal the arguments and call a method, the middleware only needs to know the method`s signature. On the
+other hand, the client could be independent of middleware if it called the remote object through an abstract
+interface. If the application was built using interface-based programming, \cite{Pugh} the interfaces could naturally
+be used by the middleware to set up the client and server stubs. like in \texttt{\texttt{Java} \texttt{RMI}}. The client stub would
+implement this interface and the server stub would call an user-supplied object that implements this same interface.
+
+The other problem left to solve is how a client would locate the right server object without resorting to middleware-specific \texttt{API}s.
+The answer is that it should not have to. Actively searching for services simply cannot be done in a platform-independent way.
+Applying the principle of inversion of control \cite{Fowler2} the client simply declares that it depends on a service implementing
+a certain interface and during the configuration phase it is supplied with a reference to a conforming service.
+
+All this might seem too idealistic to be feasible, but such a platform does exist: the \texttt{Java} implementation of the Service Component
+Architecture (\texttt{SCA}). An \texttt{SCA} application server reads a configuration file that states how services are to be configured
+and connected. The \texttt{RMI} technology used to connect the objects can be configured explicitly and can be changed without requiring
+changes to application objects. Unfortunately \texttt{SCA} for \texttt{Java} is an exception. The specification of \texttt{SCA} for C++, for example,
+ties distributed objects to its own \texttt{API}. The \texttt{RMI} protocol can be changed at will, but the code is no longer truly portable.
+While \texttt{Java} is well-suited for many applications, native code might be better for situations where execution speed or fast response
+times are required.
+
+We intend to modify an existing open-source implementation of \texttt{SCA} for \texttt{C++} to make it as easy to use and as
+flexible as the Java version. As we will see, the main reason for the difference between the two platforms is the lack of
+reflection for \texttt{C++}, so our proposed solution involves adding support for reflection. In this text, we will discuss
+the requirements and present the work that has already been done.
+
+
+\section{The relevance of native code}\label{sec:cpp}
+
+During the 2000s, managed languages such as \texttt{Java}, \texttt{C\#} and \texttt{Python} have been favored over C and \texttt{C++}.
+\footnote{We adopt the terms \emph{native} and \emph{managed} languages as they capture more accurately the essence
+of the difference between languages like \texttt{C++} and \texttt{C\#}}
+These languages emphasize programmer productivity over performance, while \texttt{C++} favors performance per cycle and thus per watt. 
+According to Sutter \cite{CPPAndBeyond2011}, this has been possible because the main computing paradigm didn't change much during these years,
+while the hardware performance kept increasing. However, in the last few years, there has been dramatic change on two fronts:
+mobile computing and servers.
+
+With the introduction of smartphones and tablets, new ways of user interaction have been made possible such as augmented reality. Some of
+these applications are very \texttt{CPU}-intensive and some require short response times in order to be useful. Clearly, these applications are in
+direct conflict with the general goal of preserving battery life. Therefore, the best possible performance per watt becomes essential
+and this is something dynamic languages cannot offer. Initially, the most popular smartphone platforms supported only applications
+written in managed languages, such as \texttt{Java} or \texttt{C\#}. However, the second generation of these platforms is now supporting native applications,
+which means applications written in C and \texttt{C++}.
+
+Moreover, with the explosion of web-based applications and cloud computing, significant demand has been placed on the server infrastructure.
+Most of these applications are supported by huge server farms which consume equally huge amounts of power. According to Hamilton, \cite{Hamilton}
+88\% of a datacenter's cost is directly related to hardware and power expenses. Therefore, it becomes essential to maximise the performance per watt ratio. Indeed, some of the biggest companies are changing their code bases to \texttt{C++}. Facebook,
+for example has developed an PHP to \texttt{C++} compiler, \texttt{HipHop} \cite{HipHop}, in order to meet the increasing performance demands. According to Facebook engineers,
+with \texttt{HipHop}, the same workload can be handled with a 50\% reduction in \texttt{CPU} usage in comparison to PHP. Another benefit is that, if a server farm requires
+less power consumption for the same functionality, it is also better for the environment.
+
+In addition to these questions, there is another change that is worth pointing out. The shift to multi-core architectures means that the speed of
+execution of sequential code is now effectively limited, at least for the next years. While many important algorithms and applications can be paralelized efficiently
+on current hardware, many algorithms are inherently serial or can't be run efficiently in parallel \cite{Madriles}. For these applications the performance per cycle
+will be absolutely essential.
+
+An interesting project that confirms the trend of native code revival is Google's Native Client \cite{NaCl}. The Native Client is an infrastructure embedded in Google's Chrome browser
+to enable the execution of x86, x86-64 and ARM native code on the client's machine. The motivations behind this project are better performance and integration with local
+resources like graphics and audio. This infrastructure forces the developer to provide one version of his application for each hardware platform, but there is a research
+project at Google called the Portable Native Client \cite{pNaCl} that proposes to deliver the executables in the form of LLVM's bytecode. This bytecode is then locally converted by LLVM to
+native bytecode.
+
+While there has been a return to \texttt{C++} in many areas, component software is mostly dominated by managed languages. Most
+component platforms for \texttt{C++} focus on embedded systems where performance has always been essential. Because of this,
+these platforms impose severe restrictions on components and are generally unattractive for application programming.
+However, we believe that now that performance is important once again, a flexible component platform for \texttt{C++} is called
+for. In 2011, a new \texttt{C++} standard was published \cite{CPP11} and the language is now much easier to use than in 1998.
+In addition to this, with compiler support, we intend to provide a few features of managed languages to our platform.
+We believe that it is possible to create a platform that is both efficient and easy to develop components for.

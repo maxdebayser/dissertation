@@ -12,7 +12,7 @@ without ambiguity we need to tie a few terms to very specific meanings. \emph{Co
 definitions we will first analyze why coarse grained units of reuse are needed.
 
 In the history of programming, there has always existed the desire to reuse existing work. In other words, designers have always
-striven to reduce the waste of programming effort. In 1968 McIlroy proposed that to turn the building of software into a truly
+striven to reduce the waste of programming effort. In 1968 McIlroy advocated that to turn the building of software into a truly
 industrial activity there should be a way of building applications by composing pieces of software available on the marketplace
 \cite{McIlroy}. The key, in his vision, was a concept called software components, in analogy to hardware components. Also in
 analogy to electrical and mechanical engineering there should be a wiring standard that would make the third-party composition
@@ -37,13 +37,24 @@ free to randomly assign class definitions to modules and there is no way of expr
 at a higher level than module dependencies that are resolved by the linker.
 
 This was a very unsatisfactory state of affairs as concepts from object orientation such as separation of interface and implementation
-and Liskov's substitution principle fitted perfectly into McIlroy's vision of software components \cite{Liskov}. Thus in the 1990's several attempts
-were made to create software components building in the ideas of software modules and object orientation. In the remainder of this
-chapter we will first go through the definitions of modules in section \ref{sec:modules}, and services in section \ref{sec:services}
-to establish them as basic constructs that can be used to build component standards. Libraries are covered in \ref{sec:libraries}
-as they share the primordial motivation of software reuse but are an essentially different concept. The chapter ends with section
-\ref{sec:components} covering modern definitions of software components and presenting some of the most important component
-technologies available.
+and Liskov's substitution principle fitted perfectly into McIlroy's vision of software components \cite{Liskov}. However, object-orientation
+has not failed, as is sometimes said, rather it was mistakingly seen as the solution for the reuse problem. As expressed by Knoernschild
+\cite{Knoernschild},
+
+\begin{quotation}
+``We need to break away from the thinking that objects help us create more reusable software.
+Instead, objects help us create more extensible software, which is an enabler of reuse.''
+\end{quotation}
+
+Individual classes cannot be units of reuse because they are too fine-grained to be independently released and deployed. This
+is nicely summarised in the Reuse/Release principle: \emph{The unit of reuse is the unit of release} \cite{Martin}.
+Consequently, in the 1990's several attempts were made to create coarse-grained units of software with object-oriented interfaces,
+that could be units of release. These units are called \emph{software components} and are built on the ideas of object-orientation,
+software modules and services. Thus in the remainder of this chapter we will first go through the definitions of modules in section
+\ref{sec:modules}, and services in section \ref{sec:services} to establish them as basic constructs that can be used to build
+component standards. Libraries are covered in \ref{sec:libraries} as they share the primordial motivation of software reuse but
+are an essentially different concept. The chapter ends with section \ref{sec:components} covering modern definitions of software
+components and presenting some of the most important component technologies available.
 
 
 \section{Modules}
@@ -59,8 +70,8 @@ A good description of the motivation for modular programming can be found in Par
 (3) comprehensibility - it should be possible to study the system one module at a time. The whole system can therefore be better designed because it is better understood.''
 \end{quotation}
 
-Although this lucidly states why modules are important, it doesn't really describe what they are. Perhaps the most complete
-definition was given by Kirk Knoernschild \cite{Knoernschild}:
+Although this lucidly states why modules are important, it doesn't really describe what they are. A more complete
+definition was given by Knoernschild \cite{Knoernschild}:
 
 \begin{quotation}
 ``A module is a deployable, manageable, natively reusable, composable, stateless unit of software that provides a concise interface to consumers''
@@ -173,19 +184,11 @@ as this would force clients to depend on the module of a specific implementation
 \section{Components}
 \label{sec:components}
 
-Before we begin to attempt any definition of what components are, we will try to make the point that something is still missing in the
-landscape of code reuse.
-
-\begin{enumerate}
- \item Modules are just containers of code
- \item Objects are too fine grained units of reuse
- \item Objects are not units of deployment, they are not physical entities.
- \item Dependencies between classes and procedures are mostly implicit
-\end{enumerate}
-
-Intuitively, what is needed is a concept that denotes a unit of both physical and logical design. We will call those units \emph{software components}.
-As is the case with other many other concepts, the term \emph{software component} means slightly different things to different people. Perhaps the
-most general definition, that encompasses the core notions behind components, is the one given by Grady Booch \cite{Booch87}:
+As discussed in the introduction of this chapter, to achieve reuse we need coarse-grained units of release with an
+explicit and abstract interface. Intuitively, what is needed is a concept that denotes a unit of both physical and
+logical design. We will call those units \emph{software components}. As is the case with many other concepts,
+the term \emph{software component} means slightly different things to different people. Perhaps the most general
+definition, that encompasses the core notions behind components, is the one given by Grady Booch \cite{Booch87}:
 
 \begin{quotation}
 ``A reusable software component is a logically cohesive, loosely coupled module that denotes a single abstraction''
@@ -313,3 +316,105 @@ The CORBA Component Model (CCM) is OMG's response to EJB and proposes a language
 on top of CORBA, a language independent standard for remote objects and remote method invocation \cite{CCM}. CCM extends CORBA's interface definition language
 (IDL) to include the concept of component connectors such as facets and receptacles. Unlike EJB and COM, by enforcing explicit receptacles, support
 a connection-oriented style of composition.
+
+\section{Modularity Patterns and Physical Design}
+\label{sec:patterns}
+
+Because the unit of reuse is the unit of release special care has to be put into physical design.
+The relationship between modules is defined by the logical relationship of classes and procedures
+and how they are assigned to physical units. If two related classes are assigned to different
+modules a physical dependency is created. There is a lot of literature on object-oriented design
+that shows how create extensible and reusable logical designs but few treat the physical design
+that must be considered to make reuse possible. This section is based on the work of Szyperski
+\cite{Szyperski}, \cite{Lakos}, \cite{Martin} and \cite{Knoernschild}.
+
+Creating units of independent reuse and deployment is not an easy task. The more flexible and
+configurable a unit of reuse is, the more difficult it is to use because more decisions are
+delegated to the user. In the same way, a coarse-grained physical unit is easier to use
+but also less flexible because its impossible to  use only a small part of it. These 
+conflicting concerns are well summarized in Szyperski's statement:
+
+\begin{quotation}
+``Maximizing reuse minimizes use'' 
+\end{quotation}
+
+Most of the time there are no hard rules that can be followed to create code that is both reusable,
+and easy to use. The engineer has to find the best trade-off between these conflicting requirements.
+However there are principles that can be followed that lead to good designs.
+In his excelent book, Java Application Architecture, Knoernschild listed a series of physical
+design patterns or guidelines for sound physical design. Although his guidelines are directed
+at module design, his concept of modules is very close to Szyperski's notion of software componentes
+and actually his principles are even more important when applied to components.
+
+\textbf{External Configuration}:
+Modules and components often need information that instructs them
+on how to interact with their environment. For example, modules often build on the functionality
+of other modules. But often the information of which external module to use is hard-coded as
+is often the case with libraries that use other libraries. To create really indepentently reusable
+components that have no implicit dependencies on their environment we need to move these
+from hard-coded information to implicit configuration that can be exteranally controlled.
+The same applies to other kinds of information. For example a logging component should not
+write its output to a fixed location but rather allow this location to be configured externally.
+External configuration allows a wider range of behaviors of component making it potentially
+more useful.
+
+There are several ways of allowing for external configuration. It could be done with configuration
+files, but it difficult to do this without making several assumptions on the environment such as
+the existence of a file system, and a specifica path in that filesystem. It is best to provide a
+programatic interface for external configuration. In chapter \ref{chap:ioc} we discuss the best
+way to do this.
+
+\textbf{Cohesion}:
+This pattern states that modules should be functionally cohesive. Classes that are used together should
+be put in the same module. Conversely, unrelated classes belong in different modules. Cohesion has several
+advantages. Cohesive modules are easier to understand because they have a single, well defined role in a
+larger system. Also, with a better understanding comes a better maintainability. Cohesive module also tend
+to have fewer dependencies. As random functionality is thrown into a single module, chances are that each
+functionality introduces dependencies to external modules. When a module with low cohesion is used, it is
+likely that only a small subset of its functionality is needed. However as a consequence of the common reuse
+principle \cite{Martin}, the use of a part of a module forces the inclusion of the whole including all
+external dependecies. This complicated deployments a several external modules must be installed as well
+even if they are pulled in by the parts that are not used.
+
+\textbf{Independent deployment}:
+The most reusable module or component is one that can be deployed without requiring the deployment of any other
+modules. Of course this is not always possible, but one should try to minimize outgoing dependencies.
+If a lot of functionality is put into a module to minimize its dependencies, cohesion will suffer.
+The key is to find a balance between the two concerns.
+
+\textbf{Acyclic relationships}:
+Relationship between modules should always be acyclic. Modules that are part of a cycle of dependencies
+must always be deployed together, pretty much defeating the purpose of modularizing code in the first place.
+Cyclic dependencies are induced by cyclic class dependencies and can be broken using the techniques of
+\emph{demotion} and \emph{escalation} \cite{Lakos}
+
+\textbf{Container Independence}:
+Modules should be as independent on their runtime container as possible. Modules that depend heavily on their
+container are not portable to other runtime environments. In addition it can be difficult to effectively
+test modules with strong container coupling. This guidline is sometimes difficult to achieve because
+programming frameworks often impose a strong coupling. As an example, components that are built on top
+of CCM must inherit from abstract bases classes generated by CCM's tools. As inheritance is the strongest coupling
+these components are difficult to port to other platforms. Container independence requires abstracting the
+runtime environment away. In chapters \ref{chap:ioc} and \ref{chap:sca} treat this issue in depth.
+
+\textbf{Published Interface}:
+The public interface of a module should be well known. Conversely, internal implementation classes
+should always be encapsulated. While this is not mandatory for modules, it is one of the defining
+traits of software components.
+
+\textbf{Separate Abstraction}:
+This pattern states that the abstract interface of a module and its implementation should be put in separate modules.
+This is essential if we want to allow alternative implementations of an abstraction. If the interface and one implementation
+are packaged together it is still possible to plug another implementation into the client modules but now two implementations
+must be deployed together with their dependencies.
+
+This pattern is essential for component frameworks that use interfaces to express service contract.
+
+\textbf{Abstract Module}:
+This pattern states that one module should only depend on the abstract interface of other modules. Depending directly on
+concrete classes couples a module unecessarily to a fixed implementation, whereas dependending on abstract classes allows
+to plug alternative implementation. Ideally a module should only depend on pure interface modules as resulting from the
+application of the Separate Abstaction pattern. However this pattern introduces a significant difficulty. A module
+can only use abstract references to objects but behind those references are objects of concrete implementation classes.
+But it cannot instantiate these because this would couple the module to the concrete implementation classes. This problem
+is a crucial one and chapter \ref{chap:ioc} is entirely devoted to this subject.
