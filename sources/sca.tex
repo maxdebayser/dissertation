@@ -1,3 +1,5 @@
+% separation of concerns!!!
+
 \section{The Model}
 In chapter \ref{chap:components} we have described how effective components based on services can be, as they need to be deployed only
 once and can be used by many loosely-coupled clients. But the usual service oriented middleware approach has several disadvantages.
@@ -338,7 +340,7 @@ implementation registry consists of pointers to objects that implement the \text
 %TODO isso nao eh estritamente correto
 \texttt{ImplementationExtensions} are builder objects that are given the configuration of a component and must return a
 configured instance. This configured instance is composed of a collection of endpoints that implement interfaces such as
-\texttt{ServiceBinding}, \textttt{ReferenceBinding}, \texttt{ServiceProxy} and \texttt{ServiceWrapper}. The runtime
+\texttt{ServiceBinding}, \texttt{ReferenceBinding}, \texttt{ServiceProxy} and \texttt{ServiceWrapper}. The runtime
 then uses these endpoints to compose components and relay request messages between them.
 %TODO listar o Operation
 The \texttt{ServiceWrapper} is an interface for objects that receive a serialized parameter pack and relay them
@@ -499,7 +501,7 @@ the runtime as a key in the \texttt{ComponentContext}
 
 Tuscany native also requires a componentType file for each component instantiated in the composite file.
 This file contains a description of a components services and references and their interface. Listing
-\ref{ref:calccppccomponenttype} shows the componentType file for the calculator component. Notice
+\ref{lst:calccppccomponenttype} shows the componentType file for the calculator component. Notice
 the \texttt{$<$interface.cpp$>$} element selecting the original C++ interface extension.
 
 \begin{listing}

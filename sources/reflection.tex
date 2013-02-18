@@ -458,7 +458,7 @@ by types or integer constants. This makes it possible, for example, to write a l
 to \texttt{void*} pointers as is common in \texttt{C}. With the intention of allowing reusable data structures and algorithms, the designers
 of \texttt{C++} introduced a Turing-complete compile-time language. This has originated a number of interesting techniques called template
 meta-programming, that were exploited to generate optimal linear algebra code\cite{veldhuizen}, create concrete products out of product
-lines\cite{Czarnecki98} and implement object-oriented design patterns efficiently \cite{alexbook}. The introduction of templates that accept
+lines\cite{Czarnecki98} and implement object-oriented design patterns efficiently \cite{Alexandrescu1}. The introduction of templates that accept
 a variable number of arguments in \texttt{C++11}, known as \emph{variadic templates}, has greatly improved the programming style for an unknown number
 of arguments.
 
@@ -735,8 +735,8 @@ expected type and to extract the hidden value using this type. To fulfill this r
 commonly known as \emph{variant}.
 
 Variants are like \texttt{void*} pointers enhanced with type information and life-cycle management.
-Most variants are implemented either using unions, as described by Alexandrescu\cite{alexunions}, or usings template class implementing
-an abstract interface, a technique called \emph{type erasure} \cite{becker} described by Henney\cite{henney}. boost::any and boost::variant\cite{boost}
+Most variants are implemented either using unions, as described by Alexandrescu\cite{Alexandrescu2}, or usings template class implementing
+an abstract interface, a technique called \emph{type erasure} \cite{Becker} described by Henney\cite{Henney}. boost::any and boost::variant\cite{boost}
 are good examples of both alternatives. The problem of the union approach is that the variant is restricted to a finite set of types, so our variant
 implementation follows the type erasure approach due to its greater flexibility. The improvement of our variant over existing implementations
 is that even types without default or copy constructor can be used. Indeed, any constructor can be used. In addition to values, our variant
@@ -876,7 +876,7 @@ and their types, as well as the return type (there are other subtleties as well,
 but for the sake of simplicity we will ignore them for now). Again, we use variadic templates to pass these types to the call function.
 
 It is difficult to manipulate unexpanded parameter packs and pass them as arguments to other templates, but we can employ a helper
-template called Typelist, due to Alexandrescu\cite{alexbook}. Basically, Typelists use a head and tail structure to encode a sequence
+template called Typelist, due to Alexandrescu\cite{Alexandrescu1}. Basically, Typelists use a head and tail structure to encode a sequence
 of types as a type. They are very useful to group together a list of unrelated types, such as the argument types of a function.
 Alexandrescu showed how to implemented algorithms to find types in typelists, insert new types, query types by position and sort
 them from the most abstract to the most derived. The only drawback in his implementation was that \texttt{C++98} did not support
@@ -888,7 +888,7 @@ With the vector of wrapped arguments and the Typelist containing the expected ty
 invoke a method. The next problem to be addressed is how to expand the arguments inside the parentheses of the call expression.
 We cannot use iteration inside the parentheses. We could somehow capture the arguments to the typelist as an unexpandend parameter,
 and pack and re-expand them. However, types cannot be used to index the elements of a vector. The answer is to use a helper template
-call Indices, an idea by Preney\cite{preney} to handle the problem of passing the content of an std::tuple as parameters to a function
+call Indices, an idea by Preney\cite{Preney} to handle the problem of passing the content of an std::tuple as parameters to a function
 call. Indices are just a way to encode a sequence of numbers as a type. Because integers can be used to implement compile-time recursion,
 we are able to generate a type containing the numbers from 0 to N. If we capture the unexpanded pack of integers, we can use it to
 generates indices for the typelist and the vector at the same time. We use the expansion of an expression containing the indices to
@@ -1126,7 +1126,7 @@ to share the same code for different methods, we have no choice but repeating it
 there is no difference in the code generated for a method with three parameters and one with four, but, for example,
 there should be no difference in the machine code generated for two methods of the same class with almost the same signature,
 differing only in constness. Experience with existing compilers suggests that one could cast a method pointer to another 
-one of a similar type \cite{clugston} and call it without problems if certain restrictions are observed. The casting of method pointers could
+one of a similar type \cite{Clugston} and call it without problems if certain restrictions are observed. The casting of method pointers could
 be used to reduce the repetition of equal code, but we would no longer be standards-conforming, as the standard states that calling
 a converted method pointer results in undefined behavior.
 
