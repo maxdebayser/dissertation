@@ -7,8 +7,8 @@ a middleware as described in this dissertation could ease the integration of nat
 Of course a barrier to a more widespread adoption of native components for service-based systems is precisely
 the fact that they have to be compiled for every computer architecture they are to be deployed to. However
 there a some interesting developments in that direction. For example, Google's Portable Native Client (\texttt{pNaCL}) \cite{pNaCl}
-allows to deploy \texttt{C++} programs under the form of \texttt{LLVM}'s bytecode that is the locally JIT-compiled to native code.
-This technology could potentially be reused to be the base of C++ application servers. Another work in this
+allows to deploy \texttt{C++} programs in the form of \texttt{LLVM}'s bytecode that is the locally JIT-compiled to native code.
+This technology could potentially be reused as the base of C++ application servers. Another work in this
 direction is \texttt{dlSBRT} by Al-Gahmi and Cook \cite{Al-Gahmi}. They describe a mechanism to provide low-level services
 to applications such as meta-data, call-graph instrumentation or more conventional services such an LDAP
 directory services. These services can intercept events in the application lifetime such as the resolution of

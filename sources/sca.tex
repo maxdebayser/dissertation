@@ -1,5 +1,3 @@
-% separation of concerns!!!
-
 \section{The Model}
 In chapter \ref{chap:components} we have described how effective components based on services can be, as they need to be deployed only
 once and can be used by many loosely-coupled clients. But the usual service oriented middleware approach has several disadvantages.
@@ -10,12 +8,12 @@ factors. The first one is that SOA technologies are not directly interoperable. 
 force a programming style that unnecessarily tangles integration code with business logic, which prevents one from porting
 existing services to a new implementation technology. Pichler \emph{et al.} identified several problems with the \texttt{EJB}
 component model, but it applies to others like \texttt{CCM} as well \cite{Pichler}. They identified the following problems:
-\textbf{Lack of Tailorability}. The EJB specification does not define a way to extend container with new services or configure
+\textbf{Lack of Tailorability.}. The EJB specification does not define a way to extend container with new services or configure
 existing ones. This forces component developers to address crosscutting concerns in the component implementation leading to application
 code that is unnecessarily tangled with infrastructure code. In addition, it is not possible to remove unneeded service from
-the EJB container, forcing the deployment of the entire EJB environment. \textbf{Lack of checking and enforcement} The EJB
+the EJB container, forcing the deployment of the entire EJB environment. \textbf{Lack of checking and enforcement.} The EJB
 specification expects the programmer to follow several programming rules and idioms that cannot be enforced by the compiler.
-In addition, common use of EJB's API involves loss of static type safety. \textbf{Insufficiency} It is not possible to host
+In addition, common use of EJB's API involves loss of static type safety. \textbf{Insufficiency.} It is not possible to host
 ordinary Java classes in an EJB container. To be supported by the container, classes must be developed especially for EJB.
 
 The Service Component Architecture (SCA) standard is an attempt to improve this situation. It specifies a framework
@@ -37,8 +35,8 @@ To direct the composition and configuration SCA provides an extensible XML langu
 
 \subsection{Components}
 
-The most important entity in SCA are, of course, components. Components provide services and can have configuration properties
-and dependencies on other services. Componentes can be implemented in any language if there is an extension for it. A component
+The most important elements of SCA are, of course, components. They provide services and can have configuration properties
+and dependencies on other services. Components can be implemented in any language if there is an extension for it. A component
 implementation extension is basically a plug-in that is responsible for loading a component in a language-specific way, applying
 the configuration and intercepting requests from and to the component and expressing them in a language-specific way like method
 calls, for example. Listing \ref{lst:calcservice} shows a simple example of a component written in Java. The component is an instance
@@ -106,7 +104,7 @@ We use the XML element \texttt{component} to instantiate a component. In this ex
 Components in SCA are stateless by default and can be instantiated and destroyed on demand by the runtime. Furthermore the
 SCA runtime guarantees that no instance will receive concurrent method calls. If there is more than one incoming call, the
 runtime creates a separate instance for each one. It is also possible to create components that maintain state and persist
-for the lifetime of the parent composite. In this case it is up to the component developer to guarantee that it is thread-safe.
+for the lifetime of the parent composite. In this case it is up to the component developer to make sure that it is thread-safe.
 
 Composition in SCA is recursive, one can use a composite as a single component. The SCA runtime provides a special implementation
 type that loads a composite XML files, performs all the connections and treats the results a component. As shown in listing
@@ -177,7 +175,7 @@ of XML configuration files, one can use the \texttt{$<$wire$>$} element to conne
 
 In many cases an enterprise system will depend on existing external services that are not running on a SCA infrastructure.
 Conversely, it might be necessary to expose a component's services to the outside world, without requiring external clients
-to run on SCA. Instead of leaving component developers on their own to resolve this issue \emph{ad hoc}, SCA specifies
+to run on SCA. Instead of leaving component developers on their own to solve this issue, SCA specifies
 a transparent way of connecting components to external entities. From the component's developer point of view, it makes
 no difference if it is connected to an external service or to another component. These external reference or service
 connections are called bindings.
@@ -279,8 +277,7 @@ A target service interface is considered compatible with the reference interface
 of operations. The operation names must be the same as well as the parameter types, the parameter ordering and the return
 type.
 %TODO elaborar
-In some cases 
-when creating a service binding, the SCA runtime can create a WSDL interface description from the Java interface.
+In some cases when creating a service binding, the SCA runtime can create a WSDL interface description from the Java interface.
 
 
 \section{SCA and dependency injection}
@@ -327,7 +324,7 @@ different implementation languages and messaging protocols, the most natural des
 
 Tuscany has a registry for each kind of extension. During the runtime's initialization, it searches the filesystem for
 extensions. Basically an extension is deployed in a fixed directory structure at a given path and must contain a shared
-library file containing the extension's implementation and a XSD Sshema file to verify extension-specific syntax.
+library file containing the extension's implementation and a XSD Schema file to verify extension-specific syntax.
 When an extension is loaded, an entry point function of the shared library is called to register the extension in
 the appropriate registry.
 
@@ -354,7 +351,7 @@ then uses these endpoints to compose components and relay request messages betwe
 The \texttt{ServiceWrapper} is an interface for objects that receive a serialized parameter pack and relay them
 to a service. Both implementation extension and binding extensions implement this interface. In the case of an
 implementation extension, the parameters are deserialized and the component's method is invoked. In the case
-of a binding extension the parameters a converted to a wire format and sent sent to a remote component. 
+of a binding extension the parameters a converted to a wire format and sent to a remote component. 
 
 The \texttt{ServiceProxy} is an interface for objects that somehow receive a method invocation, serializing it and
 calling a service wrapper. In the case of implementation extension, the source of the invocation can be a direct method
