@@ -8,7 +8,15 @@ but over time these have to be integrated into the larger system. However at thi
 those services may have been built using different and incompatible technologies. The integration is difficult due to two
 factors. The first one is that SOA technologies are not directly interoperable. The second factor is that many SOA technologies
 force a programming style that unnecessarily tangles integration code with business logic, which prevents one from porting
-existing services to a new implementation technology.
+existing services to a new implementation technology. Pichler \emph{et al.} identified several problems with the \texttt{EJB}
+component model, but it applies to others like \texttt{CCM} as well \cite{Pichler}. They identified the following problems:
+\textbf{Lack of Tailorability}. The EJB specification does not define a way to extend container with new services or configure
+existing ones. This forces component developers to address crosscutting concerns in the component implementation leading to application
+code that is unnecessarily tangled with infrastructure code. In addition, it is not possible to remove unneeded service from
+the EJB container, forcing the deployment of the entire EJB environment. \textbf{Lack of checking and enforcement} The EJB
+specification expects the programmer to follow several programming rules and idioms that cannot be enforced by the compiler.
+In addition, common use of EJB's API involves loss of static type safety. \textbf{Insufficiency} It is not possible to host
+ordinary Java classes in an EJB container. To be supported by the container, classes must be developed especially for EJB.
 
 The Service Component Architecture (SCA) standard is an attempt to improve this situation. It specifies a framework
 where many different communication and component implementation technologies can be integrated. It achieves this

@@ -213,11 +213,17 @@ the classes \texttt{Warrior} and \texttt{OrcWarrior} and this code would automat
 of meta-programming. We can load the drawing dispatcher class based on the name of the type of enemy of the current level. For example,
 if the current type of enemy is ``\texttt{Alien}'' we could load the class \texttt{DrawAlien} by name.
 
-
-Another interesting feature of \texttt{Java}'s introspection support is what is called \texttt{dynamic proxies}. There are special classes
-called interfaces comprised only of the signature of methods. These interfaces are used to specify contract between objects
-and more than one of them can be inherited, or in \texttt{Java} parlance, \emph{implemented} by standard classes. Dynamic proxies enable
-the programmer to implement interfaces during the execution of the program. The method invocations on those interfaces are intercepted
+Another interesting feature of \texttt{Java}'s introspection support is what is called \texttt{dynamic proxies}.
+In object-oriented programming the \emph{proxy design pattern} \cite{Gamma} is a way of intercepting the method
+invocations to an object. This is done by inserting a \emph{proxy object} between the target and client objects.
+For this to be possible the target object must be substitutable for the proxy objects. In languages like \texttt{Java}
+and \texttt{C++} this is achieved by making the proxy object implement the same interface as the client object. 
+A proxy class can be hand written for a specific case and compiled together with the application. However the
+standard introspection library in \texttt{Java} allows one to create proxies at runtime for one or more interfaces.
+In \texttt{Java} interfaces are special classes comprised only of the signature of methods. These interfaces are used
+to specify contract between objects and more than one of them can be inherited, or in \texttt{Java} parlance,
+\emph{implemented} by standard classes. Dynamic proxies enable the programmer to implement interfaces during
+the execution of the program. The method invocations on those interfaces are intercepted 
 by the dynamic proxy and then the arguments are inserted in an array of parameters and forwarded to a handler object specified
 by the programmer. This feature has many applications that would otherwise be difficult to achieve without explicitly generating
 source code for each implemented interface. Consider, for example, the implementation of remote invocation stubs. Upon receiving
@@ -272,6 +278,17 @@ public class Game {
 \label{lst:game3}
 \end{listing}
 
+Hassoun \emph{et al.} interpret \texttt{Java'} dynamic proxies as the meta-objects of \texttt{CLOS}' meta-object protocol but
+we think this is an overstatement because the possibilities of dynamic proxies are limited to intercepting method call and
+they require programmers to follow the rule of separating interface from implementation, whereas meta-objects can
+be used to change the behavior of any object \cite{Hassoun03, Hassoun05}. 
+
+The separation of interface and implementation is essential for achieving Martin's \texttt{Open-Closed Principle} that states
+that object-oriented designs should strive to be closed for modifications but open for extensions. Dynamic proxies can
+be used very effectively to extend and configure existing designs at runtime, when interfaces are separated from implementation.
+Several cross-cutting concerns can be handled with proxies. For example, the \texttt{Spring Framework for Java} provides a
+proxy implementation that wraps method call in database transaction transparently.
+
 To conclude this overview of reflection in \texttt{Java} we point out that it arguably conforms to the first four requirements listed by
 Maes \cite{Maes}. Not all entities are objects as required, but all have meta-objects.
 
@@ -316,6 +333,10 @@ Perhaps the most widely known implementation of introspection support for \textt
 detailed, including meta-data for \emph{typedefs}, scopes, primitives and arrays. It has a method call construct but it is not type-safe
 as arguments are passed as an array of void pointers and consequently unsafe type conversions are must be used on the receiving side.
 It uses a parser that generates meta-data and method call \texttt{C++} code that must be compiled and linked to the program that uses it.
+
+Chuang \emph{et al.} \cite{Chuang} describe an introspection system for \texttt{C++} that aims at being non-intrusive and that supports
+loading of new classes and meta-data at runtime. However, they make extensive use of \texttt{void*} pointers leading to unsafe type
+conversions.
 
 Devadithya et. al. \cite{Devadithya} present a reflection system similar to \texttt{SEAL}. It uses template classes to hold method pointers
 and do the calls. The number of of arguments is limited to the number of template specializations implemented in the library.
@@ -827,7 +848,7 @@ inline void emplace(std::vector<VariantValue>& v, T&& t, U&&... u )
 class Method {
 public:
   template<class... Args>
-  VariantValue call(VariantValue& object, const Args&... args) const {
+  VariantValue call(VariantValue& object, Args&&... args) const {
     ::std::vector<VariantValue> vargs;
     emplace(vargs, args...);
     return callArgArray(object, vargs );
@@ -971,13 +992,24 @@ Object result         = m.invoke(instance, 4, 6);
 As the reader might have noticed we have chosen to use a function template for each method call instead of having a template \texttt{MethodImpl}
 implementing a \texttt{AbstractMethodIml} abstract base class. We will explain the reason why in the evaluation section.
 
+There is one important detail that we have omitted so far: perfect forwarding of generic call parameters. In \texttt{C++98}
+we would have three options for passing parameters of unknown types: by value, by reference or by const reference. Passing
+parameters by value we would introduce an artificial copy that would render the generic call useless for methods that
+have references as formal parameters. With references we would be unable to pass temporaries of non-const variables as
+actual parameters. And finally with const references it would be impossible to call methods that have references as parameters
+in a clean way. With \texttt{rvalue} references \texttt{C++11} introduced a special rule for function template argument deductions.
+A formal argument that us declared as a \texttt{rvalue} reference to a template parameter is automatically resolved to a reference
+of the correct type. Actual const values cause the argument type to be a const reference, temporaries are passed by \texttt{rvalue}
+reference and other values are passed by reference. This new rule is being called perfect forwarding, and it enables us to
+provide a generic call API that is not overly cumbersome to use.
+
 \subsection{Dynamic proxies}
 
-Fundamental for dynamic proxies is the concept of an interface. Interfaces specify the signatures of a set of polymorphic
+Fundamental for dynamic proxies is the concept of interface inheritance. Interfaces specify the signatures of a set of polymorphic
 methods without providing an implementation. Interfaces are like contracts because any object that implements an interface
 must have an implementation for each method. In \texttt{Java} interfaces are explicitly represented in the language and multiple
 interface inheritance is allowed whereas multiple implementation inheritance is not. In \texttt{C++} they can be represented as abstract
-base classes but depend on programmer discipline. For our purposes we consider a class an interface if:
+base classes but depend on programmer discipline. For our purposes we consider a \texttt{C++} class an interface if:
 
 \begin{enumerate}
  \item It has no attributes
@@ -989,7 +1021,7 @@ base classes but depend on programmer discipline. For our purposes we consider a
 \end{enumerate}
 
 The implementation of dynamic proxies is mostly straightforward. For each interface we use declarative meta-data
-to generate an implementation stub. When a stub is created, it internally recieves a reference to an object of
+to generate an implementation stub. When a stub is created, it internally receives a reference to an object of
 the internal class \texttt{ProxyImpl}. Each method of this stub has a generated implementation that builds
 an array of variants when called. This array is then passed to a method of the \texttt{ProxyImpl} object together
 with an unique identifier for the current methods. The result of this call is a variant from which the stub
