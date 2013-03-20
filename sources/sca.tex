@@ -581,13 +581,13 @@ contain the name of the implementation class that will be used to locate the cla
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0" name="sample.calculator">
 
   <component name="CalculatorComponent">
-    <implementation.ioc library="Calculator" header="CalculatorImpl.h" class="CalculatorImpl"/>
+    <implementation.ioc library="Calculator" metadata="Calculator-md" header="CalculatorImpl.h" class="CalculatorImpl"/>
     <reference name="divideService">DivideComponent/DivideService</reference>
     <property name="pi">5</property>
   </component>
         
   <component name="DivideComponent">
-    <implementation.ioc library="Calculator" header="DivideImpl.h" class="DivideImpl"/>
+    <implementation.ioc library="Calculator" metadata="Calculator-md" header="DivideImpl.h" class="DivideImpl"/>
   </component>
 
 </composite>
@@ -600,7 +600,8 @@ The component type file also has suffered a few modifications, as shown in listi
 The primary difference is the use of \texttt{$<$interface.ioc$>$} element to select our interface extension.
 The \texttt{$<$class$>$} attribute contains the name of the interface class that is used to locate the
 meta-object that represents it. This meta-object is used to build the dynamic proxies that are injected into
-component references.
+component references. Also the optional \texttt{metadata} attribute is used to load a separate shared library
+that contains the compiled meta-data.
 
 \begin{listing}
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
@@ -620,6 +621,58 @@ component references.
 \caption{The new component type file}
 \label{lst:calcioccomponenttype}
 \end{listing}
+
+The difference at the physical level can be seen by the output of a command like \texttt{Linux's ldd}, that lists
+dependencies on shared objects as shown in listing \ref{lst:deps}. From this listing we can see that the original
+component depends on several of \texttt{Tuscany's} libraries while the new component depends solely on a few system
+libraries. The meta-data shared library depends only on our introspection library and on the component file. It does
+not depend on the \texttt{Tuscany} runtime so it can be reused in other contexts as well.
+
+
+\begin{listing}
+\begin{minted}[linenos,fontsize=\footnotesize]{text}
+# Original
+#> ldd libCalculator.so.0.0.0 
+linux-vdso.so.1
+libtuscany_sca.so.0
+libtuscany_sca_cpp.so.0
+libstdc++.so.6
+libm.so.6
+libc.so.6
+libgcc_s.so.1
+libtuscany_sdo.so.0
+libpthread.so.0
+/usr/lib/ld-linux-x86-64.so.2
+libxml2.so.2
+libdl.so.2
+libz.so.1
+liblzma.so.5
+
+# New component
+#> ldd libCalculator.so 
+linux-vdso.so.1
+libstdc++.so.6 => /usr/lib/libstdc++.so.6
+libm.so.6 => /usr/lib/libm.so.6
+libgcc_s.so.1 => /usr/lib/libgcc_s.so.1
+libc.so.6 => /usr/lib/libc.so.6
+/usr/lib/ld-linux-x86-64.so.2
+
+# New component meta-data
+#> ldd libCalculator-md.so 
+linux-vdso.so.1
+libselfportrait.so
+libCalculator.so
+libstdc++.so.6
+libm.so.6
+libgcc_s.so.1
+libc.so.6
+/usr/lib/ld-linux-x86-64.so.2
+ \end{minted}
+\caption{Physical dependencies}
+\label{lst:deps}
+\end{listing}
+
+
 
 % TODO discuss code quality improvements
 
