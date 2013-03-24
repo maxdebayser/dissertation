@@ -21,8 +21,8 @@ One aspect of self-reference is that it can go on indefinitely. An interpreter w
 interprets opens up the possibility of infinite levels of reflection, requiring what Smith called an infinite tower of interpreters.
 In practice, this issue is solved by a so-called meta-circular interpreter that is able to simulate the infinite levels of regression.
 
-Smith also outlined six general properties of reflective systems. The first principle is the requirement a of causal connection between
-its self-representation and its behavior. What is meant by this is that a reflective program should use this information to alter its
+Smith also outlined six general properties of reflective systems. The first principle is the requirement of a causal connection between
+its self-representation and its behavior. This means that a reflective program should use this information to alter its
 behavior. It would be useless if a process only contemplated itself without any further consequence. The second property is that
 self-reference is necessarily associated to a theory, a representation of the knowledge, of itself. The third property is that
 self-reference does not entail the ability of focusing on its current self. A process can only inspect what it was doing before
@@ -35,14 +35,14 @@ programmed from the inside. A Turing machine can simulate another Turing machine
 cannot reflect about itself. We will return to some of these points throughout this discussion.
 
 The next step in the research of computational reflection was its application to object-oriented languages. In her seminal paper, Maes \cite{Maes},
-outlined the basic features of reflection in an object oriented context. The language \texttt{3-KRS}, built to demonstrate her ideas, had the
+outlined the basic features of reflection in an object-oriented context. The language \texttt{3-KRS}, built to demonstrate her ideas, had the
 following properties:
 
 \begin{enumerate}
  \item A split between object-level and meta-level. The meta-level was comprised of objects containing informations about the user-defined
 object.
  \item A uniform self representation: everything in \texttt{3-KRS} is an object and consequently has a meta-object that can be inspected.
- \item A complete self-representation. Every object has a meta-objectivity
+ \item A complete self-representation. Every object has a meta-object.
  \item Self-consistency. The meta-level is consistent with the object level and \emph{vice versa}. A modification to one entails a modification
 to the other. 
   \item Modifiable self-representation. Meta-objects in \texttt{3-KRS} can be modified.
@@ -50,57 +50,57 @@ to the other.
 
 This design has several interesting consequences. First of all, properties 2 and 3 guarantee that all entities in a program can be
 inspected by the program itself. This alone opens up a myriad of possibilities of generic programming, auditing and debugging.
-Second, properties 4 and 5 enable the modification of object properties at runtime because to maintain the consistency the modifications
+Second, properties 4 and 5 enable the modification of object properties at runtime since to maintain consistency, modifications
 in the meta-level must be reflected in the object level. Third, as a consequence of the uniformity property, the meta-objects themselves
 have meta-objects that can be modified. An example of a modification is the addition, removal or redefinition of methods and attributes.
 
-The same design was followed in the implementation if the Common Lisp Object System (CLOS) and its Meta Object Protocol \cite{Kiczales}.
-The idea behind CLOS, in the words of the authors, was to define a region in the design-space of programming languages instead of
+The same design was followed in the implementation of the Common Lisp Object System (CLOS) and its Meta Object Protocol (\texttt{MOP}) \cite{Kiczales}.
+The idea behind CLOS, according to the authors, was to define a region in the design-space of programming languages instead of
 a point. Because there are several ways to implement object-oriented mechanisms, each involving different trade-offs, CLOS was
 designed to be adaptable to the needs of different application domains. To enable this, some basic mechanisms such as the
 rules of method calls could be modified by specializing meta-classes.
 
-Sadly, all this flexibility also introduces several new problems. One is that of meta-stability. In the words of Kiczales et al.,
+Sadly, all this flexibility also introduces several new problems. One is that of meta-stability. In the words of Kiczales \emph{et al.},
 the modification of objects at runtime could result in spectacular failures modes. Another serious issue is the performance price
-that inevitably must be paid to compensate for the added flexibility. Taking this into account, the design of the MOP restricts
-the possibilities of modifications in critical mechanisms such as method dispatch to enable implementers to make optimizations.
-For example there are methods of meta-classes whose result is required to immutable. This allows the implementation to call
+that inevitably must be paid to compensate for the added flexibility. Taking this into account, the design of the \texttt{MOP} restricts
+the possibilities of modifications in critical mechanisms, such as method dispatch to enable implementers to make optimizations.
+For example, there are methods of meta-classes that are required to be idempotent. This allows the implementation to call
 these methods only once and \emph{memoize} the result. However, even with these considerations there is anecdotal evidence
 that suggests that opening the language for modification results in a performance overhead that is prohibitive for some applications \cite{Lee}.
 
 Another problem is the runtime infra-structure needed for a self-modifiable program. So far in this discussion it was implicit
 that all discussed languages were interpreted rather than compiled. Even considering that everything is ultimately interpreted
-by the underlying hardware, it would be a considerable challenge to implement the kind of dynamism previously discussed in
+by the underlying hardware, it would be a considerable challenge to implement the previously discussed kind of dynamism in
 a compiled language. The language runtime would have to include a compiler. There are tools that can be used to provide
 a meta-object protocol for compiled languages, but they are restricted to compilation or load time \cite{Chiba95} \cite{Chiba2000}.
 
-Of course it is difficult to draw a line between compiled and interpreted languages. One reason, as mentioned is that the hardware
+Of course it is difficult to draw a line between compiled and interpreted languages. One reason, as mentioned, is that the hardware
 itself is an interpreter. Another one is that even interpreted languages are usually parsed and compiled to a representation that is
-easier to handle by the interpreter. A criteria that we can adopt is that in compiled languages the interpreter, be it hardware
-or software, cannot understand the source language while in interpreted languages it does. This property of interpreted
+easier to handle by the interpreter. A criteria that we can adopt is that, in compiled languages, the interpreter, be it hardware
+or software, cannot understand the source language, while in interpreted languages it does. This property of interpreted
 languages is often made explicit by the presence of an \texttt{eval} primitive that can be called by the program at runtime
 to interpret more code in the form of source text.
 
 A further issue is that runtime modification of a program would be difficult to conciliate with static typing, which is the norm
-in compiled languages. In languages with static typing types are used as contracts between different parts of a program. 
+in compiled languages. In languages with static typing, types are used as contracts between different parts of a program. 
 These contracts enable the compiler to generate optimal code for method invocations because it knows precisely what argument
 types to expect.
 
 For the reasons mentioned above, reflection in compiled languages, if supported, is usually restricted to what is known
 as introspection. This means that the meta-data can be inspected but not modified, what implies that no changes
-have to be reflected back to the object level. However, somewhat ironically, in statically typed languages this
-limited form of reflection is much more useful than it would be in dynamic languages because it enables the use of types
+have to be reflected back to the object level. However, somewhat ironically, in statically typed languages, this
+limited form of reflection is much more useful than it would be in dynamic languages, because it enables the use of types
 that were unknown at compile time. In other words, introspection can be used to simulate dynamic typing in a statically typed language.
 
 The primary example of a statically typed language with native introspection is \texttt{Java}, so we will discuss its reflective features in detail
-and use it as an inspiration for the implementation of an introspection support for \texttt{C++}. Finally we wish to point out that reflection
-is not an exclusive property of the programming language. Reflection is also possible at other abstraction layers such as the architectural
+and use it as an inspiration for the implementation of an introspection support for \texttt{C++}. Finally, we wish to point out that reflection
+is not an exclusive property of the programming language. Reflection is also possible at other abstraction layers, such as the architectural
 level.
 
 
 \section{Introspection in Java}
 
-\texttt{Java} is a statically typed language that is compiled to the bytecode the \texttt{Java} Virtual Machine (\texttt{JVM}). The fact that it is not executed
+\texttt{Java} is a statically typed language that is compiled to the bytecode of the \texttt{Java} Virtual Machine (\texttt{JVM}). The fact that it is not executed
 directly by hardware does not mean that it can be seen as an interpreted language: there is no \textbf{eval} primitive.
 The reason for analyzing \texttt{Java} in detail in this discussion is that \texttt{Java} has a native introspection support and has many
 similarities with \texttt{C++}.
@@ -108,19 +108,19 @@ similarities with \texttt{C++}.
 Each source file of \texttt{Java} contains the definition of a single class and is compiled to a bytecode file called a class file.
 Class files have a dual role in \texttt{Java}. The first role corresponds to that of header files in \texttt{C++}: the
 declaration of types and methods used by other compilation units. The second second role corresponds roughly to that of
-\texttt{C++} object files, containing data to direct the linkage of compilation units. This dual uses forces this file format to
-preserve information about classes such as the the number and signature of methods, the attributes and constructors.
+\texttt{C++} object files, containing data to direct the linkage of compilation units. This dual use forces this file format to
+preserve information about classes, such as the the number and signature of methods, attributes and constructors.
 Furthermore, compilation units in \texttt{Java} are linked at runtime when they are loaded into the \texttt{JVM}. Given that
-class meta-data is present when classes are loaded, it is only logical make it available to the programmer by means
+class meta-data is present when classes are loaded, it is only logical to make it available to the programmer by means
 of an introspection API instead of discarding it after linking. Another interesting feature of \texttt{Java} is that the loading
-of classes is can be customized. Application programmers can provide their own custom class loaders, which presents the
-opportunity to modify classes before they are linked enabling a meta-object protocol at load time \cite{Chiba2000}.
+of classes can be customized. Application programmers can provide their own custom class loaders, which presents the
+opportunity to modify classes before they are linked, enabling a meta-object protocol at load time \cite{Chiba2000}.
 
 Having seen how class meta-data is obtained by the \texttt{JVM}, let us now turn our attention to the architecture of the
-introspection \texttt{API}. In \texttt{Java} every class is associated to a meta-object of the class \texttt{java.lang.Class} and every object
+introspection \texttt{API}. In \texttt{Java}, every class is associated to a meta-object of the class \texttt{java.lang.Class} and every object
 inherits from the base class \texttt{java.lang.Object}. The \texttt{Object} base class can be used to obtain a reference to the meta-object of
 its class. Only single inheritance of implementation is possible in \texttt{Java} so this reference always points unambiguously to the
-meta-object of the most concrete class of an object. Observe that because in \texttt{Java} classes are not first-class citizens, they
+meta-object of the most concrete class of an object. Observe that, because in \texttt{Java} classes are not first-class citizens, they
 cannot be collapsed with their meta-objects as is the case in prototype-based object-oriented languages.
 
 The class \texttt{java.lang.Class} has class-global methods to search classes by name and to list all classes, so the meta-data for all
@@ -134,30 +134,30 @@ The entities accessible through a class meta-object are meta-objects as well. At
 respectively. There is no need to go into much detail here so we will only present a brief summary of the functionality provided
 by theses classes.
 
-The Field meta-object can be used to inspect the name and the type of an attribute. The type is information is given in the form of
-a reference to a Class meta-object. In addition this object can be used to obtain and to change the value of the given attribute in
+The \texttt{Field} meta-object can be used to inspect the name and the type of an attribute. The type information is given in the form of
+a reference to a Class meta-object. In addition, this object can be used to obtain and to change the value of the given attribute in
 a specific object. The value is returned using a reference to the universal base class, \texttt{Object}. A minor difficulty arises due to the
 fact that primitive types are not objects in \texttt{Java}. To deal with this, for each primitive type \texttt{Java} defines a container class such
 as \texttt{java.lang.Integer} and seamlessly performs \emph{auto-boxing} when necessary.
 
 Constructor meta-objects provide information about the number of arguments in addition to the type of each one of them. Constructor
-objects also have a method that takes an array of Objects calls the reified constructor passing these arguments and returns a new
+objects also have a method that takes an array of Objects calls the reified constructor passing these arguments, and returns a new
 instance of the class this meta-object is associated with. The class meta-object has a shortcut method called \texttt{newInstance}
 that finds a constructor based on the types of its arguments and uses it to return a new object.
 
-Finally, Method meta-objects are used to reify methods. They provide the methods name together with all the information relevant to
-its signature: the return type, the number of arguments and their types. As is the case with the Constructor class, the Method
+Finally, \texttt{Method} meta-objects are used to reify methods. They provide the methods name together with all the information relevant to
+its signature: the return type, the number of arguments, and their types. As is the case with the \texttt{Constructor} class, the \texttt{Method}
 class has a method to invoke the reified method. It takes as arguments a reference to the target object and an array of references
-to Object representing the arguments and subsequently performs the call returning the result as an Object.
+to \texttt{Object} representing the arguments and subsequently performs the call returning the result as an \texttt{Object}.
 
-At first sight this may seem as an overly complicated way of performing the usual operations on objects but it enables many
+At first sight, this may seem as an overly complicated way of performing the usual operations on objects, but it enables many
 advanced programming techniques that otherwise would be impossible because the reflected entities are not first-class citizens
-of the language. Because of its static typing, in \texttt{Java} the full definition of a class must be available at
-compile-time whenever it is used. However, using introspection meta-classes it is possible to interact with classes that
+of the language. Because of its static typing, in \texttt{Java}, the full definition of a class must be available at
+compile-time whenever it is used. However, using introspection meta-classes, it is possible to interact with classes that
 were unknown at compile-time. It also enables a style of programming generally known as \emph{duck typing}. Suppose that
 we are building a system that draws objects on screen. The traditional static typing approach
 would require that all graphic objects implement a common interface that declares a \texttt{draw} method. In contrast, with
-\texttt{duck typing} we simply check if the object has a method with an appropriate signature without bothering if the class
+\emph{duck typing} we simply check if the object has a method with an appropriate signature without bothering if the class
 implements a specific interface.
 
 It is also common to use introspection for meta-programming. Building on the previous example, suppose that we decide that
@@ -165,9 +165,9 @@ requiring the objects that are to be displayed to have a draw method is a bad de
 alternative forms of drawing and we may want to reuse these objects in contexts where they are not displayed. A draw method
 inevitable makes use of a graphic library and we would be forced to include it even if it's not needed. A possible
 approach is to define another hierarchy of objects to draw them. Listing \ref{lst:game1} shows the example of a computer game.
-In many games the enemies that the player has to defeat are assigned to different categories based on difficulty. And depending
+In many games, the enemies that the player has to defeat are assigned to different categories based on difficulty. Depending
 on the current setting, the enemies might be of different species, but behind the scenes share the same artificial intelligence,
-differing only in their appearance
+differing only in their appearance.
 
 \begin{listing}[H]
 \begin{minted}[linenos,fontsize=\footnotesize]{java}
@@ -190,7 +190,7 @@ public class DrawOrc implements DrawEnemy {
 \end{listing}
 
 There clearly is a pattern in the code of listing \ref{lst:game1}: for each class there is another class with a predictable name. With introspection we
-can make automate this all this tedious typing,as shown in listing \ref{lst:game2}
+can automate all this tedious typing,as shown in listing \ref{lst:game2}
 
 \begin{listing}[H]
 \begin{minted}[linenos,fontsize=\footnotesize]{java}
@@ -208,19 +208,19 @@ public class DrawOrc implements DrawEnemy {
 \label{lst:game2}
 \end{listing}
 
-Not only is this code more generic but it is also automatically handles new cases. It can even handle new cases at runtime: we could load
+Not only is this code more generic, but it also automatically handles new cases. It can even handle new cases at runtime: we could load
 the classes \texttt{Warrior} and \texttt{OrcWarrior} and this code would automatically handle them. And there are even more possibilities
 of meta-programming. We can load the drawing dispatcher class based on the name of the type of enemy of the current level. For example,
 if the current type of enemy is ``\texttt{Alien}'' we could load the class \texttt{DrawAlien} by name.
 
 Another interesting feature of \texttt{Java}'s introspection support is what is called \texttt{dynamic proxies}.
-In object-oriented programming the \emph{proxy design pattern} \cite{Gamma} is a way of intercepting the method
+In object-oriented programming, the \emph{proxy design pattern} \cite{Gamma} is a way of intercepting the method
 invocations to an object. This is done by inserting a \emph{proxy object} between the target and client objects.
-For this to be possible the target object must be substitutable for the proxy objects. In languages like \texttt{Java}
-and \texttt{C++} this is achieved by making the proxy object implement the same interface as the client object. 
+For this to be possible, the target object must be substitutable for the proxy objects. In languages like \texttt{Java}
+and \texttt{C++}, this is achieved by making the proxy object implement the same interface as the client object. 
 A proxy class can be hand written for a specific case and compiled together with the application. However the
 standard introspection library in \texttt{Java} allows one to create proxies at runtime for one or more interfaces.
-In \texttt{Java} interfaces are special classes comprised only of the signature of methods. These interfaces are used
+In \texttt{Java}, interfaces are special classes comprised only of the signature of methods. These interfaces are used
 to specify contract between objects and more than one of them can be inherited, or in \texttt{Java} parlance,
 \emph{implemented} by standard classes. Dynamic proxies enable the programmer to implement interfaces during
 the execution of the program. The method invocations on those interfaces are intercepted 
@@ -228,12 +228,12 @@ by the dynamic proxy and then the arguments are inserted in an array of paramete
 by the programmer. This feature has many applications that would otherwise be difficult to achieve without explicitly generating
 source code for each implemented interface. Consider, for example, the implementation of remote invocation stubs. Upon receiving
 a method call, the stub must find out which method was called, put this information together with a serialized representation
-of the arguments in a packet and send it across the network. Without dynamic proxies, the programmer would have to use
+of the arguments in a packet, and send it across the network. Without dynamic proxies, the programmer would have to use
 a tool to read the definitions of interfaces and generate a stub source file for each one, every method containing slightly
 different code to handle the method's signature.
 
-To illustrate this concept, consider again the computer game example. As previously noted the implementation of the drawing dispatchers
-is quite mechanical. With dynamic proxies we can automate the definition of these classes, as shown in listing \ref{lst:game3}
+To illustrate this concept, consider again the computer game example. As previously noted, the implementation of the drawing dispatchers
+is quite mechanical. With dynamic proxies, we can automate the definition of these classes, as shown in listing \ref{lst:game3}
 
 \begin{listing}[H]
 \begin{minted}[linenos,fontsize=\footnotesize]{java}
@@ -278,8 +278,8 @@ public class Game {
 \label{lst:game3}
 \end{listing}
 
-Hassoun \emph{et al.} interpret \texttt{Java'} dynamic proxies as the meta-objects of \texttt{CLOS}' meta-object protocol but
-we think this is an overstatement because the possibilities of dynamic proxies are limited to intercepting method call and
+Hassoun \emph{et al.} interpret \texttt{Java's} dynamic proxies as the meta-objects of \texttt{CLOS}' meta-object protocol, but
+we think this is an overstatement, since the possibilities of dynamic proxies are limited to intercepting method call and
 they require programmers to follow the rule of separating interface from implementation, whereas meta-objects can
 be used to change the behavior of any object \cite{Hassoun03, Hassoun05}. 
 
@@ -289,32 +289,32 @@ be used very effectively to extend and configure existing designs at runtime, wh
 Several cross-cutting concerns can be handled with proxies. For example, the \texttt{Spring Framework for Java} provides a
 proxy implementation that wraps method call in database transaction transparently.
 
-To conclude this overview of reflection in \texttt{Java} we point out that it arguably conforms to the first four requirements listed by
+To conclude this overview of reflection in \texttt{Java}, we point out that it arguably conforms to the first four requirements listed by
 Maes \cite{Maes}. Not all entities are objects as required, but all have meta-objects.
 
 \section{Introspection in C++}
 
-\texttt{C++} is a superset of C that supports object oriented programming. The design of \texttt{C++} is primarily concerned with the most efficient
-implementation of abstractions. Also the design is guided by the principle that the programmer should only pay for what
+\texttt{C++} is a superset of C that supports object-oriented programming. The design of \texttt{C++} is primarily concerned with the most efficient
+implementation of abstractions. Also, the design is guided by the principle that the programmer should only pay for what
 is effectively used (the currency being \texttt{CPU} and memory overhead). So, for instance, polymorphism is not enabled by default
 for objects, one has to explicitly mark at least one method as \emph{virtual} to obtain this behavior.
 
-In \texttt{C++} introspection is severely limited. Basically, all that can be done at runtime is comparing types for equality. Most likely a complete
+In \texttt{C++}, introspection is severely limited. Basically, all that can be done at runtime is comparing types for equality. Most likely, a complete
 introspection support was never introduced because it is difficult to conciliate the inherent space overhead with the ``pay only for what
-is used'' approach. At compile-time template meta-programming techniques can be used to obtain information about classes.
+is used'' approach. At compile-time, template meta-programming techniques can be used to obtain information about classes.
 In particular, a technique called Substitution Failure Is Not An Error (SFINAE) can be used to detect if a class has a method with
-a specific name and signature. Combining compile-time introspection with runtime introspection it is possible to obtain more
+a specific name and signature. Combining compile-time introspection with runtime introspection, it is possible to obtain more
 detailed runtime information. However, these techniques can only answer yes-no questions like ``Is class A derived from class B?''.
-There is no way for example to enumerate all methods of an object.
+There is no way, for example, to enumerate all methods of an object.
 
 Clearly, this situation is far from satisfactory and several introspection extensions have been proposed, but most stumble upon
 two primary difficulties. In \texttt{C++}, as specified in the \texttt{ISO} standard of 1998, there is no way of referring to generic entities 
-without losing all type information. In \texttt{Java} every objects can be referred to using the universal \texttt{java.lang.Object} base class
-and as we have seen, this base class can be used to recover the full type information of an object. In \texttt{C++} there is the \texttt{void*}
+without losing all type information. In \texttt{Java}, every objects can be referred to using the universal \texttt{java.lang.Object} base class
+and as we have seen, this base class can be used to recover the full type information of an object. In \texttt{C++}, there is the \texttt{void*}
 pointer that can point to anything, but unfortunately the already limited introspection facilities of the language cannot interact
-with this kind of pointer so the type information cannot be recovered. Another difficulty is that in this version of the standard
+with this kind of pointer, so the type information cannot be recovered. Another difficulty is that, in this version of the standard,
 it is impossible to declare methods that accept a variable number of arguments. This makes the implementation of a totally generic
-Method meta-class impossible.
+\texttt{Method} meta-class impossible.
 
 To introduce more advanced introspection in \texttt{C++} two main issues must be addressed:
 
@@ -330,17 +330,17 @@ Attempts to introduce reflection in \texttt{C++} were made almost since the lang
 a meta-object protocol for \texttt{C++}, but it was limited to modifications at compile-time. 
 
 Perhaps the most widely known implementation of introspection support for \texttt{C++} is the \texttt{SEAL} \cite{seal} library developed at \texttt{CERN}. It is very
-detailed, including meta-data for \emph{typedefs}, scopes, primitives and arrays. It has a method call construct but it is not type-safe
-as arguments are passed as an array of void pointers and consequently unsafe type conversions are must be used on the receiving side.
-It uses a parser that generates meta-data and method call \texttt{C++} code that must be compiled and linked to the program that uses it.
+detailed, including meta-data for \emph{typedefs}, scopes, primitives and arrays. It has a method call construct, but it is not type-safe,
+as arguments are passed as an array of void pointers and, consequently, unsafe type conversions must be used on the receiving side.
+It uses a parser that generates meta-data and method call code in \texttt{C++} that must be compiled and linked to the program that uses it.
 
 Chuang \emph{et al.} \cite{Chuang} describe an introspection system for \texttt{C++} that aims at being non-intrusive and that supports
 loading of new classes and meta-data at runtime. However, they make extensive use of \texttt{void*} pointers leading to unsafe type
 conversions.
 
-Devadithya et. al. \cite{Devadithya} present a reflection system similar to \texttt{SEAL}. It uses template classes to hold method pointers
+Devadithya \emph{et al.} \cite{Devadithya} present a reflection system similar to \texttt{SEAL}. It uses template classes to hold method pointers
 and do the calls. The number of of arguments is limited to the number of template specializations implemented in the library.
-The exact types of arguments and return types must be known, which has as consequence that the end user code needs their complete
+The exact argument and return types must be known, which has as consequence that the end user code needs their complete
 definitions. 
 
 \texttt{Reflection for C++} \cite{garret} proposes the gathering of meta-data out of debug information generated by compilers.
@@ -352,34 +352,34 @@ The \texttt{Rich Pointer} proposal \cite{RichPointers} proposes a special kind o
 not loose the runtime type information associated with the referenced object. These pointers could be cast to normal pointers,
 allowing their use with legacy code. In addition, this work proposes a comprehensive runtime type information system that would
 enable the iteration over the set of methods of a class, for example. At the time of this writing, the authors of the proposal express
-the intention of adding a construct to call methods and functions dynamically but no further details are given.
+the intention of adding a construct to call methods and functions dynamically, but no further details are given.
 
 There are proposals to add compile-time introspection to \texttt{C++} in a form suitable for template meta-programming \cite{Chochlik}.
 Compile-time and runtime introspection address slightly different concerns and present different trade-offs. Compile-time
 introspection could advance compile-time meta-programming beyond what is possible today with template meta-programming techniques.
 For example, it could be used to generate object-relational mappings to store objects in a relational database.
 In addition, the compiler would have many opportunities for optimization. Because every use of meta-data is known, the compiler
-can discard unused data, reducing the memory overhead. Runtime method calls using pre-compiled introspection mechanism could
+can discard unused data, reducing the memory overhead. Runtime method calls using pre-compiled introspection mechanisms could
 also be optimized, the compiler knowing all variables involved. On the other hand, compile-time reflection cannot be used to
 enable late binding. It would be impossible, for example, to load a module during the execution of a program and
 use the classes defined in it.
 
-And finally there are approaches that modify the language itself. For example, Microsoft supports an extended \texttt{C++} for their
+And finally, there are approaches that modify the language itself. For example, Microsoft supports an extended \texttt{C++} for their
 Common Language Runtime (CLR), which provides reflection for all supported languages, including \texttt{C++} \cite{CLR}. Another notable
 example is the \texttt{Qt} framework. It provides a mechanism called \emph{signals and slots} that enables a restricted form
 of late binding that makes it possible to connect objects at runtime without requiring their definitions to be available during compilation of either parts.
-However, Qt requires the extension of the language with additional keywords and forces all connectable objects to inherit a common base class, which introduces
+However, \texttt{Qt} requires the extension of the language with additional keywords and forces all connectable objects to inherit a common base class, which introduces
 difficulties when multiple inheritance is needed. 
 
-Not directly related but still relevant is \texttt{CERN}'s \texttt{C++} interpreter, \texttt{cling} \cite{cling}, that uses the \texttt{clang}
+Not directly related, but still relevant is \texttt{CERN}'s \texttt{C++} interpreter, \texttt{cling} \cite{cling}, that uses the \texttt{clang}
 \cite{cling} compiler and \texttt{LLVM}'s infrastructure to dynamically compile \texttt{C++} code. In view of the above discussion of the relation between
 interpretation and reflection, this could open interesting possibilities.
 
 \subsection{Existing introspective features of C++}
 
 \texttt{C++} is not totally devoid of introspection. There are some very limited introspective features both at compile-time and
-at runtime. In the following section we will analyze them in detail not only for the purpose of comparison but also because
-our proposed introspection extension is partly built using of these features.
+at runtime. In the following section, we will analyze them in detail not only for the purpose of comparison but also because
+our proposed introspection extension is partly built using these features.
 
 \subsubsection{Runtime type introspection}
 
@@ -389,20 +389,20 @@ The \texttt{dynamic\_cast} can be seen as a built-in function template which tak
 as template parameter. It thus takes two types as parameters: the origin type implicitly specified by the pointer argument, and the
 explicitly specified destination type. If the object referred to by the argument pointer is an instance of the requested class, a pointer of
 the correct type, pointing to that same object, is returned. Otherwise, a null pointer is returned. Therefore the \texttt{dynamic\_cast}
-enables us to ask if the object pointed to is an instance of the destination type, with the restriction that both types must be in a the same
+enables us to ask if the object pointed to is an instance of the destination type, with the restriction that both types must be in the same
 hierarchy of polymorphic classes. There are two restrictions on origin and destination that severely limit the functionality of the
-\texttt{dynamic\_cast}: both must be polymorphic types and both must be in the same class hierarchy. The first restriction excludes not
+\texttt{dynamic\_cast}: both must be polymorphic types, and both must be in the same class hierarchy. The first restriction excludes not
 only classes without virtual methods but also primitive types. In particular, the \texttt{void*} pointer cannot be used, eliminating
-the possibility of using the dynamic cast as a general \texttt{instanceof} operator as in \texttt{Java}. If the second restriction were lifted
-we could at least use this operator to introspect all polymorphic classes but unfortunately this is not the case. A more subtle limitation
+the possibility of using the dynamic cast as a general \texttt{instanceof} operator as in \texttt{Java}. If the second restriction were lifted,
+we could at least use this operator to introspect all polymorphic classes but, unfortunately, this is not the case. A more subtle limitation
 of this operator is that the declaration of both types must be visible at the same source location where it is used.
 
 Another form of \texttt{rtti} is the \texttt{typeid} operator. This operator returns a reference to an object of the standard class
-\texttt{type\_info}. Basically the only thing that can be done with this object is to compare it for equality with other objects of
+\texttt{type\_info}. Basically, the only thing that can be done with this object is to compare it for equality with other objects of
 this class. The standard library defines a special \texttt{operator==} to compare two references to \texttt{type\_info}. If this
 comparison operator returns true, both \texttt{type\_infos} refer to the same type. The \texttt{typeid} operator is applicable to all
 types, making it possible to formulate expressions like \verb|typeid(double) == typeid(std::string)|. In addition to its universal
-applicability, this operator also gives us an opaque reference to type-dependent information. It is possible possible to compare
+applicability, this operator also gives us an opaque reference to type-dependent information. It is possible to compare
 \texttt{type\_info} object even if the types they represent are not known at compile type. The greatest disadvantage of this
 operator is that it is agnostic to class hierarchies. For this reason, \verb|typeid(A) == typeid(B)| evaluates to false even if
 \texttt{B} inherits \texttt{A}. Most of the functionality of this operator can be simulated using \texttt{templates} that implement
@@ -438,7 +438,7 @@ const sim_type_info& sim_typeid(const T& exprResult) {
 \label{lst:typeid}
 \end{listing}
 
-The last form of \texttt{rtti} is never mentioned in \texttt{C++} programming manuals, which is amusing as it is really the most powerful one.
+The last form of \texttt{rtti} is never mentioned in \texttt{C++} programming manuals, which is surprising, as it is really the most powerful one.
 Because in \texttt{C++} any value, object or reference can be used as operand of the \texttt{throw} operator, the exception handling
 machinery must include the type information of the thrown entity to guarantee that the correct catch statement is called.
 Listing \ref{lst:dyncast} shows how a \texttt{dynamic\_cast} operator can be implemented with exception handling.
@@ -461,7 +461,7 @@ Dest* dyn_cast(Orig* o) {
 \end{listing}
 
 Actually, the above \texttt{dyn\_cast} in some aspects is more powerful than the \texttt{dynamic\_cast} because \texttt{Orig} and
-\texttt{Dest} need not be in an inheritance relation, they can even be primitive types. Not all traversals of an inheritance
+\texttt{Dest} do not need to be in an inheritance relation, they can even be primitive types. Not all traversals of an inheritance
 hierarchy graph are supported but the conversion of a more concrete type to a more abstract type is guaranteed to work.
 Of course, this is an abuse of exception handling for a totally different purpose, so we cannot expect it to be as efficient
 as the other forms of \texttt{rtti}. The advantage of this mechanism is that the code that throws can be defined in one translation unit
@@ -469,7 +469,7 @@ and the catching code in another. Better yet is the fact that the catching code 
 thrown and, conversely, the throwing code does not need to know the types that appear in the catch statement. 
 
 Before we continue with the next topic, we wish to point out that the examples in this section not only demonstrate the relationship
-between the different forms of runtime introspection in \texttt{C++} but also illustrate the interesting interactions with templates, a compile-time
+between the different forms of runtime introspection in \texttt{C++}, but also illustrate the interesting interactions with templates, a compile-time
 feature.
 
 \subsubsection{Compile-time introspection}
