@@ -104,7 +104,7 @@ layout of data structures. High performance data structures have to maximize cac
 pre-fetching of cache lines. In \texttt{C++} an array of objects can be allocated in a single continuous chunk of memory
 and the traversal is very efficient. However, in \texttt{Java} an array is a chunk of memory with pointers to
 many other memory locations, making the traversal very inefficient in terms of cache hits. The effects of
-using a single buffer instead of several linked ones are demonstrated in the work of Häubl \emph{et al.} who
+using a single buffer instead of several linked ones are demonstrated in the work of Häubl and colleagues who
 modified a \texttt{Java} virtual machine to merge the meta-data and character array components of the class
 \texttt{java.lang.String} achieving a considerable speed-up.
 

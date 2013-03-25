@@ -60,7 +60,7 @@ a point. Because there are several ways to implement object-oriented mechanisms,
 designed to be adaptable to the needs of different application domains. To enable this, some basic mechanisms such as the
 rules of method calls could be modified by specializing meta-classes.
 
-Sadly, all this flexibility also introduces several new problems. One is that of meta-stability. In the words of Kiczales \emph{et al.},
+Sadly, all this flexibility also introduces several new problems. One is that of meta-stability. In the words of Kiczales and colleagues,
 the modification of objects at runtime could result in spectacular failures modes. Another serious issue is the performance price
 that inevitably must be paid to compensate for the added flexibility. Taking this into account, the design of the \texttt{MOP} restricts
 the possibilities of modifications in critical mechanisms, such as method dispatch to enable implementers to make optimizations.
@@ -278,7 +278,7 @@ public class Game {
 \label{lst:game3}
 \end{listing}
 
-Hassoun \emph{et al.} interpret \texttt{Java's} dynamic proxies as the meta-objects of \texttt{CLOS}' meta-object protocol, but
+Hassoun and colleagues interpret \texttt{Java's} dynamic proxies as the meta-objects of \texttt{CLOS}' meta-object protocol, but
 we think this is an overstatement, since the possibilities of dynamic proxies are limited to intercepting method call and
 they require programmers to follow the rule of separating interface from implementation, whereas meta-objects can
 be used to change the behavior of any object \cite{Hassoun03, Hassoun05}. 
@@ -334,11 +334,11 @@ detailed, including meta-data for \emph{typedefs}, scopes, primitives and arrays
 as arguments are passed as an array of void pointers and, consequently, unsafe type conversions must be used on the receiving side.
 It uses a parser that generates meta-data and method call code in \texttt{C++} that must be compiled and linked to the program that uses it.
 
-Chuang \emph{et al.} \cite{Chuang} describe an introspection system for \texttt{C++} that aims at being non-intrusive and that supports
+Chuang and colleagues \cite{Chuang} describe an introspection system for \texttt{C++} that aims at being non-intrusive and that supports
 loading of new classes and meta-data at runtime. However, they make extensive use of \texttt{void*} pointers leading to unsafe type
 conversions.
 
-Devadithya \emph{et al.} \cite{Devadithya} present a reflection system similar to \texttt{SEAL}. It uses template classes to hold method pointers
+Devadithya and colleagues \cite{Devadithya} present a reflection system similar to \texttt{SEAL}. It uses template classes to hold method pointers
 and do the calls. The number of of arguments is limited to the number of template specializations implemented in the library.
 The exact argument and return types must be known, which has as consequence that the end user code needs their complete
 definitions. 

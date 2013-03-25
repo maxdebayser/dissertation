@@ -1,24 +1,29 @@
 \section{The Model}
-In chapter \ref{chap:components} we have described how effective components based on services can be, as they need to be deployed only
-once and can be used by many loosely-coupled clients. But the usual service oriented middleware approach has several disadvantages.
-The problem is that large systems tend to grow organically over time. Several small systems are first built to handle specific needs
-but over time these have to be integrated into the larger system. However at this point difficulties tend to arise because
+In chapter \ref{chap:components}, we have described how effective components based on services can be, as they need to be deployed only
+once and can be used by many loosely-coupled clients. However, the usual service oriented middleware approach has several disadvantages.
+The problem is that large systems tend to grow organically over time. Several small systems are first built to handle specific needs,
+but, over time, these have to be integrated into the larger system. At this point, nevertheless, difficulties tend to arise because
 those services may have been built using different and incompatible technologies. The integration is difficult due to two
-factors. The first one is that SOA technologies are not directly interoperable. The second factor is that many SOA technologies
+factors. The first one is that Service Oriented Architecture (\texttt{SOA}) technologies are not directly interoperable. The second factor is that many \texttt{SOA} technologies
 force a programming style that unnecessarily tangles integration code with business logic, which prevents one from porting
-existing services to a new implementation technology. Pichler \emph{et al.} identified several problems with the \texttt{EJB}
-component model, but it applies to others like \texttt{CCM} as well \cite{Pichler}. They identified the following problems:
-\textbf{Lack of Tailorability.}. The \texttt{EJB} specification does not define a way to extend container with new services or configure
+existing services to a new implementation technology. Pichler and colleagues \cite{Pichler} identified several problems with the \texttt{EJB}
+component model that do apply to other models, like \texttt{CCM}. They identified the following problems:
+
+\textbf{Lack of Tailorability.}. The \texttt{EJB} specification does not define a way to extend container with new services, or configure
 existing ones. This forces component developers to address crosscutting concerns in the component implementation leading to application
 code that is unnecessarily tangled with infrastructure code. In addition, it is not possible to remove unneeded service from
-the \texttt{EJB} container, forcing the deployment of the entire \texttt{EJB} environment. \textbf{Lack of checking and enforcement.} The \texttt{EJB}
+the \texttt{EJB} container, forcing the deployment of the entire \texttt{EJB} environment. 
+
+\textbf{Lack of checking and enforcement.} The \texttt{EJB}
 specification expects the programmer to follow several programming rules and idioms that cannot be enforced by the compiler.
-In addition, common use of \texttt{EJB}'s \texttt{API} involves loss of static type safety. \textbf{Insufficiency.} It is not possible to host
+In addition, common use of \texttt{EJB}'s \texttt{API} involves loss of static type safety. 
+
+\textbf{Insufficiency.} It is not possible to host
 ordinary \texttt{Java} classes in an \texttt{EJB} container. To be supported by the container, classes must be developed especially for EJB.
 
 The Service Component Architecture (\texttt{SCA}) standard is an attempt to improve this situation. It specifies a framework
 where many different communication and component implementation technologies can be integrated. It achieves this
-with a modular design that decouples components from the underlying infrastructure. At the same time it allows
+with a modular design that decouples components from the underlying infrastructure. At the same time, it allows
 interoperability with legacy services also avoiding unnecessary coupling to any communication protocol. New
 technologies and languages are supported with extensions to the core runtime.
 
@@ -28,13 +33,13 @@ actively for other services it depends on. Instead, references to the required s
 during the initialization of a component. In other words, the core runtime uses a dependency injection model to
 configure and connect components. However, how the dependency injection manifests itself at the component implementation
 level depends on the implementation language and on the design decisions taken for that particular language extension.
-As discussed below, the \texttt{Java} language binding supports dependency injection at the implementation level and therefore
-properties and references are represented as class fields. The \texttt{C++} language binding however, does not and the components
+As discussed below, the \texttt{Java} language binding supports dependency injection at the implementation level and, therefore,
+properties and references are represented as class fields. The \texttt{C++} language binding, however, does not, and the components
 are forced to look up property values and references using the binding's \texttt{API}.
 
 In \texttt{SCA}, composition is directed by a declarative configuration file. This configuration file, also called \emph{composite file},
-is written in an \texttt{XML} language specified by the \texttt{SCA} standard. This language is meant to be extensible to give the necessary
-freedom of adding new elements and attributes to the extension developer. This is possible because \texttt{SCA} validates the
+is written in a \texttt{XML} language specified by the \texttt{SCA} standard. This language is meant to be extensible to give the necessary
+freedom to add new elements and attributes to the extension developer. This is possible because \texttt{SCA} validates the
 composite files using a composition of \texttt{XSD} schemas.
 
 \subsection{Components}
@@ -45,9 +50,9 @@ implementation extension is basically a plug-in that is responsible for loading 
 the configuration and intercepting requests from and to the component and expressing them in a language-specific way like method
 calls, for example. Listing \ref{lst:calcservice} shows a simple example of a component written in \texttt{Java}. The component is an instance
 of the \texttt{CalculatorServiceImpl} class. It provides a single service that follows the contract represented by the \texttt{CalculatorService}
-interface. It has one configuration property, \texttt{coefficient}, that is configured by the run time using setter injection.
+interface. It has one configuration property, \texttt{coefficient}, that is configured by the runtime using setter injection.
 This component also depends on an external service that follows the contract represented by the \texttt{DivideService} interface.
-The service is represented as a \texttt{Java} object that implements this interface and its reference is also provided to the component
+The service is represented as a \texttt{Java} object that implements this interface, and its reference is also provided to the component
 by the way of setter injection.
 
 \begin{listing}
@@ -102,16 +107,16 @@ public class CalculatorServiceImpl implements CalculatorService {
 \end{listing}
 
 Listing \ref{lst:calcservicexml} shows a simple configuration file for the calculator component of listing \ref{lst:calcservice}.
-We use the \texttt{XML} element \texttt{component} to instantiate a component. In this example we instantiate two components:
+We use the \texttt{XML} element \texttt{component} to instantiate a component. In this example, we instantiate two components:
 \texttt{DivideComponent} and \texttt{CalculatorComponent}
 
 Components in \texttt{SCA} are stateless by default and can be instantiated and destroyed on demand by the runtime. Furthermore, the
 \texttt{SCA} runtime guarantees that no instance will receive concurrent method calls. If there is more than one incoming call, the
 runtime creates a separate instance for each one. It is also possible to create components that maintain state and persist
-for the lifetime of the parent composite. In this case it is up to the component developer to make sure that it is thread-safe.
+for the lifetime of the parent composite. In this case, it is up to the component developer to make sure that it is thread-safe.
 
 Composition in \texttt{SCA} is recursive, one can use a composite as a single component. The \texttt{SCA} runtime provides a special implementation
-type that loads a composite \texttt{XML} files, performs all the connections and treats the results a component. As shown in listing
+type that loads a composite \texttt{XML} files, performs all the connections, and treats the results as a component. As shown in listing
 \ref{lst:composite}, at line 9, all there is to do is to use the \texttt{$<$implementation.composite$>$} element to instruct the runtime
 to load a composite.
 
@@ -134,8 +139,8 @@ to load a composite.
 \label{lst:composite}
 \end{listing}
 
-As services and references of a composite component we can use selected services and references of internal components
-that were left unconnected. To instruct the runtime to expose a service for composition outside of the containing composite
+As services and references of a composite component, we can use selected services and references of internal components
+that were left unconnected. To instruct the runtime to expose a service for composition outside of the containing composite,
 we \emph{promote} as shown in listing \ref{lst:calcservicexmlpromote}, line 3.
 
 \begin{listing}
@@ -177,11 +182,11 @@ of \texttt{XML} configuration files, one can use the \texttt{$<$wire$>$} element
 
 \subsection{Bindings}
 
-In many cases an enterprise system will depend on existing external services that are not running on a \texttt{SCA} infrastructure.
+In many cases, an enterprise system will depend on existing external services that are not running on a \texttt{SCA} infrastructure.
 Conversely, it might be necessary to expose a component's services to the outside world, without requiring external clients
 to run on \texttt{SCA}. Instead of leaving component developers on their own to solve this issue, \texttt{SCA} specifies
 a transparent way of connecting components to external entities. From the component's developer point of view, it makes
-no difference if it is connected to an external service or to another component. These external reference or service
+no difference if the component is connected to an external service or to another component. These external references or service
 connections are called bindings.
 
 When a binding is declared, details such as the address and the communication protocol must be known. For example, if we
@@ -204,7 +209,7 @@ Services can be made available through several bindings at the same time. All it
 inside the \texttt{$<$service$>$} element.
 
 The configuration for reference bindings is very similar to the one for services. Listing \ref{lst:calcservicexmlbinding2}
-continues with the \texttt{CalculaterService} example, but this time the calculator component uses an external service
+continues with the \texttt{CalculatorService} example, but this time the calculator component uses an external service
 instead of the local \texttt{DivideComponent}.
 
 \begin{listing}
@@ -229,7 +234,7 @@ instead of the local \texttt{DivideComponent}.
 As with component implementations, \texttt{SCA} can support any communication protocol as long as there is a plug-in for it.
 
 In reality, even internal connections always go through a binding. In the absence of an explicit instruction, components
-are connected using \texttt{SCA} the default binding. This can be made explicit using the \texttt{$<$binding.sca$>$} element.
+are connected using the \texttt{SCA} default binding. This can be made explicit using the \texttt{$<$binding.sca$>$} element.
 The default binding can be overridden in the configuration file. For example, we can instruct the \texttt{SCA} runtime to
 connect to components using \texttt{Java RMI}, as shown in \ref{lst:calcservicexmlbinding3}
 
@@ -261,55 +266,55 @@ calls for components in the same address space.
 
 \subsection{Interfaces}
 %TODO, falar de interfaces extensions
-In \texttt{SCA} service contracts can be seen as object-oriented interfaces: a named set of methods. In most object-oriented programming
-languages and middleware platforms interfaces are either directly supported, as in \texttt{Java} or \texttt{CORBA}, or simulated using well-known
+In \texttt{SCA}, service contracts can be seen as object-oriented interfaces: a named set of methods. In most object-oriented programming
+languages and middleware platforms, interfaces are either directly supported, as in \texttt{Java} or \texttt{CORBA}, or simulated using well-known
 conventions, as in \texttt{C++}. Although this concept is natural in object-oriented programming, it does not necessarily map in the same
-way on every language and thus it can be challenging to make components written in different languages interoperable.
+way on every language and, thus, it can be challenging to make components written in different languages interoperable.
 
 Older object-oriented middleware platforms tried to address this problem by requiring interfaces to be written in a
-interface description language (IDL). These interfaces would then be processes by a tool to generate abstract base classes
+interface description language (IDL). These interfaces would then be processed by a tool to generate abstract base classes
 which implementation classes would inherit from. The problem with this approach is that it encourages a strong coupling
 of components to that particular middleware, thereby reducing its portability.
 
 As \texttt{SCA} tries to avoid platform lock-in, it has taken an entirely different approach. Instead of requiring the use
-of a implementation language-independent IDL components can use interfaces written in the implementation language.
-The only requirement is that the interface on the client side must be a subset of the one at the server side and that
+of a implementation, language-independent IDL components can use interfaces written in the implementation language.
+The only requirement is that the interface on the client side must be a subset of the one at the server side, and that
 argument types can be mapped cleanly from one language to the other. The difference between the two approaches is
 similar to the difference between static typing and structural typing in programming languages.
 
 A target service interface is considered compatible with the reference interface if it defines the same set, or a superset,
-of operations. The operation names must be the same as well as the parameter types, the parameter ordering and the return
+of operations. The operation names must be the same, as well as the parameter types, the parameter ordering and the return
 type.
 %TODO elaborar
-In some cases when creating a service binding, the \texttt{SCA} runtime can create a WSDL interface description from the \texttt{Java} interface.
+In some cases when creating a service binding, the \texttt{SCA} runtime can create a Web Service Definition Language (\texttt{WSDL}) interface description from the \texttt{Java} interface.
 
 
 \section{SCA and dependency injection}
 
 \texttt{SCA} was proposed at a time when the \texttt{Java} enterprise developer community had already experienced the complexity of component
-platforms such as \texttt{EJB} and moved on to simpler lightweight dependency injection containers like Spring. For this reason
-\texttt{SCA} tries to follow the same principles to avoid issues such as container coupling, lack of portability and interoperability.
+platforms such as \texttt{EJB}, and moved on to simpler lightweight dependency injection containers like Spring. For this reason,
+\texttt{SCA} tries to follow the same principles to avoid issues such as container coupling, lack of portability, and interoperability.
 In a sense, everything up to the communication stack is injected rather than hard-coded.
 
-The core runtime does its part to allow component to be configured using dependency injection. At start-up it reads the
-composite assembly file, locates the required implementation, interface and binding extensions and configures them
+The core runtime does its part to allow components to be configured using dependency injection. At start-up, it reads the
+composite assembly file, locates the required implementation, interface and binding extensions, and configures them
 according to the user's instructions. From this point on, it is up to the implementation extension to provide an environment
 suitable for the development of components that are configured externally.
 
-OSOA also has standards for implementation extensions for \texttt{Java} and \texttt{C++} \cite{SCA}. While \texttt{Java}'s binding fully supports
-dependency injection, \texttt{C++}'s standard does not. The reason, as explained in chapter \ref{chap:ioc}, is that runtime
+The Open Service Oriented Architecture Group (\texttt{OSOA}) also has standards for implementation extensions for \texttt{Java} and \texttt{C++} \cite{SCA}.
+While \texttt{Java}'s binding fully supports dependency injection, \texttt{C++}'s standard does not. The reason, as explained in chapter \ref{chap:ioc}, is that runtime
 introspection is necessary to implement a generic container that can handle objects of classes unknown at compile-time.
-While \texttt{Java} has a built-in introspection support, \texttt{C++} does not. For this reason, the \texttt{SCA} \texttt{C++} standard requires components
+While \texttt{Java} has built-in introspection support, \texttt{C++} does not. For this reason, the \texttt{SCA} \texttt{C++} standard requires components
 to use an \texttt{SCA}-specific \texttt{API} to retrieve configuration values and service references as needed. This leads to an unfortunate
 situation where \texttt{C++} components are almost independent on the underlying infrastructure, but not enough to be reused in
 other contexts.
 
-The dependency on a \texttt{API} also implies a dependency at the module level between the components module and the \texttt{API}'s module.
+The dependency on an \texttt{API} also implies a dependency at the module level between the components module and the \texttt{API}'s module.
 So even if the \texttt{API} is only an abstract facade that could allow several implementations, the component's module can not be deployed
 without the \texttt{API}'s module.
 
 Actually there is an \texttt{SCA} \texttt{C++} container, Trentino \cite{Trentino}, that supports a limited form of inversion of control as it is
-built on top of \texttt{PocoCapsule} \cite{PocoCapsule}. But as discussed in chapter \ref{chap:ioc}, \texttt{PocoCapsule} uses a configuration
+built on top of \texttt{PocoCapsule} \cite{PocoCapsule}. However, as discussed in chapter \ref{chap:ioc}, \texttt{PocoCapsule} uses a configuration
 file, in this case the composite file, as input to the injection code generator and consequently this adapter code must be
 recompiled every time there is a significant change in the configuration file. Nonetheless, this scheme allows to make minor
 changes to configurations such as changing a configuration value. An additional shortcoming of this scheme is that
@@ -320,7 +325,7 @@ it is impossible to introspect interfaces at runtime to generate representations
 \texttt{Apache Tuscany} is a project hosted by the Apache Foundation \cite{Tuscany}, \cite{Laws}. It includes one implementation written
 in \texttt{Java} that supports components written in \texttt{Java}, \texttt{BPEL}, \texttt{Python} and many messaging protocols such as \texttt{RMI}, \texttt{CORBA}, \texttt{SOAP} and \texttt{JMS}.
 This project also includes a more limited \texttt{SCA} runtime written entirely in \texttt{C++}, which includes a \texttt{C++} implementation extension.
-However this extension does not support dependency injection. As described in the previous section, components have to use
+However, this extension does not support dependency injection. As described in the previous section, components have to use
 \texttt{SCA}'s \texttt{API} to retrieve the configuration properties and service references.
 
 \texttt{Apache Tuscany} has a modular architecture, reflecting \texttt{SCA}'s extensible model. Because \texttt{SCA} is designed to support many
@@ -335,7 +340,7 @@ the appropriate registry.
 Because different extensions might require different configurations, \texttt{SCA}'s \texttt{XML} assembly language is designed to be extensible.
 For example, the \texttt{$<$implementation.java$>$} element has a different syntax than the \texttt{$<$implementation.cpp$>$}
 due to differences between the two languages. In \texttt{Tuscany}, composite files are verified using an \texttt{XSD} schema. This schema is
-composed of a main file for the core syntax and each extension provides an additional file that determines it's specific syntax.
+composed of a main file for the core syntax, and each extension provides an additional file that determines its specific syntax.
 %TODO encaixar esse negocio em algum lugar e usar a figura das extensoes plugaveis do tuscany
 There can be extensions for implementations, interfaces, data bindings, messaging protocols and policies.
 
@@ -362,14 +367,14 @@ runtime then uses these endpoints to compose components and relay request messag
 The \texttt{ServiceWrapper} is an interface for objects that receive serialized parameter packs and relay them to a service.
 These serialized messages are instances of the \texttt{Operation} class. Both implementation extension and binding extensions
 implement this interface. In the case of an implementation extension, the parameters are de-serialized and the component's
-method is invoked. In the case of a binding extension the parameters a converted to a wire format and sent to a remote component. 
+method is invoked. In the case of a binding extension, the parameters are converted to a wire format and sent to a remote component. 
 
 The \texttt{ServiceProxy} is an interface for objects that receive a method invocation, serializing it and
 calling a service wrapper. In the case of implementation extension, the source of the invocation can be a direct method
 call by a component's implementation. In the case of a binding extension, the proxy object might listen for requests coming
 in from a network interface.
 
-A \texttt{ServiceBinding} is represents a service endpoint of a component. It has a reference to a \texttt{ServiceWrapper}
+A \texttt{ServiceBinding} represents a service endpoint of a component. It has a reference to a \texttt{ServiceWrapper}
 object that is used to effectively invoke a component's method.
 
 A \texttt{ReferenceBinding} represents a reference endpoint of a component. It has a method to make the connection
@@ -382,21 +387,21 @@ As previously discussed, \texttt{Tuscany}'s \texttt{C++} implementation extensio
 create another \texttt{C++} extension that uses the \texttt{SelfPortrait} library presented in chapter \ref{chap:reflection} in order
 to support dependency injection. 
 
-Naturally our extension is a modified version of the existing one. We will first describe how the original extension works
+Naturally, our extension is a modified version of the existing one. We will first describe how the original extension works
 and then proceed to the changes that were necessary.
  
 Most of the classes that are part of an implementation extension have a structural purpose so we will not discuss them in
 detail. The real functionality of handling requests and responses is implemented in the \texttt{ServiceWrapper} and 
 \texttt{ServiceProxy} classes. 
 
-In \texttt{Tuscany}'s \texttt{C++} extension service wrappers are a three-level class hierachy. At the most abstract level is the
+In \texttt{Tuscany}'s \texttt{C++} extension, service wrappers are a three-level class hierachy. At the most abstract level is the
 \texttt{ServiceWrapper} interface that contains the declaration of the \texttt{invoke} method. At the intermediate level of
 this class hierarchy is the \texttt{CPPServiceWrapper} class that contains code that is common to all wrappers.
 At the most concrete level is a class that is generated by a tool that the component developer must run before
 compiling the component. This tool takes as input the name of the implementation class and the header file containing
 the abstract base class representing the service interface. The class that is generated by this tool contains code
 to invoke the methods of the implementation class and to create and destroy new instances. The method invocation
-happens in the implementation of the abstract \texttt{invoke} method, that does the invocations based on the method names.
+happens in the implementation of the abstract \texttt{invoke} method, which does the invocations based on the method names.
 The generated source file also contains a global function whose name is based on the name of the component. When
 the shared library containing the component implementation is loaded by the \texttt{C++} extension, this function is called
 to create new instances of the service wrapper class.
@@ -411,11 +416,11 @@ service references. In addition the \texttt{API} and the generated proxy and wra
 possibly leading to invalid memory accesses.
 
 To extend this same basic scheme to support dependency injection would require parsing the implementation classes
-as well and reifying this type information. Basically the result would be close to a introspection support
+as well and reifying this type information. Basically, the result would be close to a introspection support
 and there would be no reason not to generalize it to a general-purpose introspection framework.
 
-Our extension is based on a \texttt{SelfPortrait}, a general-purpose \texttt{C++} introspection library that is capable
-of instantiating object, reading and writing attributes and calling methods. It also support dynamic proxies
+Our extension is based on \texttt{SelfPortrait}, a general-purpose \texttt{C++} introspection library that is capable
+of instantiating objects, reading and writing attributes and calling methods. It also supports dynamic proxies
 similar to those supported by \texttt{Java}.
 
 The structural classes in our extension are very similar to the ones of the existing extension. It is in the
@@ -423,41 +428,41 @@ implementation of proxies and wrappers that our extension diverges.
 
 Our implementation of the \texttt{ServiceWrapper} class, \texttt{IoCServiceWrapper}, loads the shared library
 that contains a component and tries to locate the meta-object that describes the implementation class using
-the reflection \texttt{API}. This meta-object is then used to create and instance of that class using the default constructor.
-We could have implemented constructor injection but that would require changing the \texttt{XML} language supported by
+the reflection \texttt{API}. This meta-object is then used to create an instance of that class using the default constructor.
+We could have implemented constructor injection, but that would require changing the \texttt{XML} language supported by
 \texttt{Tuscany native}. The next step is to inject configuration values from the composite file based in the property names.
 Attribute and setter injection are supported. The final step of the initialization phase is to inject the service
 references. These can also be injected directly into public attributes or setter methods. The injection is done
 locating the corresponding attribute or method meta-objects based on the property names. When the service wrapper
 receives a request, it tries to find a meta-object for a method that has the same name as the operation and that
-as an appropriate signature. It then invokes this method using the meta object.
+has an appropriate signature. It then invokes this method using the meta object.
 
-Our implementation of the \texttt{ServiceProxy} class, \texttt{IoCServiceProxy} relies on dynamic proxies to provide
+Our implementation of the \texttt{ServiceProxy} class, \texttt{IoCServiceProxy}, relies on dynamic proxies to provide
 implementations of service interfaces. During the initialization phase, this class locates the class meta-object that
 describes the interface class and creates a proxy for it. For each method, this proxy is configured to serialize its
 arguments to an \texttt{Operation} object that is then handed to a service wrapper.
 
 In addition to dependency injection, our scheme has the advantage that pre-compiled shared libraries can be loaded without
 modifications. The introspection meta-data can be compiled to a second shared library and loaded separately.
-The possibility of separating component shared libraries and reflection shared libraries is a trait that we share with
+The possibility of separating component shared libraries and reflection shared libraries is a trait we share with
 \texttt{Trentino}.
 
 \section{Results}
 
 To demonstrate the difference in component development using the existing \texttt{C++} extension and our
-new extension we will use a sample component present in \texttT{Tuscany native}'s distribution. Listing
+new extension, we will use a sample component present in \texttT{Tuscany native}'s distribution. Listing
 \ref{lst:calccpp} shows a calculator service that depends on an external service to perform
 divisions. In this example, we can see that the component has to include an external \texttt{SCA} header
 file. This include is necessary to get access to a \texttt{ComponentContext} object that is then
 used to retrieve a reference to the division service. The \texttt{ComponentContext} context acts
-as a key-value collection where the keys a the property names given in the composite file.
-It is worthwhile to note that \texttt{ComponentContext::getService} method returns a \texttt{void*}
+as a key-value collection where the keys are the property names given in the composite file.
+It is worthwhile to note that the \texttt{ComponentContext::getService} method returns a \texttt{void*}
 pointer that must be cast to the expected interface type. This cast can fail for two reasons, both
 with catastrophic consequences. The first and most obvious reason for the conversion from \texttt{void*} to
 \texttt{Divide*} to fail is that the pointer may actually point to something else.
 This cast can also fail in a more subtle way if the \texttt{API} implementation is not careful. If the
 \texttt{API} implementation puts a pointer to the implementation class in the key-value storage instead of
-a pointer to the interface the conversion can fail. If the implementation class happens to
+a pointer to the interface, the conversion can fail. If the implementation class happens to
 implement several interfaces, pointers to the same object but with different types can actually
 point to memory locations that are a few words apart. This problem can be avoided if the runtime
 uses a \texttt{static\_cast} to convert the implementation class pointer to the interface pointer
@@ -517,7 +522,7 @@ the runtime as a key in the \texttt{ComponentContext}
 \end{listing}
 
 \texttt{Tuscany native} also requires a \texttt{componentType} file for each component instantiated in the composite file.
-This file contains a description of a components services and references and their interface. Listing
+This file contains a description of the component's services and references and their interface. Listing
 \ref{lst:calccppccomponenttype} shows the \texttt{componentType} file for the calculator component. Notice
 the \texttt{$<$interface.cpp$>$} element selecting the original \texttt{C++} interface extension.
 
@@ -543,12 +548,12 @@ developed for our \texttt{C++} implementation extension. Listing \ref{lst:calcio
 component with a few modifications. The only header file inclusions left are for application-
 specific header files. We have added a pointer attribute to a \texttt{Divide*} object and a
 setter method. The division method now simply uses this pointer to call the division service.
-When this component is created the implementation extension takes the reference name and
+When this component is created, the implementation extension takes the reference name and
 tries to find an attribute with the same name or a setter method whose name follows \texttt{Java}'s
-setter names rule. In this example it will use the \texttt{setDivideService} method for
+setter names rule. In this example, it will use the \texttt{setDivideService} method for
 setter injection. We have also added a public attribute for a property just to demonstrate
 attribute injection. An important difference is that the runtime is now responsible for
-checking that properties and reference are of the correct type. In our implementation this
+checking that properties and references are of the correct type. In our implementation, this
 is done at runtime. If the types do not match, an exception is thrown and the configuration
 phase is aborted.
 
@@ -608,11 +613,11 @@ contain the name of the implementation class that will be used to locate the cla
 \label{lst:calcioccomposite}
 \end{listing}
 
-The component type file also has suffered a few modifications, as shown in listing \ref{lst:calcioccomponenttype}.
-The primary difference is the use of \texttt{$<$interface.ioc$>$} element to select our interface extension.
+The component type file also suffered a few modifications, as shown in listing \ref{lst:calcioccomponenttype}.
+The primary difference is the use of the \texttt{$<$interface.ioc$>$} element to select our interface extension.
 The \texttt{$<$class$>$} attribute contains the name of the interface class that is used to locate the
 meta-object that represents it. This meta-object is used to build the dynamic proxies that are injected into
-component references. Also the optional \texttt{metadata} attribute is used to load a separate shared library
+component references. Also, the optional \texttt{metadata} attribute is used to load a separate shared library
 that contains the compiled meta-data.
 
 \begin{listing}
@@ -635,7 +640,7 @@ that contains the compiled meta-data.
 \end{listing}
 
 The difference at the physical level can be seen by the output of a command like \texttt{Linux's ldd}, that lists
-dependencies on shared objects as shown in listing \ref{lst:deps}. From this listing we can see that the original
+dependencies on shared objects as shown in listing \ref{lst:deps}. From this listing, we can see that the original
 component depends on several of \texttt{Tuscany's} libraries while the new component depends solely on a few system
 libraries. The meta-data shared library depends only on our introspection library and on the component file. It does
 not depend on the \texttt{Tuscany} runtime so it can be reused in other contexts as well.
@@ -684,16 +689,16 @@ libc.so.6
 \label{lst:deps}
 \end{listing}
 
-From a quantitative standpoint there a two things we can compare, the code size and the performance overhead.
-In table \ref{tab:table1} we can see the sizes of the original component shared library file and the new one,
+From a quantitative standpoint, there are two things we can compare: the code size and the performance overhead.
+In table \ref{tab:table1}, we can see the sizes of the original component shared library file and the new one,
 along with the meta-data file. While the component file without meta-data is smaller than the original file,
-the meta-data file is quite large. There are several reasons why the meta-data files is bigger than the component
+the meta-data file is quite large. There are several reasons why the meta-data files are bigger than the component
 file. First of all, the component contains almost no code, so there is actually much more code to handle the
-generic use of the component's interface than in actual methods. In a real-world application the component code
+generic use of the component's interface than in actual methods. In a real-world application, the component code
 would be much bigger, leading to a smaller overhead. Another reason for this size is that the reflection library
 uses template container classes from the standard library leading to the generation of code in the meta-data shared
-object file. And finally, for each type of method argument an internal template of the \texttt{VariantValue} class
-are instantiated leading to more code generation. However, as more interfaces and methods are introspected, it is
+object file. Finally, for each type of method argument, an internal template of the \texttt{VariantValue} class
+is instantiated leading to more code generation. However, as more interfaces and methods are introspected, it is
 likely that the same type will be used many times, but generating code only once.
 
 \begin{table}[ht]
@@ -713,15 +718,15 @@ Meta-data libCalculator-md.so & 138792 B\\
 \end{tabular}
 \end{table}
 
-To compare the performance of the new and the old \texttt{Tuscany} binding we ran a test where the
+To compare the performance of the new and the old \texttt{Tuscany} bindings, we ran a test where the
 division method was called 10 million times for each component version. We measured the processor use
-using the \texttt{clock} \texttt{Unix} system call. In our extension we implemented an optimization where
+using the \texttt{clock} \texttt{Unix} system call. In our extension, we implemented an optimization where
 direct method calls are used if the two components are written in \texttt{C++} and are hosted by the same
-process. In table \ref{tab:table2} we can see that the direct method call is by far the fastest. In second
+process. In table \ref{tab:table2}, we can see that the direct method call is by far the fastest. In second
 place comes \texttt{Tuscany's} original method call mechanism. The slowest method call is using dynamic proxies.
 This happens because with the dynamic proxy approach there is much more work involved. \texttt{Tuscany's}
-pre-compiled code just takes its arguments and constructs an \texttt{Operation} object and calls the connected
-\texttt{ServiceWrapper}. The proxy version must find out dynamically what its argument types are to construct
+pre-compiled code just takes its arguments, constructs an \texttt{Operation} object, and calls the connected
+\texttt{ServiceWrapper}. The proxy version must find out dynamically what argument types are to construct
 an operation \texttt{Object}. After this, our \texttt{ServiceWrapper} takes this serialized request and
 builds an introspective call frame. What makes this inefficient is that we must convert twice between \texttt{SelfPortrait's}
 representation of method calls and \texttt{Tuscany's}. Changing \texttt{Tuscany's} implementation, the call sequence would

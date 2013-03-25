@@ -23,7 +23,7 @@ the meta-data that is actually used would be loaded, reducing the meta-data memo
 work in dependency injection could be used to inject \texttt{dlSBRT} services into applications in a way that is more
 configurable and without source-level dependencies.
 
-Another potentially interesting experiment would be to apply the work of Dubey \emph{et al.} to \texttt{SCA C++} with \texttt{D.I} \cite{Dubey}.
+Another potentially interesting experiment would be to apply the work of Dubey and colleagues to \texttt{SCA C++} with \texttt{D.I} \cite{Dubey}.
 They describe the work that was necessary to create a real-time component framework starting with \texttt{CCM} and a \texttt{ARINC-653},
 a real-time operating system. On one hand real-time components usually require fast and predictable response times and therefore
 are usually developed in low-level languages. On the other hand, the use of \texttt{CCM} introduces a lot of complexity and source-level
@@ -40,3 +40,10 @@ script could sense the environment to configure the application accordingly. Thi
 for the \texttt{SelfPortrait API}. Indeed with this binding we can extend Cerqueira's approach to purely local components written
 in different languages. With the \texttt{LuaJ} binding and ours, \texttt{Lua} has access to both \texttt{C++} and \texttt{Java} dynamic proxies and could
 be used to bridge the communication between \texttt{Java} and \texttt{C++} objects.
+
+There is still a lot of room for improvement. Regarding the introspection library, maybe the most important issue to be resolved is the size of
+reflection meta-data. \texttt{JIT} compilation has the potential to reduce greatly the amount of space used by compiling only the code that is
+actually required. In addition, it could be used to produce faster method call code by eliminating run-time type checking
+in situations where the arguments types are known. As for the \texttt{SCA} container for \texttt{C++} with dependency injection,
+another interesting possibility would be building a version of the \texttt{Frascati} \cite{Seinturier} component model, which is an extension of
+\texttt{SCA}, for \texttt{C++}.
