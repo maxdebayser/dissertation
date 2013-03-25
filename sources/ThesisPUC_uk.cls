@@ -59,7 +59,7 @@
 % hyphenation
 \RequirePackage[british]{babel}
 
-% PhD thesis or MsC dissertation
+% PhD thesis or MSc dissertation
 \newboolean{puc@phd}
 \setboolean{puc@phd}{false}
 \DeclareOption{msc}{\setboolean{puc@phd}{false}}
@@ -643,7 +643,7 @@
       \puc@rightmargin{\LARGE \arial \puc@subtitle\relax \normalsize} }%
     \vspace*{\stretch{5}}%
     \par%
-    \puc@rightmargin{\Large \arial \textbf{\ifthenelse{\boolean{puc@phd}}{PhD Thesis}{MsC Thesis}}}%
+    \puc@rightmargin{\Large \arial \textbf{\ifthenelse{\boolean{puc@phd}}{PhD Thesis}{MSc Dissertation}}}%
     \vspace*{\stretch{1.5}}%
     \par%
     \puc@rightmargin{\textbf{DEPARTMENT OF \MakeUppercase{\puc@department}}}%
@@ -686,13 +686,13 @@
     \puc@rightmargin{\arial \textbf{\puc@subtitle} \relax} }%
   \vspace*{\stretch{5}}%
   \par%
-  \puc@rightmargin{\arial \textbf{\ifthenelse{\boolean{puc@phd}}{PhD Thesis}{MsC Thesis}}}%
+  \puc@rightmargin{\arial \textbf{\ifthenelse{\boolean{puc@phd}}{PhD Thesis}{MSc Dissertation}}}%
   \vspace*{\stretch{1.5}}%
   \par%
   \puc@leftmargin{\arial%
     \ifthenelse{\boolean{puc@phd}}%
       {Thesis presented to the Post--graduate Program in \puc@program\ of the \puc@department\ Department, \puc@uni\ as partial fulfillment of the requirements for the degree of Doctor in Philosophy in \puc@program}%
-      {Thesis presented to the Post--graduate Program in \puc@program\ of the \puc@department\ Department, \puc@uni\ as partial fulfillment of the requirements for the degree of Master in \puc@program}%
+      {Dissertation presented to the Post--graduate Program in \puc@program\ of the \puc@department\ Department, \puc@uni\ as partial fulfillment of the requirements for the degree of Master in \puc@program}%
   }%
   \vspace*{\stretch{1}}%
   \par%
@@ -735,7 +735,7 @@
   \puc@leftmargin{\arial%
   \ifthenelse{\boolean{puc@phd}}%
   {Thesis presented to the Post--graduate Program in \puc@program\ of the \puc@department\ Department, \puc@uni\ as partial fulfillment of the requirements for the degree of Doctor in Philosophy in \puc@program. }%
-  {Thesis presented to the Post--graduate Program in \puc@program\ of the \puc@department\ Department, \puc@uni\ as partial fulfillment of the requirements for the degree of Master in \puc@program. }%
+  {Dissertation presented to the Post--graduate Program in \puc@program\ of the \puc@department\ Department, \puc@uni\ as partial fulfillment of the requirements for the degree of Master in \puc@program. }%
   Approved by the following commission:%
   }%
   \vspace*{\stretch{1}}%
@@ -787,7 +787,7 @@
       \noindent \puc@authorR \\ \\ \par%
       \hspace*{.6cm} \puc@title\relax\ / \puc@author; adviser: \puc@adviser\ifthenelse{\equal{\puc@coadviser}{}}{}{; co--adviser\ifthenelse{\equal{\puc@coadviserII}{}}{}{s}: \puc@coadviser}\ifthenelse{\equal{\puc@coadviserII}{}}{}{, \puc@coadviserII}\ifthenelse{\equal{\puc@coadviserIII}{}}{}{, \puc@coadviserIII}. --- \puc@city\ : \puc@uni, Department of \puc@department, \puc@year. \\ \\ \par%
       \hspace*{.6cm} v., \pageref{LastPage} f: il. ; 29,7 cm \\ \\ \par%
-      \hspace*{.6cm} 1.   \ifthenelse{\boolean{puc@phd}}{PhD Thesis}{MsC Thesis} - \puc@university, Department of \puc@department. \\ \\ \par%
+      \hspace*{.6cm} 1.   \ifthenelse{\boolean{puc@phd}}{PhD Thesis}{MSc Dissertation} - \puc@university, Department of \puc@department. \\ \\ \par%
       \hspace*{.6cm} Bibliography included. \\ \\ \par%
       \hspace*{.6cm}%
         \newcounter{keycount}\setcounter{keycount}{1}%
@@ -864,7 +864,7 @@
   \vspace{\stretch{3}}%
   \par\indent%
   \begin{minipage}{12cm}\singlespacing%
-  \puc@authorR; \puc@adviserR\ifthenelse{\equal{\puc@coadviser}{}}{}{; \puc@coadviserR}\ifthenelse{\equal{\puc@coadviserII}{}}{}{; \puc@coadviserIIR}\ifthenelse{\equal{\puc@coadviserIII}{}}{}{; \puc@coadviserIIIR}. \textbf{\puc@title}. \puc@city, \puc@year. \pageref{LastPage}p.   \ifthenelse{\boolean{puc@phd}}{PhD Thesis}{MsC Thesis} --- Department of \puc@department, \puc@university.%
+  \puc@authorR; \puc@adviserR\ifthenelse{\equal{\puc@coadviser}{}}{}{; \puc@coadviserR}\ifthenelse{\equal{\puc@coadviserII}{}}{}{; \puc@coadviserIIR}\ifthenelse{\equal{\puc@coadviserIII}{}}{}{; \puc@coadviserIIIR}. \textbf{\puc@title}. \puc@city, \puc@year. \pageref{LastPage}p.   \ifthenelse{\boolean{puc@phd}}{PhD Thesis}{MSc Dissertation} --- Department of \puc@department, \puc@university.%
   \end{minipage}\onehalfspacing%
   \vspace*{\stretch{1}}%
   \par%
