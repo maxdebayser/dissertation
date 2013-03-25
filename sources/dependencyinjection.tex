@@ -219,24 +219,31 @@ components are tightly coupled to the CCM runtime and cannot be reused in other 
 are not portable. In contrast, if we look at applications developed using the Spring Framework for Java we will
 see that they are POJOs that never reference Spring's API and can therefore be used in other contexts.
 
-\begin{center}
+\begin{figure}
+\centering
 \includegraphics[height=80pt]{graphics_tables/bad_layers.eps} 
-\end{center}
+\caption{Layered Architecture}
+\label{fig:bad_layers}
+\end{figure}
 
-The problem with the earlier component framework is that they are based on a strictly layered approach. Traditionally systems
-are structured in layers where the more abstract layers depend on more the concrete layers below them. The benefit is that
-the higher level layers can be built without worrying about low-level concerns. The drawback is that the higher level
-layers are tightly coupled to the layers directly below them and are usually not portable to other stacks.
-This problem can be mitigated by creating standards for the API of a layer, like \texttt{POSIX}, but cannot be completely
-eliminated. 
+The problem with the earlier component framework is that they are based on a strictly layered approach, as illustrated in figure
+\ref{fig:bad_layers}. Traditionally systems are structured in layers where the more abstract layers depend on more the concrete
+layers below them. The benefit is that the higher level layers can be built without worrying about low-level concerns. The
+drawback is that the higher level layers are tightly coupled to the layers directly below them and are usually not portable
+to other stacks. This problem can be mitigated by creating standards for the API of a layer, like \texttt{POSIX}, but cannot
+be completely eliminated. 
 
 With inversion of control, the infra-structure can sometimes be abstracted away completely eliminating source dependencies
 on infra-structure APIs. As will be explained in the chapter about \texttt{SCA}, dependency injection can be used to adapt
-a generic component to a specific middleware platform.
+a generic component to a specific middleware platform, by introducing a layer that inverts the direction of dependencies,
+as shown in figure \ref{fig:good_layers}.
 
-\begin{center}
-\includegraphics[height=80pt]{graphics_tables/good_layers.eps} 
-\end{center}
+\begin{figure}
+\centering
+\includegraphics[height=80pt]{graphics_tables/good_layers.eps}
+\caption{Inversion of dependencies}
+\label{fig:good_layers}
+\end{figure}
 
 
 \textbf{Interoperability} Component frameworks like CCM are created to foster the reuse of software components.

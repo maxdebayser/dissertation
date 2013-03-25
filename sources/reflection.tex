@@ -1259,10 +1259,13 @@ where the most expensive tests are performed and as a result the call can be two
 the time required for direct calls does not change significantly when more parameters are added, while in the generic call case we can see a
 constant increment for each added parameter.
 
+The cost of these method calls is a direct consequence of the cost of dynamic type conversions in \texttt{C++}. Gibbs and Stroustrup propose
+a solution that greatly improves the performance of the \texttt{dynamic\_cast} operator \cite{Gibbs}. However their solution requires that
+all types must be known to the compiler and is therefore not directly applicable for applications where new classes can be loaded at runtime.
+This is not a problem for their problem domain, which is embedded systems, but in our case this is too restrictive.
+
 While this overhead can be prohibitive for calling small functions in tight inner loops, it should be acceptable for the configuration and composition
 of components as these are typically done only once at start-up.
-
-% analise mais qualitativa
 
 For a more qualitative analysis we can adopt the following design principles for a reflection \texttt{API} by Bracha and Ungar \cite{Bracha}:
 
@@ -1311,5 +1314,9 @@ probably less than 10\% of these methods will be called. We believe that we have
 in a standards conforming way. However, it might be interesting to investigate the possibility of generating the required
 code on demand at runtime for a standard \texttt{ABI} such as the \texttt{Itanium ABI} used by \texttt{gcc} and \texttt{clang}, among other compilers.
 Possibilities include \texttt{JIT} compilation using \texttt{clang} or creating the call frames with \texttt{libffi}.
+One of the greatest sources of code bloat is that we use template classes that implement polymorphic interfaces.
+This forces the compiler to generate \texttt{vtables} and code for each one of these classes. Nicart proposes a solution to reduce
+\texttt{vtable} overhead that simulates polymorphism \cite{Nicart}. However, his solution requires all derived classes to be
+known and in our system this set of classes is open-ended.
 
 The entire source code can be found at \url{https://github.com/maxdebayser/SelfPortrait}
