@@ -25,7 +25,7 @@ proposed. The simplest solution is to forward messages for a specific object. Fo
 be created for a specific \texttt{CORBA} object \cite{soap, corba}. A more general approach is to translate the messages transparently
 from one middleware protocol to another. As more middleware protocols are added, however, the number of translators
 needed rises quadratically. To address this problem, some solutions translate all messages to an intermediate format,
-which must be a functional subset of all supported formats, at the expense of expressivity. While these solutions
+which must be a functional subset of all supported formats, at the expense of expressivity \cite{Flores, Issarny, Bennaceur, Bromberg, Nakazawa}. While these solutions
 are certainly needed for the integration of legacy systems, they don`t address the source of the interoperability
 problem which is the tight coupling that most middleware platforms impose on distributed applications. If applications were
 easily portable between middlewares, then is would also be easy to open ports using several different communication
