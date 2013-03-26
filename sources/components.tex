@@ -1,6 +1,4 @@
-\section{Introduction}
-
-In this chapter we hope to give a precise definition of several concepts that will be used later in this dissertation, and to
+In this chapter we give a precise definition of several concepts that will be used later in this dissertation, and to
 establish the relations between them. It is often the case that words that denote intangible things such as concepts are vague
 and can have slightly different interpretations for different persons or in different contexts. The most representative example
 of this is the term \emph{object} that, even restricted to the field of computer science, supports many different interpretations.
@@ -8,7 +6,7 @@ In many cases this vagueness is a good thing because the human intellect is able
 to different usages. For instance, even if object orientation manifests itself in many different forms in different programming
 languages, we are still able to recognize the same idea. However, in order to develop the ideas of the forthcoming chapters
 without ambiguity we need to tie a few terms to very specific meanings. \emph{Component}, \emph{module}, \emph{service} and
-\emph{library} are such words for which we will try to give precise definitions. But before we delve into the details of those
+\emph{library} are such words for which we will give precise definitions. But before we delve into the details of those
 definitions we will first analyze why coarse grained units of reuse are needed.
 
 In the history of programming, there has always existed the desire to reuse existing work. In other words, designers have always
@@ -33,12 +31,12 @@ objects would revolutionize reuse by allowing one to build an application entire
 Object orientation was indeed very successful and objects such as supported by most programming languages can be used to model
 entities going from the granularity of employee records to huge subsystems. But it is precisely this lack of syntactical distinction and
 of distinct tooling support that makes it difficult to use objects as units of third-party reuse and composition. Normally the programmer is
-free to randomly assign class definitions to modules and there is no way of expressing expressing the dependencies between subsystems
+free to randomly assign class definitions to modules and there is no way of expressing the dependencies between subsystems
 at a higher level than module dependencies that are resolved by the linker.
 
 This was a very unsatisfactory state of affairs as concepts from object orientation such as separation of interface and implementation
 and Liskov's substitution principle fitted perfectly into McIlroy's vision of software components \cite{Liskov}. However, object-orientation
-has not failed, as is sometimes said, rather it was mistakingly seen as the solution for the reuse problem. As expressed by Knoernschild
+has not failed, as is sometimes said \cite{Udell}, rather it was mistakenly seen as the solution for the reuse problem. As expressed by Knoernschild
 \cite{Knoernschild},
 
 \begin{quotation}
@@ -122,7 +120,7 @@ enforcing visibility restrictions and managing the dependencies on a JAR file le
 \section{Libraries}
 \label{sec:libraries}
 
-A library is a stateless collection of reusable, fine-grained entities such as procedures and classes, packaged in a single module. These entities could be reused
+A library is a stateless collection of reusable, fine-grained entities such as procedures and classes, put together in a single package. These entities could be reused
 and delivered individually but the cost of managing a high number of modules would be too high. The use of libraries is always local and intra-process using the linking
 mechanism of modules.
 
@@ -268,15 +266,16 @@ stream editor to adapt a streams content to the input protocol of another one. T
 command languages are commonly used as glue language. In addition the individual filter programs are perfectly self-contained,
 independently deployable and perform well defined tasks. The component infrastructure is the \texttt{UNIX} operating system itself.
 
-However most of the ``canonical'' component models interact using object-oriented approaches. Interfaces are expressed as abstract
-base classes and components represent their facets as objects that implement these interface. Conversely, a receptacle
+However most of the ``canonical'' component models interact using object-oriented approaches. In some languages interface are elements
+of the language, in others they are represented as abstract
+base classes and components represent their facets as objects that implement these interfaces. Conversely, a receptacle
 receive a reference to an object implementing the interface it expects and is then able to use it by the means of method calls.
 In the case of intra-process components, a connection can be established by means of a reference to the facet object.
 When \texttt{RMI} is used, the receptacle receives a reference to a \emph{stub} object that forwards the calls across an \texttt{IPC} channel. 
 
 Local component frameworks are little more than a set of infrastructure utilities that perform the loading of components and their composition.
 Remote component frameworks are typically more heavyweight including implementations for one or more \texttt{RMI} protocols, component registries
-and so forth. Some framework go to the point of providing an entire environment that includes persistence and distributed transactions support.
+and so forth. Some frameworks go to the point of providing an entire environment that includes persistence and distributed transactions support.
 
 Perhaps the most prominent example of a local component framework is \texttt{Microsoft's} \texttt{Component Object Model (COM)}, although
 later remote components were introduced. At its core is a specification for binary interfaces. An interface is represented as a table of
@@ -291,7 +290,7 @@ The same mechanism is used for components that depend on other components, which
 in \texttt{COM}. \texttt{COM} was the infrastructure used for the \texttt{Object Linking and Embedding (OLE)} technology that enables
 things such as editing rich text using a word processor component inside a spreadsheet cell. \texttt{COM} is still being used
 in a variety of services in Microsoft's operating system but is largely being superseded by the \texttt{.NET} framework for application
-programming. Nonetheless, has influenced many other component frameworks like Mozilla's \texttt{XPCOM} and \texttt{OpenCOM}, a component
+programming. Nonetheless, it has influenced many other component frameworks like Mozilla's \texttt{XPCOM} and \texttt{OpenCOM}, a component
 framework for embedded applications \cite{XPCOM} \cite{OpenCOM01}.
 
 Another good example of local components are Sun's JavaBeans technology. There are several component models supported by the Java platform, each
@@ -317,16 +316,17 @@ on top of CORBA, a language independent standard for remote objects and remote m
 (IDL) to include the concept of component connectors such as facets and receptacles. Unlike EJB and COM, by enforcing explicit receptacles, support
 a connection-oriented style of composition.
 
-\section{Modularity Patterns and Physical Design}
+\section{Modularity Patterns and Packaging}
 \label{sec:patterns}
 
-Because the unit of reuse is the unit of release special care has to be put into physical design.
+Because the unit of reuse is the unit of release special care has to be put into packaging.
 The relationship between modules is defined by the logical relationship of classes and procedures
 and how they are assigned to physical units. If two related classes are assigned to different
 modules a physical dependency is created. There is a lot of literature on object-oriented design
 that shows how create extensible and reusable logical designs but few treat the physical design
 that must be considered to make reuse possible. This section is based on the work of Szyperski
-\cite{Szyperski}, \cite{Lakos}, \cite{Martin} and \cite{Knoernschild}.
+\cite{Szyperski}, \cite{Lakos}, \cite{Martin} and \cite{Knoernschild}. \emph{Packaging} is also called
+\emph{physical design} by Knoernschild, so both terms are used interchangeably in this text.
 
 Creating units of independent reuse and deployment is not an easy task. The more flexible and
 configurable a unit of reuse is, the more difficult it is to use because more decisions are
@@ -341,7 +341,7 @@ conflicting concerns are well summarized in Szyperski's statement:
 Most of the time there are no hard rules that can be followed to create code that is both reusable,
 and easy to use. The engineer has to find the best trade-off between these conflicting requirements.
 However there are principles that can be followed that lead to good designs.
-In his excellent book, Java Application Architecture, Knoernschild listed a series of physical
+In his book, Java Application Architecture, Knoernschild listed a series of physical
 design patterns or guidelines for sound physical design. Although his guidelines are directed
 at module design, his concept of modules is very close to Szyperski's notion of software components
 and actually his principles are even more important when applied to components.
@@ -372,9 +372,9 @@ larger system. Also, with a better understanding comes a better maintainability.
 to have fewer dependencies. As random functionality is thrown into a single module, chances are that each
 functionality introduces dependencies to external modules. When a module with low cohesion is used, it is
 likely that only a small subset of its functionality is needed. However as a consequence of the common reuse
-principle \cite{Martin}, the use of a part of a module forces the inclusion of the whole including all
-external dependencies. This complicated deployments a several external modules must be installed as well
-even if they are pulled in by the parts that are not used.
+principle \cite{Martin}, the use of a part of a module forces the inclusion of all external dependencies.
+This complicates deployment as several external modules must be installed as well, even if they are only
+required by parts of modules that are not used.
 
 \textbf{Independent deployment}:
 The most reusable module or component is one that can be deployed without requiring the deployment of any other
@@ -395,7 +395,7 @@ test modules with strong container coupling. This guideline is sometimes difficu
 programming frameworks often impose a strong coupling. As an example, components that are built on top
 of CCM must inherit from abstract bases classes generated by CCM's tools. As inheritance is the strongest coupling
 these components are difficult to port to other platforms. Container independence requires abstracting the
-runtime environment away. In chapters \ref{chap:ioc} and \ref{chap:sca} treat this issue in depth.
+runtime environment away. In chapters \ref{chap:ioc} and \ref{chap:sca} we treat this issue in depth.
 
 \textbf{Published Interface}:
 The public interface of a module should be well known. Conversely, internal implementation classes

@@ -252,6 +252,11 @@ component directly. So the platforms created to enable reuse can actually hinder
 islands of compatibility. 
 
 There are several solutions to bridge the gap between different middleware platforms such as the translation of
-network protocols. But it would be even better if the component framework to use was just a matter of external
+network protocols. But it would be even better if the communication protocol to use was just a matter of external
 configuration. Then we could take two components and configure the remote method invocation protocol they should
-use to talk to each other.
+use to talk to each other. Of course it may not be possible to map all concepts of an interface defined in one language
+on another language or on the communication protocol, but the languages in widespread use today are often similar enough.
+
+To conclude this section, we remark that dependency injection solves the classical problem of object instantiation
+and configuration in a way that keeps objects dependent on interfaces alone, instead of introducing dependencies
+to implementation classes. This has wide-ranging consequences on the quality of code, packaging and \texttt{API} design.
