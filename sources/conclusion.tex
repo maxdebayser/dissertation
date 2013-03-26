@@ -1,20 +1,20 @@
-In this work we have shown that it is possible to develop native components that are independent of the
+In this work, we have shown that it is possible to develop native components that are independent of the
 underlying infrastructure. We have shown how dependency injection can be used to cut certain kinds
 of source-level dependencies resulting in less physical dependencies between modules. Native components
-are useful in more constrained environments or when a greater power efficiency is needed. In addition
-a middleware as described in this dissertation could ease the integration of native legacy code.
+are useful in more constrained environments, or when a greater power efficiency is needed. In addition,
+a middleware, as described in this dissertation, could ease the integration of native legacy code.
 
-Of course a barrier to a more widespread adoption of native components for service-based systems is precisely
-the fact that they have to be compiled for every computer architecture they are to be deployed to. However
-there a some interesting developments in that direction. For example, Google's Portable Native Client (\texttt{pNaCL}) \cite{pNaCl}
+Of course, a barrier to a more widespread adoption of native components for service-based systems is precisely
+the fact that they have to be compiled for every computer architecture they will be deployed to. However,
+there are some interesting developments in that direction. For example, Google's Portable Native Client (\texttt{pNaCL}) \cite{pNaCl}
 allows to deploy \texttt{C++} programs in the form of \texttt{LLVM}'s bytecode that is the locally JIT-compiled to native code.
 This technology could potentially be reused as the base of C++ application servers. Another work in this
 direction is \texttt{dlSBRT} by Al-Gahmi and Cook \cite{Al-Gahmi}. They describe a mechanism to provide low-level services
-to applications such as meta-data, call-graph instrumentation or more conventional services such an LDAP
-directory services. These services can intercept events in the application lifetime such as the resolution of
-symbols. This could be used for example, by a security manager service to prevent the linking to a symbol
-that represents a more privileged functionality, such as writing to a file. \texttt{dlSBRT} is built as an extension
-operating system's dynamic linker to provide a more dynamic and configurable environment.
+to applications such as meta-data, call-graph instrumentation, or more conventional services, such an LDAP
+directory services. These services can intercept events in the application lifetime, such as the resolution of
+symbols. This could be used, for example, by a security manager service to prevent the linking to a symbol
+that represents a more privileged functionality, like writing to a file. \texttt{dlSBRT} is built as an extension
+operating the system's dynamic linker to provide a more dynamic and configurable environment.
 We see these two works and ours as complimentary in building a more flexible environment for native services.
 \texttt{pNaCl} provides the necessary portability required to support multiple deployment environments. \texttt{dlSBRT} could
 be used to provide more dynamic infrastructure services. For example, \texttt{dlSBRT} could be a great mechanism to load
@@ -25,19 +25,19 @@ configurable and without source-level dependencies.
 
 Another potentially interesting experiment would be to apply the work of Dubey and colleagues to \texttt{SCA C++} with \texttt{D.I} \cite{Dubey}.
 They describe the work that was necessary to create a real-time component framework starting with \texttt{CCM} and a \texttt{ARINC-653},
-a real-time operating system. On one hand real-time components usually require fast and predictable response times and therefore
+a real-time operating system. On one hand, real-time components usually require fast and predictable response times and, therefore,
 are usually developed in low-level languages. On the other hand, the use of \texttt{CCM} introduces a lot of complexity and source-level
-dependencies. Therefore it would be interesting to verify how far we can go with the dependency injection approach considering
+dependencies. It would be interesting to verify how far we can go with the dependency injection approach, considering
 that these components have strong requirements on the quality of the infrastructure services.
 
 Finally, although \texttt{XML} is a good language for the declarative configuration of applications, despite being overly verbose, it
-is too rigid when a more dynamic behavior is required. As demonstrated by Cerquira \cite{Cerqueira00} a lightweight scripting language with
+is too rigid when a more dynamic behavior is required. As demonstrated by Cerqueira \cite{Cerqueira00}, a lightweight scripting language with
 dynamic typing such as \texttt{Lua} \cite{Lua} can be very useful for gluing together components, even when written for different component
-frameworks and in different languages. \texttt{Lua} supports a very clean declarative syntax when needed but also has support for control
-flow statements that could allow to write composition files with conditional statements. For example instead of maintaining two
-composition files for slightly different environments, as is required with \texttt{SCA's} composition language, with \texttt{Lua} the configuration
+frameworks and in different languages. \texttt{Lua} supports a very clean declarative syntax when needed, but also has support for control
+flow statements that could allow to write composition files with conditional statements. For example, instead of maintaining two
+composition files for slightly different environments, as is required with \texttt{SCA's} composition language, with \texttt{Lua}, the configuration
 script could sense the environment to configure the application accordingly. This is why we have also written a \texttt{Lua} binding
-for the \texttt{SelfPortrait API}. Indeed with this binding we can extend Cerqueira's approach to purely local components written
+for the \texttt{SelfPortrait API}. Indeed, with this binding, we can extend Cerqueira's approach to purely local components written
 in different languages. With the \texttt{LuaJ} binding and ours, \texttt{Lua} has access to both \texttt{C++} and \texttt{Java} dynamic proxies and could
 be used to bridge the communication between \texttt{Java} and \texttt{C++} objects.
 
