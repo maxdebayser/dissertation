@@ -124,6 +124,9 @@ A library is a stateless collection of reusable, fine-grained entities such as p
 and delivered individually but the cost of managing a high number of modules would be too high. The use of libraries is always local and intra-process using the linking
 mechanism of modules.
 
+An essential difference between libraries and modules is that libraries have no representation in the language. Even in language with primitive modularity
+resources, there are elements in the language provided to control aspects of the resulting module, such as the visibility of symbols.
+
 Libraries allow a separation of interface and implementation, the former usually called \emph{Application Programming Interface} (\texttt{API}). There are many examples
 of a standardized \texttt{APIs} that have many implementations such as the \texttt{OpenGL} graphics library. To a certain extent, libraries enable late-binding but not
 as much as object-oriented polymorphism would allow. Programs don't usually select a specific version of a library at runtime and its not possible to load more than
