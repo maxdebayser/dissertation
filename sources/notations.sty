@@ -1,0 +1,22 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{notations}[06/18/2002 v1.1 Notations]
+\RequirePackage{array}
+\def\notation#1#2{%
+  \write\@auxout{\string\@writefile{not}{\string\notationitem{#1}{#2}{\thepage}}}
+}%
+
+\newcommand\notationitem[3]{#1 & #2 (#3) \\
+}
+\newcommand\printnotations{%
+  \begingroup%
+  \makeatletter%
+   \begin{tabular}{l<{\vrule height 12pt depth 12pt width 0pt}@{\hspace{2cm}} l<{\vrule height 12pt depth 12pt width 0pt}}%
+   \@input{\jobname.not}%
+   \end{tabular}%
+  \if@filesw%
+  \newwrite\tf@not%
+  \immediate\openout\tf@not=\jobname.not\relax%
+  \fi%
+}%
+%
+\endinput%

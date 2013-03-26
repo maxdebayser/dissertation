@@ -4,24 +4,25 @@
 # Original Makefile from http://www.math.psu.edu/elkin/math/497a/Makefile
 # First modification by Matti Airas <Matti.Airas@hut.fi>
 # Second modification by Thomas Lewiner <lewiner@gmail.com>
-# $Id: Makefile,v 1.11 2005/09/27 15:44:33 tlewiner Exp $
+# Third modification by Americo Barbosa da Cunha Jr <americo.cunhajr@gmail.com>
+# last update: Jan 4, 2010
 #
 ##############################################################################
 
 
 ######################### Programs ################################
 
-LATEX	    = latex -src-specials -interaction=nonstopmode -shell-escape
+LATEX	  = latex -src-specials -interaction=nonstopmode -shell-escape
 BIBTEX	  = bibtex
 MAKEINDEX = makeindex
-XDVI	    = xdvi -gamma 4
-DVIPS	    = dvips
-DVIPDF    = dvipdfm
-L2H	      = latex2html -split 0
-TTH	      = tth #-a -e2
-GH	      = gv
-XPDF	    = xpdf
-RM        = rm -f
+XDVI	  = xdvi -gamma 4
+DVIPS	  = dvips
+DVIPDF    = dvipdfmx
+L2H	  = latex2html -split 0
+TTH	  = tth #-a -e2
+GH	  = gv
+XPDF	  = xpdf
+RM        = rm -Rf
 
 
 ########################## Sources ################################
@@ -29,13 +30,13 @@ RM        = rm -f
 # BEGIN DEPENDENCIES
 
 SRC       := dissertation.tex
-CLASSES   := ThesisPUC_uk.cls  
-STYLES    := atbeginend.sty chngpage.sty fancyhdr.sty indentfirst.sty inputenc.sty setspace.sty subfigure.sty titlesec.sty tocloft.sty   
-INPUTS    :=    
-BIBFILE   := dissertation.bib  
-BIBSTYLES := ThesisPUC_uk.bst
+CLASSES   := puc-rio_thesis.cls
+STYLES    := atbeginend.sty chngpage.sty nomencl.sty
+INPUTS    := *.tex
+BIBFILE   := dissertation.bib
+BIBSTYLES := puc-rio_num_us.bst puc-rio_bib_us.bst
 INPUTENCS := noaccent.def
-EPSPICS   := puc.ps  
+EPSPICS   := puc_logo.eps
 
 # END DEPENDENCIES
 
@@ -43,8 +44,8 @@ EPSPICS   := puc.ps
 DVI	 = $(SRC:%.tex=%.dvi)
 PSF	 = $(SRC:%.tex=%.ps)
 PDF	 = $(SRC:%.tex=%.pdf)
-HTM  = $(SRC:%.tex=%_htm)
-HTML = $(SRC:%.tex=%.html)
+HTM	 = $(SRC:%.tex=%_htm)
+HTML	 = $(SRC:%.tex=%.html)
 
 
 ####################### Dependencies ##############################
@@ -57,7 +58,7 @@ SRC     := $(shell egrep -l '^[^%]*\\begin\{document\}' *.tex)
 CLASSES := $(shell perl -ne '($$_)=/^[^%]*\\documentclass[^{]*\{(.*?)\}/;@_=split /,/;foreach $$b (@_) {print "$$b.cls "}' $(SRC))
 CLASSES := $(sort $(foreach class,$(CLASSES), $(shell if [ -f $(class) ] ; then echo $(class) ; else echo class $(class) not in folder >&2 ; fi ;) ) )
 
-STYLES  := $(shell perl -ne '($$_)=/^[^%]*\\usepackage[^{]*\{(.*?)\}/;@_=split /,/;foreach $$b (@_) {print "$$b.sty "}' $(SRC)) $(shell perl -ne '($$_)=/^[^%]*\\RequirePackage[^{]*\{(.*?)\}/;@_=split /,/;foreach $$b (@_) {print "$$b.sty "}' $(CLASSES))
+STYLES  := $(shell perl -ne '($$_)=/^[^%]*\\[useRqir]+[Pp]ackage[^{]*\{(.*?)\}/;@_=split /,/;foreach $$b (@_) {print "$$b.sty "}' $(SRC) $(CLASSES))
 STYLES  := $(sort $(foreach style,$(STYLES), $(shell if [ -f $(style) ] ; then echo $(style) ; else echo style $(style) not in folder >&2 ; fi ;) ) )
 
 BIBFILE := $(shell perl -ne '($$_)=/^[^%]*\\bibliography\{(.*?)\}/;@_=split /,/;foreach $$b (@_) {print "$$b.bib "}' $(SRC))
@@ -77,7 +78,7 @@ EPSPICS := \
   $(shell perl -ne '($$_)=/^[^%]*\\[tvsingleubo]+image[{[].*\{([^{}]*?)\}/;@_=split /,/;foreach $$b (@_) {print "figs/$$b "}' $(SRC) $(INPUTS) ) \
   $(shell perl -ne '($$_)=/^[^%]*\\watermark[^{}]*\{([^{}]*?)\}/;@_=split /,/;foreach $$b (@_) {print "$$b "}' $(SRC) $(INPUTS) ) \
   $(shell perl -ne '($$_)=/^[^%]*\\logouni[^{}]*\{([^{}]*?)\}/;@_=split /,/;foreach $$b (@_) {print "$$b "}' $(SRC) $(INPUTS) )
-EPSPICS := $(sort $(foreach fig,$(EPSPICS), $(shell if [ -f $(fig) ] ; then echo $(fig) ; else if [ -f $(fig).eps ] ;  then echo $(fig).eps ; else if [ -f $(fig).ps ] ;  then echo $(fig).ps ; else echo figure $(fig) not in folder >&2 ; fi ; fi ; fi ;) ) )
+EPSPICS := $(sort $(foreach fig,$(EPSPICS), $(shell if [ -f $(fig) ] ; then echo $(fig) ; else if [ -f $(fig).eps ] ;  then echo $(fig).eps ; else if [ -f $(fig).ps ] ;  then echo $(fig).ps ; else if [ -f $(fig).png ] ;  then echo $(fig).png ; else echo figure $(fig) not in folder >&2 ; fi ; fi ; fi ; fi ;) ) )
 
 endif
 
@@ -115,6 +116,7 @@ endef
 
 define run-complete
 	$(run-latex)
+    $(MAKEINDEX) $(SRC:%.tex=%.nlo) -s nomencl.ist -o $(SRC:%.tex=%.nls)
 	( egrep -q $(MAKEIDX) $< > /dev/null && \
     ! (cmp -s $(<:%.tex=%.idx) $(<:%.tex=%.idx.bak)) ) && ( \
     $(MAKEINDEX) $(<:%.tex=%) 2>&1 | egrep -i "(lines|error)" ; $(run-latex) ) ; true
@@ -212,7 +214,9 @@ clean	:
   $(DVI:%.dvi=%.aux) $(DVI:%.dvi=%.log) $(DVI:%.dvi=%.out) \
   $(DVI:%.dvi=%.bbl) $(DVI:%.dvi=%.blg) $(DVI:%.dvi=%.brf) \
   $(DVI:%.dvi=%.lof) $(DVI:%.dvi=%.lot) $(DVI:%.dvi=%.toc) \
-  $(DVI:%.dvi=%.idx) $(DVI:%.dvi=%.ilg) $(DVI:%.dvi=%.ind)
+  $(DVI:%.dvi=%.idx) $(DVI:%.dvi=%.ilg) $(DVI:%.dvi=%.ind) \
+  $(DVI:%.dvi=%.tid) $(DVI:%.dvi=%.tin) $(DVI:%.dvi=%.tms) \
+  $(DVI:%.dvi=%.nlo) $(DVI:%.dvi=%.nls)
 
 cvs :
 	cvs ci -m "backup $(shell date -u '+%A, %d %b %Y, %H:%M')"
@@ -283,4 +287,3 @@ $(HTM)	:	%_htm : %.tex $(DEP) $(BIBFILE)
 
 $(TARNAME) : $(SRC) $(DVI:%.dvi=%.bbl) $(DVI:%.dvi=%.pdf) $(CLASSES) $(STYLES) $(INPUTS) $(BIBFILE) $(BIBSTYLES) $(INPUTENCS) $(EPSPICS) Makefile figs/*.[^e][^p][^s]
 	tar -C.. -c -v -z --exclude=CVS -f $@ $(foreach file,$^,$(DIRNAME)/$(file)) > /dev/null
-

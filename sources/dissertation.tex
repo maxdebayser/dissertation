@@ -1,5 +1,7 @@
-\documentclass[msc,twoside,british]{ThesisPUC_uk}
+%\documentclass[msc,twoside,british]{ThesisPUC_uk}
 
+\documentclass[msc,wide,cover,nomencl,unix]{puc-rio_thesis}
+\usepackage[brazil]{babel}
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage[section]{minted}
@@ -20,14 +22,17 @@
 
 \author{Maximilien de Bayser}
 \authorR{de Bayser, Maximilien}
-\adviser{Renato Fontoura de Gusmão Cerqueira}
-\adviserR{Cerqueira, Renato Fontoura de Gusmão}
+\advisor{Renato Fontoura de Gusmão Cerqueira}
+\advisorR{Cerqueira, Renato Fontoura de Gusmão}
 \title{Flexible Composition for C++11}
+\titleBR{Composição Flexível em C++11}
 \day{20} \month{February} \year{2013}
 
 \city{Rio de Janeiro}
 \CDD{510}
 \department{Informatics}
+\program{Informatics}
+\programBR{Informatica}
 \program{Informatics}
 \school{Science and Engineering Center}
 \university{Pontif\'{i}cia Universidade Cat\'{o}lica do Rio de Janeiro}
@@ -39,6 +44,7 @@
 \jury{%
   \jurymember{Alessandro Garcia}{Deparment of Informatics -- PUC-Rio}%
   \jurymember{Waldemar Celes}{Deparment of Informatics -- PUC-Rio}%
+  \schoolhead{Guido Lemos de Souza Filho}
 }
 
 
@@ -70,11 +76,35 @@ software for nondestructive testing of oil pipelines and flexible risers for PET
 
 \abstract{%
 Dependency injection, a form of inversion of control, is a way of structuring the configuration and composition of
-software components that brings many benefits such as a loose coupling of components. However a generic dependency
+software components that brings many benefits such as a loose coupling of components. However, a generic dependency
 injection framework requires runtime type introspection and this is why dependency injection is popular in \texttt{Java} and
-almost non-existent in \texttt{C++}. In this work we present a reflection system for \texttt{C++11} and show how to use it to improve
+almost non-existent in \texttt{C++}. In this work we present a introspection system for \texttt{C++11} and show how to use it to improve
 an implementation of the Service Component Architecture (\texttt{SCA}) for \texttt{C++}. It uses several features of \texttt{C++11}
 such as \emph{perfect forwarding}, \emph{variadic templates} and \emph{lvalue references} to improve usability and minimize overhead.
+}
+
+\keywordsBR
+{
+   \key{Componentes de Software}%
+   \key{Modulos}%
+   \key{Serviços}%
+   \key{Service Component Architecture}%
+   \key{Reflexão}%
+   \key{Introspecção}%
+   \key{C++11}%
+   \key{Injeção de Dependências}%
+   \key{Inversão de Controle}%
+}
+
+\abstractBR
+{
+Injeção de dependências, uma forma de inversão de controle, é uma forma de estruturar a configuração e composição de componentes
+de software que traz vários benefícios como um acoplamento reduzido entre componentes. No entanto, um \emph{framework} genérico
+de injeção de dependências requer instrospecção em tempo de execução, o que explica por que injeção de dependências é popular
+em \texttt{Java} mas praticamente inexistente em \texttt{C++}. Neste trabalho apresentamos um sistema de introspecção para \texttt{C++11}
+e mostramos como ele pode ser usado para melhorar uma implementação de Service Component Architecture (\texttt{SCA}) para \texttt{C++};
+Usamos vários novas funcionalidades de \texttt{C++11} como \emph{perfect forwarding}, \emph{variadic templates} e \emph{lvalue references}
+para melhorar a usabilidade da \texttt{API} de reflexão e minimizar o \emph{overhead} de execução.	
 }
 
 
