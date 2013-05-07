@@ -1,26 +1,26 @@
-In this chapter we give a precise definition of several concepts that will be used later in this dissertation, and to
-establish the relations between them. It is often the case that words that denote intangible things such as concepts are vague
+In this chapter, we give a precise definition of several concepts that will be used later in this dissertation, and
+establish the relations between them. It is often the case that words that denote intangible things, such as concepts, are vague
 and can have slightly different interpretations for different persons or in different contexts. The most representative example
 of this is the term \emph{object} that, even restricted to the field of computer science, supports many different interpretations.
 In many cases this vagueness is a good thing because the human intellect is able to adapt the intuitive notion behind a word
 to different usages. For instance, even if object orientation manifests itself in many different forms in different programming
 languages, we are still able to recognize the same idea. However, in order to develop the ideas of the forthcoming chapters
-without ambiguity we need to tie a few terms to very specific meanings. \emph{Component}, \emph{module}, \emph{service} and
-\emph{library} are such words for which we will give precise definitions. But before we delve into the details of those
+without ambiguity, we need to tie a few terms to very specific meanings. \emph{Component}, \emph{module}, \emph{service} and
+\emph{library} are such words for which we will give precise definitions. But, before we delve into the details of those
 definitions we will first analyze why coarse grained units of reuse are needed.
 
 In the history of programming, there has always existed the desire to reuse existing work. In other words, designers have always
-striven to reduce the waste of programming effort. In 1968 McIlroy advocated that to turn the building of software into a truly
+striven to reduce the waste of programming effort. In 1968, McIlroy advocated that to turn the building of software into a truly
 industrial activity there should be a way of building applications by composing pieces of software available on the marketplace
 \cite{McIlroy}. The key, in his vision, was a concept called software components, in analogy to hardware components. Also in
-analogy to electrical and mechanical engineering there should be a wiring standard that would make the third-party composition
+analogy to electrical and mechanical engineering, there should be a wiring standard that would make the third-party composition
 of software possible. Although it is questionable if software could ever be mass-produced, it is clear that there is a need for
 tools and standards that effectively supports code reuse by independent developers.
 
-In the beginning, when there were no high-level languages it was difficult to reuse code because it was tightly coupled to a
-specific machine and there were only rudimentary tools to compose independently developed pieces of software.
+In the beginning, when there were no high-level languages, it was difficult to reuse code because it was tightly coupled to a
+specific machine, and there were only rudimentary tools to compose independently developed pieces of software.
 With procedural languages, small, encapsulated units of code called procedures were introduced with standardized calling
-conventions, making separate compilation possible. In addition these procedures could now be ported to all other computer platforms
+conventions, making separate compilation possible. In addition, these procedures could now be ported to all other computer platforms
 that had a compiler for this language. However, procedures were too fine-grained entities to be distributed and reused independently.
 Procedures often depend on definitions of data types and on other procedures but these dependencies are implicit, buried in their
 encapsulated implementation. It would be a lot of work for an application builder to take hundreds of packages containing single procedures and
@@ -30,11 +30,11 @@ Then came object-oriented programming encapsulating data structures and procedur
 objects would revolutionize reuse by allowing one to build an application entirely out of pre-defined, loosely coupled, objects. 
 Object orientation was indeed very successful and objects such as supported by most programming languages can be used to model
 entities going from the granularity of employee records to huge subsystems. But it is precisely this lack of syntactical distinction and
-of distinct tooling support that makes it difficult to use objects as units of third-party reuse and composition. Normally the programmer is
+of distinct tooling support that makes it difficult to use objects as units of third-party reuse and composition. Normally, the programmer is
 free to randomly assign class definitions to modules and there is no way of expressing the dependencies between subsystems
 at a higher level than module dependencies that are resolved by the linker.
 
-This was a very unsatisfactory state of affairs as concepts from object orientation such as separation of interface and implementation
+This was a very unsatisfactory state of affairs as concepts from object orientation, such as separation of interface and implementation,
 and Liskov's substitution principle fitted perfectly into McIlroy's vision of software components \cite{Liskov}. However, object-orientation
 has not failed, as is sometimes said \cite{Udell}, rather it was mistakenly seen as the solution for the reuse problem. As expressed by Knoernschild
 \cite{Knoernschild},
@@ -45,13 +45,13 @@ Instead, objects help us create more extensible software, which is an enabler of
 \end{quotation}
 
 Individual classes cannot be units of reuse because they are too fine-grained to be independently released and deployed. This
-is nicely summarised in the Reuse/Release principle: \emph{The unit of reuse is the unit of release} \cite{Martin}.
+is nicely summarized in the Reuse/Release principle: \emph{The unit of reuse is the unit of release} \cite{Martin}.
 Consequently, in the 1990's several attempts were made to create coarse-grained units of software with object-oriented interfaces,
 that could be units of release. These units are called \emph{software components} and are built on the ideas of object-orientation,
 software modules and services. Thus in the remainder of this chapter we will first go through the definitions of modules in section
-\ref{sec:modules}, and services in section \ref{sec:services} to establish them as basic constructs that can be used to build
-component standards. Libraries are covered in \ref{sec:libraries} as they share the primordial motivation of software reuse but
-are an essentially different concept. The chapter ends with section \ref{sec:components} covering modern definitions of software
+\ref{sec:modules}, and services in section \ref{sec:services}, to establish them as basic constructs that can be used to build
+component standards. Libraries are covered in \ref{sec:libraries}, as they share the primordial motivation of software reuse but
+are an essentially different concept. The chapter ends with Section \ref{sec:components} covering modern definitions of software
 components and presenting some of the most important component technologies available.
 
 
@@ -99,7 +99,7 @@ This also makes modules an important managerial tool to partition the developmen
 An important consequence of the separation of compilation units is that the same module can be used to build different software products if it's
 contents are useful in more than one context. This feature makes modules the basic unit of native reuse. 
 
-It is easy to extend the meaning of the term module to include concepts such as components or objects but this overly broad concept
+It is easy to extend the meaning of the term module to include concepts such as components or objects, but this overly broad concept
 would only lead to confusion and to a lack of precision of our definitions. Indeed, as Szyperski noted, ``...modules can be used, and
 always have been used, to package multiple entities, such as ADTs or, indeed, classes, into one unit. Also modules do not have a concept
 of instantiation, whereas classes do''
@@ -121,7 +121,7 @@ enforcing visibility restrictions and managing the dependencies on a JAR file le
 \label{sec:libraries}
 
 A library is a stateless collection of reusable, fine-grained entities such as procedures and classes, put together in a single package. These entities could be reused
-and delivered individually but the cost of managing a high number of modules would be too high. The use of libraries is always local and intra-process using the linking
+and delivered individually but the cost of managing a high number of modules would be too high. The use of libraries is always local and intra-process, using the linking
 mechanism of modules.
 
 An essential difference between libraries and modules is that libraries have no representation in the language. Even in language with primitive modularity
@@ -131,7 +131,7 @@ Libraries allow a separation of interface and implementation, the former usually
 of a standardized \texttt{APIs} that have many implementations such as the \texttt{OpenGL} graphics library. To a certain extent, libraries enable late-binding but not
 as much as object-oriented polymorphism would allow. Programs don't usually select a specific version of a library at runtime and its not possible to load more than
 one implementation of a library at once. In addition libraries are only replaceable without recompilation of its clients if their binary interface, also called
-\emph{Application Binary Interface} (\texttt{ABI}), remains the same despite internal differences. Libraries are also stateless, it would make no sense to load a library
+\emph{Application Binary Interface} (\texttt{ABI}), remains the same despite internal differences. Libraries are also stateless; it would make no sense to load a library
 more than once in the same process. There are no instances of libraries.
 
 In general, the procedures or classes in a library are not randomly thrown together. They are assembled in one package because they all deal with the same problem domain.
@@ -146,16 +146,16 @@ could be used in many applications in the same system, it made sense to install 
 \section{Services}
 \label{sec:services}
 
-The notion of a service incorporates a pattern of control flow. A service is always reactive, responding to requests of a client process. In some cases
+The notion of a service incorporates a pattern of control flow. A service is always reactive, responding to requests of a client process. In some cases,
 services can call a client using a callback mechanism, but the initiator of the dialogue is always the client. An essential property of services is a
 separation of interface and implementation akin to polymorphism in object oriented languages. A service is a runtime entity and has its own identity.
-The same process can use several individual services that implement the same interface. For example a process could read files from different file
+The same process can use several individual services that implement the same interface. For example, a process could read files from different file
 servers, all providing the same set of operations.
 
 Although in some cases it is convenient to use the term service to describe an object or an architectural unit within a process that is used in
 a reactive manner, we will add two more requirements to our definition of service to prevent unnecessary confusion.
 
-The first requirement is that a service should be accessible through some form of inter-process communication (IPC). For example a local printing service
+The first requirement is that a service should be accessible through some form of inter-process communication (IPC). For example, a local printing service
 could be invoked by placing the documents to print in a certain location in the filesystem. The second requirement is that any individual service
 should have a location transparent identifier, an URL.
 
@@ -170,12 +170,12 @@ This kind of architecture is known as \emph{Service Oriented Architecture (SOA)}
 Due to the cost of \texttt{IPC} operations, services tend to provide coarse grained operations that do a lot of work to compensate for the invocation
 overhead.
 
-Although our definition allows any \texttt{IPC} mechanism to be used, in this discussion whenever we use the term service we will be referring to
+Although our definition allows any \texttt{IPC} mechanism to be used, in this discussion, whenever we use the term service, we will be referring to
 services accessible using a \emph{Remote Procedure Call (RPC)} or \emph{Remote Method Invocation (RMI)} abstraction.
 
 Despite being conceptually unrelated, services are necessarily packaged and deployed using modules and this has important consequences on the
 reusability of services. If more than one service implementation is packaged in the same module, one cannot be used without including the other
-and its dependencies. Also if a service is called through \texttt{RMI} the interface classes cannot be put in the same module as the implementation
+and its dependencies. Also if a service is called through \texttt{RMI}, the interface classes cannot be put in the same module as the implementation,
 as this would force clients to depend on the module of a specific implementation, even if they use another one.
 
 % Services have to be coarse grained and specific to be both useful and efficient. But it makes them less reusable.
@@ -189,7 +189,7 @@ As discussed in the introduction of this chapter, to achieve reuse we need coars
 explicit and abstract interface. Intuitively, what is needed is a concept that denotes a unit of both physical and
 logical design. We will call those units \emph{software components}. As is the case with many other concepts,
 the term \emph{software component} means slightly different things to different people. Perhaps the most general
-definition, that encompasses the core notions behind components, is the one given by Grady Booch \cite{Booch87}:
+definition, which encompasses the core notions behind components, is the one given by Grady Booch \cite{Booch87}:
 
 \begin{quotation}
 ``A reusable software component is a logically cohesive, loosely coupled module that denotes a single abstraction''
@@ -197,7 +197,7 @@ definition, that encompasses the core notions behind components, is the one give
 
 A point of contention is the moment when the actual phase of composition takes place. Several authors view components as reusable source entities that
 are integrated at build-time (at build-time there is no difference if the components are in source form or already in module form) \cite{Lakos}, some
-insist that components should be assembled only at runtime \cite{Szyperski} \cite{Heineman} and others feel that it is not worth to make this distinction
+insist that components should be assembled only at runtime \cite{Szyperski} \cite{Heineman}, and others feel that it is not worth to make this distinction
 \cite{Czarnecki00} \cite{Sametinger}.
 
 Although we feel personally more inclined to accept a more general definition of components, in this text we will use the one by Szyperski and Pfisters \cite{WCOP97}
@@ -207,9 +207,9 @@ Although we feel personally more inclined to accept a more general definition of
 A software component can be deployed independently and is subject to composition by third parties.''
 \end{quotation}
 
-Even with all these carefully crafted definitions the distinction between modules and components can become blurry if
+Even with all these carefully crafted definitions, the distinction between modules and components can become blurry if
 we do no take care to insist that a component should be a logically cohesive unit, in other words, it should contain
-a single abstraction. Without this requirement what remains is a specification for modules that are composed at runtime 
+a single abstraction. Without this requirement what remains is a specification for modules that are composed at runtime,
 as exemplified by the following definition of \texttt{OSGi} modules: \cite{Hall}
 
 \begin{quotation}
@@ -222,8 +222,8 @@ are not required to contain code for a single unit of functionality. An \texttt{
 classes, a library indeed, if it explicitly specifies what classes are part of its public \texttt{API} and on which other
 modules it depends. As a matter of fact, \texttt{OSGi} has been used as an infrastructure for component frameworks in \texttt{Java}.
 
-In addition, to be independently deployable, a component cannot be physically integrated in a larger software product at build-time,
-it must remain independent and be composed at runtime. This requirement means that to support composition we cannot rely on the
+In addition, to be independently deployable, a component cannot be physically integrated in a larger software product at build-time
+it must remain independent and be composed at runtime. This requirement means that, to support composition, we cannot rely on the
 mechanisms provided by the compiler and the linker to check dependencies and compose modules. We must establish rules to reify these
 dependencies and make components programmatically composable at runtime. 
 
@@ -232,18 +232,18 @@ For component orientation to make sense at all, it should be possible to exchang
 one that has the same interface but a different implementation. In other words, components should follow Liskov's
 Substitution Principle \cite{Liskov}.
 
-If the interaction is based on method calls there should be an abstract interface type that is implemented by the component responding
+If the interaction is based on method calls, there should be an abstract interface type that is implemented by the component responding
 to method calls and known to the requesting component. If the interaction is based on streams of data, it should follow a protocol
 that is known to both parties and to the external agent responsible for the composition.
 
 The points of connection between components are called \emph{ports} and can be of two kinds. The first kind are ports used to
 get access to a service that is provided by the component. The second kind is used by the component to interact with services
 it depends on. We will adopt \texttt{CCM}'s nomenclature and use the terms \emph{facet} and and \emph{receptacle} for
-``provides'' and ``requires'' ports respectively \cite{CCM}. The general idea is that one component is connected to the other
+``provides'' and ``requires'' ports, respectively \cite{CCM}. The general idea is that one component is connected to the other
 by connecting a facet to a receptacle. Ports are always associated to an interface.
 
-Although the general idea of these rules is simple, there are many ways of implementing them. The languages used to implement
-components, the form of interaction, how interfaces are represented and implemented: for every one of those details there
+Although the general idea of these rules is simple, there are many ways of implementing them; the languages used to implement
+components, the form of interaction, how interfaces are represented and implemented. For every one of those details there
 are many possible choices of implementation. At the same time, it is essential that components conform to the same set of
 rules to be able to interact. A set of these rules is called a \emph{component model}. This model implicitly defines an abstract
 platform or environment suitable for executing these components. We will use the term \emph{component framework} for the
@@ -265,8 +265,8 @@ or subsystem constructed using those components and interfaces will satisfy clea
 An interesting example that predates the modern definition of software components and component model are \texttt{UNIX}
 \emph{pipes and filters}. Filters are programs that communicate by streams of text data, while pipes are channels through
 which the output of one filter can be directed to the input of another one. It is common to use program such as the \texttt{sed}
-stream editor to adapt a streams content to the input protocol of another one. To construct more advanced behaviors \texttt{shell}
-command languages are commonly used as glue language. In addition the individual filter programs are perfectly self-contained,
+stream editor to adapt a streams content to the input protocol of another one. To construct more advanced behaviors, \texttt{shell}
+command languages are commonly used as glue language. In addition, the individual filter programs are perfectly self-contained,
 independently deployable and perform well defined tasks. The component infrastructure is the \texttt{UNIX} operating system itself.
 
 However most of the ``canonical'' component models interact using object-oriented approaches. In some languages interface are elements
@@ -277,15 +277,15 @@ In the case of intra-process components, a connection can be established by mean
 When \texttt{RMI} is used, the receptacle receives a reference to a \emph{stub} object that forwards the calls across an \texttt{IPC} channel. 
 
 Local component frameworks are little more than a set of infrastructure utilities that perform the loading of components and their composition.
-Remote component frameworks are typically more heavyweight including implementations for one or more \texttt{RMI} protocols, component registries
+Remote component frameworks are typically more heavyweight, including implementations for one or more \texttt{RMI} protocols, component registries,
 and so forth. Some frameworks go to the point of providing an entire environment that includes persistence and distributed transactions support.
 
 Perhaps the most prominent example of a local component framework is \texttt{Microsoft's} \texttt{Component Object Model (COM)}, although
-later remote components were introduced. At its core is a specification for binary interfaces. An interface is represented as a table of
+later remote components were introduced. It is, essentially, specification for binary interfaces. An interface is represented as a table of
 pointers to methods. A facet is an object whose binary representation has a pointer to the method table representing its implemented interfaces.
 It is not by chance that this scheme is precisely how Microsoft's \texttt{C++} compiler lays out polymorphic objects in memory.
-In \texttt{COM} every facet has to implement the interface \texttt{IUnknown} that contains methods for reference counting and a method
-to obtain reference to other interfaces implemented by this component. In \texttt{COM} interface and components are identified by
+In \texttt{COM}, every facet has to implement the interface \texttt{IUnknown} that contains methods for reference counting and a method
+to obtain reference to other interfaces implemented by this component. In \texttt{COM}, interface and components are identified by
 universally unique identifiers (UUID), 128-bit random numbers generated in a way to make clashing extremely unlikely.
 When components are installed, factory objects are registered in a system registry using the component's UUID as a key.
 When a program needs the functionality of a specific component, it locates a factory using this registry and instantiates the desired component.
@@ -325,8 +325,8 @@ a connection-oriented style of composition.
 Because the unit of reuse is the unit of release special care has to be put into packaging.
 The relationship between modules is defined by the logical relationship of classes and procedures
 and how they are assigned to physical units. If two related classes are assigned to different
-modules a physical dependency is created. There is a lot of literature on object-oriented design
-that shows how create extensible and reusable logical designs but few treat the physical design
+modules, a physical dependency is created. There is a lot of literature on object-oriented design
+that shows how to create extensible and reusable logical designs but few treat the physical design
 that must be considered to make reuse possible. This section is based on the work of Szyperski
 \cite{Szyperski}, \cite{Lakos}, \cite{Martin} and \cite{Knoernschild}. \emph{Packaging} is also called
 \emph{physical design} by Knoernschild, so both terms are used interchangeably in this text.
@@ -341,12 +341,12 @@ conflicting concerns are well summarized in Szyperski's statement:
 ``Maximizing reuse minimizes use'' 
 \end{quotation}
 
-Most of the time there are no hard rules that can be followed to create code that is both reusable,
+Most of the time, there are no hard rules that can be followed to create code that is both reusable
 and easy to use. The engineer has to find the best trade-off between these conflicting requirements.
 However there are principles that can be followed that lead to good designs.
 In his book, Java Application Architecture, Knoernschild listed a series of physical
 design patterns or guidelines for sound physical design. Although his guidelines are directed
-at module design, his concept of modules is very close to Szyperski's notion of software components
+at module design, his concept of modules is very close to Szyperski's notion of software components,
 and actually his principles are even more important when applied to components.
 
 \textbf{External Configuration}:
@@ -356,15 +356,15 @@ of other modules. But often the information of which external module to use is h
 is often the case with libraries that use other libraries. To create really independently reusable
 components that have no implicit dependencies on their environment we need to move these
 from hard-coded information to implicit configuration that can be externally controlled.
-The same applies to other kinds of information. For example a logging component should not
+The same applies to other kinds of information. For example, a logging component should not
 write its output to a fixed location but rather allow this location to be configured externally.
 External configuration allows a wider range of behaviors of component making it potentially
 more useful.
 
 There are several ways of allowing for external configuration. It could be done with configuration
-files, but it difficult to do this without making several assumptions on the environment such as
+files, but it is difficult to do this without making several assumptions on the environment, such as
 the existence of a file system, and a specific path in that filesystem. It is best to provide a
-programmatic interface for external configuration. In chapter \ref{chap:ioc} we discuss the best
+programmatic interface for external configuration. In Chapter \ref{chap:ioc}, we discuss a better
 way to do this.
 
 \textbf{Cohesion}:
@@ -398,7 +398,7 @@ test modules with strong container coupling. This guideline is sometimes difficu
 programming frameworks often impose a strong coupling. As an example, components that are built on top
 of CCM must inherit from abstract bases classes generated by CCM's tools. As inheritance is the strongest coupling
 these components are difficult to port to other platforms. Container independence requires abstracting the
-runtime environment away. In chapters \ref{chap:ioc} and \ref{chap:sca} we treat this issue in depth.
+runtime environment away. In Chapters \ref{chap:ioc} and \ref{chap:sca}, we treat this issue in depth.
 
 \textbf{Published Interface}:
 The public interface of a module should be well known. Conversely, internal implementation classes
@@ -408,16 +408,14 @@ traits of software components.
 \textbf{Separate Abstraction}:
 This pattern states that the abstract interface of a module and its implementation should be put in separate modules.
 This is essential if we want to allow alternative implementations of an abstraction. If the interface and one implementation
-are packaged together it is still possible to plug another implementation into the client modules but now two implementations
-must be deployed together with their dependencies.
-
-This pattern is essential for component frameworks that use interfaces to express service contract.
+are packaged together, it is still possible to plug another implementation into the client modules but now two implementations
+must be deployed together with their dependencies. This pattern is essential for component frameworks that use interfaces to express service contract.
 
 \textbf{Abstract Module}:
 This pattern states that one module should only depend on the abstract interface of other modules. Depending directly on
 concrete classes couples a module unnecessarily to a fixed implementation, whereas depending on abstract classes allows
 to plug alternative implementation. Ideally a module should only depend on pure interface modules as resulting from the
-application of the Separate Abstraction pattern. However this pattern introduces a significant difficulty. A module
+application of the Separate Abstraction pattern. However, this pattern introduces a significant difficulty. A module
 can only use abstract references to objects but behind those references are objects of concrete implementation classes.
-But it cannot instantiate these because this would couple the module to the concrete implementation classes. This problem
-is a crucial one and chapter \ref{chap:ioc} is entirely devoted to this subject.
+It cannot instantiate these because this would couple the module to the concrete implementation classes. This problem
+is a crucial one, nevertheless, and chapter \ref{chap:ioc} is entirely devoted to this subject.

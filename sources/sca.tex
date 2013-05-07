@@ -1,5 +1,5 @@
 \section{The Model}
-In chapter \ref{chap:components}, we have described how effective components based on services can be, as they need to be deployed only
+In Chapter \ref{chap:components}, we have described how effective components based on services can be, as they need to be deployed only
 once and can be used by many loosely-coupled clients. However, the usual service oriented middleware approach has several disadvantages.
 The problem is that large systems tend to grow organically over time. Several small systems are first built to handle specific needs,
 but, over time, these have to be integrated into the larger system. At this point, nevertheless, difficulties tend to arise because
@@ -106,7 +106,7 @@ public class CalculatorServiceImpl implements CalculatorService {
 \label{lst:calcservicexml}
 \end{listing}
 
-Listing \ref{lst:calcservicexml} shows a simple configuration file for the calculator component of listing \ref{lst:calcservice}.
+Listing \ref{lst:calcservicexml} shows a simple configuration file for the calculator component of Listing \ref{lst:calcservice}.
 We use the \texttt{XML} element \texttt{component} to instantiate a component. In this example, we instantiate two components:
 \texttt{DivideComponent} and \texttt{CalculatorComponent}
 
@@ -116,7 +116,7 @@ runtime creates a separate instance for each one. It is also possible to create 
 for the lifetime of the parent composite. In this case, it is up to the component developer to make sure that it is thread-safe.
 
 Composition in \texttt{SCA} is recursive, one can use a composite as a single component. The \texttt{SCA} runtime provides a special implementation
-type that loads a composite \texttt{XML} files, performs all the connections, and treats the results as a component. As shown in listing
+type that loads a composite \texttt{XML} files, performs all the connections, and treats the results as a component. As shown in Listing
 \ref{lst:composite}, at line 9, all there is to do is to use the \texttt{$<$implementation.composite$>$} element to instruct the runtime
 to load a composite.
 
@@ -141,7 +141,7 @@ to load a composite.
 
 As services and references of a composite component, we can use selected services and references of internal components
 that were left unconnected. To instruct the runtime to expose a service for composition outside of the containing composite,
-we \emph{promote} as shown in listing \ref{lst:calcservicexmlpromote}, line 3.
+we \emph{promote} as shown in Listing \ref{lst:calcservicexmlpromote}, line 3.
 
 \begin{listing}
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
@@ -156,7 +156,7 @@ we \emph{promote} as shown in listing \ref{lst:calcservicexmlpromote}, line 3.
 
 A connection between components is called a \emph{wire} in \texttt{SCA}. A single reference can be wired to several services
 but it can get unwieldy to list several connections inside the \texttt{$<$reference$>$} element. To improve the readability
-of \texttt{XML} configuration files, one can use the \texttt{$<$wire$>$} element to connect components, as shown in listing 
+of \texttt{XML} configuration files, one can use the \texttt{$<$wire$>$} element to connect components, as shown in Listing 
 \ref{lst:calcservicexmlwires}
 
 \begin{listing}
@@ -190,7 +190,7 @@ no difference if the component is connected to an external service or to another
 connections are called bindings.
 
 When a binding is declared, details such as the address and the communication protocol must be known. For example, if we
-wanted to expose the \texttt{CalculaterService} as a web service we could do as shown in listing \ref{lst:calcservicexmlbinding1}.
+wanted to expose the \texttt{CalculaterService} as a web service we could do as shown in Listing \ref{lst:calcservicexmlbinding1}.
 
 \begin{listing}
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
@@ -384,7 +384,7 @@ to invoke the \texttt{ServiceWrapper} that is held by the \texttt{ServiceBinding
 \section{Proposed changes and implementation}
 
 As previously discussed, \texttt{Tuscany}'s \texttt{C++} implementation extension does not support dependency injection. Our proposal is to
-create another \texttt{C++} extension that uses the \texttt{SelfPortrait} library presented in chapter \ref{chap:reflection} in order
+create another \texttt{C++} extension that uses the \texttt{SelfPortrait} library presented in Chapter \ref{chap:reflection} in order
 to support dependency injection. 
 
 Naturally, our extension is a modified version of the existing one. We will first describe how the original extension works
@@ -613,7 +613,7 @@ contain the name of the implementation class that will be used to locate the cla
 \label{lst:calcioccomposite}
 \end{listing}
 
-The component type file also suffered a few modifications, as shown in listing \ref{lst:calcioccomponenttype}.
+The component type file also suffered a few modifications, as shown in Listing \ref{lst:calcioccomponenttype}.
 The primary difference is the use of the \texttt{$<$interface.ioc$>$} element to select our interface extension.
 The \texttt{$<$class$>$} attribute contains the name of the interface class that is used to locate the
 meta-object that represents it. This meta-object is used to build the dynamic proxies that are injected into
@@ -640,7 +640,7 @@ that contains the compiled meta-data.
 \end{listing}
 
 The difference at the physical level can be seen by the output of a command like \texttt{Linux's ldd}, that lists
-dependencies on shared objects as shown in listing \ref{lst:deps}. From this listing, we can see that the original
+dependencies on shared objects as shown in Listing \ref{lst:deps}. From this listing, we can see that the original
 component depends on several of \texttt{Tuscany's} libraries while the new component depends solely on a few system
 libraries. The meta-data shared library depends only on our introspection library and on the component file. It does
 not depend on the \texttt{Tuscany} runtime so it can be reused in other contexts as well.

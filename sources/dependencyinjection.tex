@@ -1,12 +1,12 @@
 \section{Object oriented transients and steady state}
 
 The greatest strength of object-oriented programming is also directly related to the greatest source of poor and inflexible
-designs. Polymorphism allows one to separate interface from implementation making it possible for an object to depend
+designs. Polymorphism allows one to separate interface from implementation, making it possible for an object to depend
 on an abstraction instead of a concrete implementation. In theory, we can plug one of several possible implementations
 into an object at runtime. 
 
 In steady-state, when the program can be seen as a graph of communicating objects, this scheme works very well. The
-problem is the initial construction of this graph which is when a concrete implementation must be selected for
+problem is the initial construction of this graph, which is when a concrete implementation must be selected for
 each object reference. In terms of program control flow, there are only two ways of filling in an abstract reference:
 internally or externally.
 
@@ -61,7 +61,7 @@ In addition to dependencies on other components, components also often support p
 that must be configured. Most of the times these parameters are not hard-coded but left open for configuration
 during initialization. With internal control flow there is no way of retrieving the values for these parameters
 without making many assumptions about the execution environment. A component framework could have a registry
-for configuration values or the component could read a configuration file. But in all cases it depends on
+for configuration values or the component could read a configuration file, but in all cases it depends on
 a significant infrastructure to do so.
 
 An amusing way to see internal configuration control flow appears if we extend the analogy between software components
@@ -74,9 +74,9 @@ The lack of portability and interoperability between components developed for di
 has lead the development of so-called \emph{lightweight containers} such as Spring, PicoContainer and Guice \cite{Spring},
 \cite{PicoContainer}, \cite{Guice}. These containers are based on an idea called \emph{dependency injection} \cite{Fowler2}.
 
-Dependency injection is often called \emph{inversion of control}, but but it is really only a special case \cite{Fowler1}.
+Dependency injection is often called \emph{inversion of control}, but it is really only a special case \cite{Fowler1}.
 Inversion of control happens when a programming framework calls the application code instead of the other way around.
-For example, in windowing frameworks, when the user captures a button, the framework calls the application code.
+For example, in windowing frameworks, when the user pushes a button, the framework calls the application code.
 In contrast, in a command-line program it is the application code that initiates a request to read data from the standard input.
 Arguably, inversion of control is a defining features of frameworks, separating them from mere libraries.
 
@@ -104,25 +104,25 @@ has also been proposed as an implementation tool for dependency injection as it 
 Dependency injection usually comes in three flavors: constructor injection, attribute injection and setter injection.
 Constructor injection is when references and values are passed to an object as actual parameters to its constructor.
 Constructor injection guarantees that an object is never in a inconsistent state between construction and initialization
-but makes object circles impossible. Attribute injection happens when the public attributes of an object are modified
-directly. Setter injection, happens when accessor methods, are used to change the value of an attribute. These last
-two forms are more flexible but create a state when the object is already created but not ready to run. For this reason
+but makes circular object references impossible. Attribute injection happens when the public attributes of an object are modified
+directly. Setter injection, happens when accessor methods are used to change the value of an attribute. These last
+two forms are more flexible, but create a state when the object is already created but not ready to run. For this reason
 dependency injection frameworks that support attribute or setter injection usually also support initializer methods
 without arguments that are called when the configuration phase is finished.
 
 Different dependency injection frameworks also differ in the declarative representation of the configured object graph.
 The most popular approach, implemented by Spring, is to define an XML configuration language. This input is then
 kept as a separate configuration file and allows rewiring the object graph without recompilation. The drawback
-is that this configuration is invisible to code refactoring tools present in development environments such as eclipse.
+is that this configuration is invisible to code refactoring \cite{Fowler3} tools present in development environments such as eclipse.
 If such a tool is used on a large code-base, many changes must be reflected manually on the configuration file and
-errors are only discovered during execution. For this reason, Guice keeps this configuration information as Java code.
+errors are only discovered during execution. For this reason, \texttt{Guice} keeps this configuration information as Java code.
 Guice makes extensive use of Java annotations to mark attributes that must be configured, identify initializer methods
 and so on. Java annotations have the advantage that they don't introduce hard dependencies between modules.
-A module with Guice annotations can be deployed and used without any Guice module.
+A module with Guice annotations can be deployed and used without any \texttt{Guice} module.
 
 Due to the requirement of introspection dependency injection frameworks are usually only available for languages
-that support it, such as Java. There is, however, a framework for C++, PocoCapsule that does a limited form of
-dependency injection \cite{PocoCapsule}. This framework has a tool that takes as input a configuration file and
+that support it, such as Java. There is, however, a framework for C++, \texttt{PocoCapsule}, that does a limited form of
+dependency injection \cite{PocoCapsule}. This framework has a tool that takes as input a configuration file, and
 the header files containing the class definitions and generates code for the instantiation and configuration
 of objects, but only for the constructors, attributes, and acessor methods explictluy mentioned in the configuration
 file. This approach allows to make small changes to the configuration file such as the change of parameter values
@@ -138,13 +138,13 @@ that has a public attribute called \texttt{foo} or a \texttt{setFoo} setter meth
 
 The link between dependency injection and feature-based programming of product lines has not passed unnoticed.
 Walraven and colleagues proposed the use of dependency injection to enable multi-tenancy in Software-as-a-Service
-(SaaS) applications \cite{Walraven} \cite{Truyen}. In their approach service is offered with some feature variations.
+(SaaS) applications \cite{Walraven} \cite{Truyen}. In their approach, service is offered with some feature variations.
 To each customer, or tenant, a specific composition configuration is associated and is applied using dependency
 injection. Rosa and Lucena Jr. also propose the use of dependency injection to automatically configure a mobile
 application according to the execution platform \cite{Rosa}.
 
 Dependency injection has already been used to separate the concern of the communication protocol used between
-service components, but this is the subject of chapter \ref{chap:sca} and will be discussed in more detail there.
+service components, but this is the subject of Chapter \ref{chap:sca} and will be discussed in more detail there.
 
 \section{The benefits of dependency injection}
 

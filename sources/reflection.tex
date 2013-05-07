@@ -34,7 +34,7 @@ requirement on a calculus than simply being able to model the calculus in the ca
 programmed from the inside. A Turing machine can simulate another Turing machine augmented with reflective capabilities but it
 cannot reflect about itself. We will return to some of these points throughout this discussion.
 
-The next step in the research of computational reflection was its application to object-oriented languages. In her seminal paper, Maes \cite{Maes},
+The next step in the research of computational reflection was its application to object-oriented languages. In her seminal paper, Maes \cite{Maes}
 outlined the basic features of reflection in an object-oriented context. The language \texttt{3-KRS}, built to demonstrate her ideas, had the
 following properties:
 
@@ -50,7 +50,7 @@ to the other.
 
 This design has several interesting consequences. First of all, properties 2 and 3 guarantee that all entities in a program can be
 inspected by the program itself. This alone opens up a myriad of possibilities of generic programming, auditing and debugging.
-Second, properties 4 and 5 enable the modification of object properties at runtime since to maintain consistency, modifications
+Second, properties 4 and 5 enable the modification of object properties at runtime since, to maintain consistency, modifications
 in the meta-level must be reflected in the object level. Third, as a consequence of the uniformity property, the meta-objects themselves
 have meta-objects that can be modified. An example of a modification is the addition, removal or redefinition of methods and attributes.
 
@@ -61,22 +61,22 @@ designed to be adaptable to the needs of different application domains. To enabl
 rules of method calls could be modified by specializing meta-classes.
 
 Sadly, all this flexibility also introduces several new problems. One is that of meta-stability. In the words of Kiczales and colleagues,
-the modification of objects at runtime could result in spectacular failures modes. Another serious issue is the performance price
+the modification of objects at runtime could result in spectacular failure modes \cite{Kiczales}. Another serious issue is the performance price
 that inevitably must be paid to compensate for the added flexibility. Taking this into account, the design of the \texttt{MOP} restricts
 the possibilities of modifications in critical mechanisms, such as method dispatch to enable implementers to make optimizations.
 For example, there are methods of meta-classes that are required to be idempotent. This allows the implementation to call
 these methods only once and \emph{memoize} the result. However, even with these considerations there is anecdotal evidence
 that suggests that opening the language for modification results in a performance overhead that is prohibitive for some applications \cite{Lee}.
 
-Another problem is the runtime infra-structure needed for a self-modifiable program. So far in this discussion it was implicit
+Another problem is the runtime infra-structure needed for a self-modifiable program. So far in this discussion, it was implicit
 that all discussed languages were interpreted rather than compiled. Even considering that everything is ultimately interpreted
 by the underlying hardware, it would be a considerable challenge to implement the previously discussed kind of dynamism in
 a compiled language. The language runtime would have to include a compiler. There are tools that can be used to provide
 a meta-object protocol for compiled languages, but they are restricted to compilation or load time \cite{Chiba95} \cite{Chiba2000}.
 
 Of course it is difficult to draw a line between compiled and interpreted languages. One reason, as mentioned, is that the hardware
-itself is an interpreter. Another one is that even interpreted languages are usually parsed and compiled to a representation that is
-easier to handle by the interpreter. A criteria that we can adopt is that, in compiled languages, the interpreter, be it hardware
+itself is an interpreter. Another one is that, even interpreted languages, are usually parsed and compiled to a representation that is
+easier to handle by the interpreter. A criteria that we can adopt is the following: in compiled languages, the interpreter, be it hardware
 or software, cannot understand the source language, while in interpreted languages it does. This property of interpreted
 languages is often made explicit by the presence of an \texttt{eval} primitive that can be called by the program at runtime
 to interpret more code in the form of source text.
@@ -189,8 +189,8 @@ public class DrawOrc implements DrawEnemy {
 \label{lst:game1}
 \end{listing}
 
-There clearly is a pattern in the code of listing \ref{lst:game1}: for each class there is another class with a predictable name. With introspection we
-can automate all this tedious typing,as shown in listing \ref{lst:game2}
+There clearly is a pattern in the code of Listing \ref{lst:game1}: for each class there is another class with a predictable name. With introspection we
+can automate all this tedious typing, as shown in Listing \ref{lst:game2}
 
 \begin{listing}[H]
 \begin{minted}[linenos,fontsize=\footnotesize]{java}
@@ -233,7 +233,7 @@ a tool to read the definitions of interfaces and generate a stub source file for
 different code to handle the method's signature.
 
 To illustrate this concept, consider again the computer game example. As previously noted, the implementation of the drawing dispatchers
-is quite mechanical. With dynamic proxies, we can automate the definition of these classes, as shown in listing \ref{lst:game3}
+is quite mechanical. With dynamic proxies, we can automate the definition of these classes, as shown in Listing \ref{lst:game3}
 
 \begin{listing}[H]
 \begin{minted}[linenos,fontsize=\footnotesize]{java}
@@ -279,7 +279,7 @@ public class Game {
 \end{listing}
 
 Hassoun and colleagues interpret \texttt{Java's} dynamic proxies as the meta-objects of \texttt{CLOS}' meta-object protocol, but
-we think this is an overstatement, since the possibilities of dynamic proxies are limited to intercepting method call and
+we think this is an overstatement, since the possibilities of dynamic proxies are limited to intercepting method calls, and
 they require programmers to follow the rule of separating interface from implementation, whereas meta-objects can
 be used to change the behavior of any object \cite{Hassoun03, Hassoun05}. 
 
@@ -407,7 +407,7 @@ applicability, this operator also gives us an opaque reference to type-dependent
 operator is that it is agnostic to class hierarchies. For this reason, \verb|typeid(A) == typeid(B)| evaluates to false even if
 \texttt{B} inherits \texttt{A}. Most of the functionality of this operator can be simulated using \texttt{templates} that implement
 a polymorphic base class with a custom equality operator that internally performs a \texttt{dynamic\_cast}, as demonstrated in
-listing \ref{lst:typeid}. The reverse is not possible.
+Listing \ref{lst:typeid}. The reverse is not possible.
 
 \begin{listing}[H]
 \begin{minted}[linenos,fontsize=\footnotesize]{c++}
@@ -483,7 +483,7 @@ lines\cite{Czarnecki98} and implement object-oriented design patterns efficientl
 a variable number of arguments in \texttt{C++11}, known as \emph{variadic templates}, has greatly improved the programming style for an unknown number
 of arguments.
 
-The basis for template meta-programming is template specialization that can be used as a compile-time \emph{if-then-else} statement, as seen in listing \ref{lst:staticif}
+The basis for template meta-programming is template specialization that can be used as a compile-time \emph{if-then-else} statement, as seen in Listing \ref{lst:staticif}
 
 %\begin{minipage}[b]{0.45\linewidth}
 %\centering
@@ -523,9 +523,9 @@ struct fact<0> {
 \end{listing}
 %\end{minipage}
 
-And since integer constants may be used as template arguments, we have recursion as well, as shown in listing \ref{lst:staticrec}
+And since integer constants may be used as template arguments, we have recursion as well, as shown in Listing \ref{lst:staticrec}
 The most impressive consequence of template specialization, however, is the compile-time introspection that results. For example,
-listing \ref{lst:templintros1} shows how we can determine if a given type is a pointer using specialization.
+Listing \ref{lst:templintros1} shows how we can determine if a given type is a pointer using specialization.
 
 \begin{listing}[H]
 \begin{minted}[linenos,fontsize=\footnotesize]{c++}
@@ -544,7 +544,7 @@ struct is_a_pointer<T*> {
 \end{listing}
 
 An even more impressive use of templates is a technique called Substitution Failure Is Not An Error (SFINAE).
-The code in listing \ref{lst:sfinae} employs this technique to test if a type supports the equality operator.
+The code in Listing \ref{lst:sfinae} employs this technique to test if a type supports the equality operator.
 
 \begin{listing}[H]
 \begin{minted}[linenos,fontsize=\footnotesize]{c++}
@@ -640,9 +640,9 @@ In short, we want the programmer to be able to perform the following operations:
  \item Dynamic implementation of interfaces
 \end{enumerate}
 
-In listing \ref{lst:listing1} we present a simplified view of the \texttt{API} we want to implement. We have omitted many methods and the classes for
+In Listing \ref{lst:listing1} we present a simplified view of the \texttt{API} we want to implement. We have omitted many methods and the classes for
 attributes and functions, but the essential parts are there. Basically, the user can obtain a \texttt{Class} meta-data object by name (line 7) and,
-from there, locate its methods and attributes. The \texttt{Method} class at line 10 gives basic informations about the corresponding method including
+from there, locate its methods and attributes. The \texttt{Method} class at line 11 gives basic informations about the corresponding method including
 name, number of parameters and their types, among other features. The sequences of three dots are part of \texttt{C++11's} notation for templates that
 accept an unknown number of arguments.
 
@@ -668,7 +668,7 @@ class Method {
   list<string> returnArgumentSpellings();
   
   template<class... Args>
-  VariantValue call(VariantValue& object, Args... args) { //impl }
+  VariantValue call(VariantValue& object, Args... args) { /*impl*/ }
   VariantValue callArgArray(VariantValue& object, vector<VariantValue>& args);
 };
 \end{minted}
@@ -676,7 +676,7 @@ class Method {
 \label{lst:listing1}
 \end{listing}
 
-Instead of showing the \texttt{API} for dynamic proxies, listing \ref{lst:proxies} shows an example
+Instead of showing the \texttt{API} for dynamic proxies, Listing \ref{lst:proxies} shows an example
 usage because it might not be immediately apparent how these are used from the \texttt{API} alone.
 In line 1, we obtain a meta-object for a class called ``Foo''. Then, in line 3, we search for a
 method named ``method1''. After that, we instantiate a proxy object, in line 5, passing the class
@@ -717,7 +717,7 @@ we want the arguments to be converted implicitly and safely to the types that th
 For example, if a parameter is passed by reference we want to get a reference to the value passed as argument.
 On the other hand, if the parameter is passed by value we want a copy of the value. The best place to implement
 these conversion is the \texttt{VariantValue} class. We can see some of the conversions that we would like to
-support in listing \ref{lst:listing5}.
+support in Listing \ref{lst:listing5}.
 
 \begin{listing}[H]
 \begin{minted}[linenos,fontsize=\footnotesize]{c++}
@@ -812,7 +812,7 @@ private:
 \label{lst:listing11}
 \end{listing}
 
-In listing \ref{lst:listing11} we can see the essential aspects of our Variant implementation. We have a front-end called \texttt{VariantValue} (line 1)
+In Listing \ref{lst:listing11} we can see the essential aspects of our Variant implementation. We have a front-end called \texttt{VariantValue} (line 1)
 with value-semantics that holds a pointer to the abstract base class \texttt{IValueHolder} which in turn is implemented by the class template
 \texttt{ValueHolder} (line 28). (The abstract base class has been omitted to avoid redundancy)
 
@@ -860,8 +860,8 @@ public:
 \label{lst:listing6}
 \end{listing}
 
-In listing \ref{lst:listing6} at line 17 \texttt{callArgArray} forwards the two parameters to the \texttt{call} method of
-\texttt{MethodImpl}, seen in listing \ref{lst:listing7} at line 9.
+In Listing \ref{lst:listing6} at line 17 \texttt{callArgArray} forwards the two parameters to the \texttt{call} method of
+\texttt{MethodImpl}, seen in Listing \ref{lst:listing7} at line 9.
 
 \begin{listing}[H]
 \begin{minted}[linenos,fontsize=\footnotesize]{c++}
@@ -886,7 +886,7 @@ public:
 \label{lst:listing7}
 \end{listing}
 
-The \texttt{m\_method} attribute at line 6 is simply a pointer to a function that is used to normalize a pointer to method.
+The \texttt{m\_method} attribute at line 5 is simply a pointer to a function that is used to normalize a pointer to method.
 Its type is declared at line 1. Because the type of a method pointer depends on the entire signature, it would be impossible
 for a non-templated class to have such a pointer as member. However, in addition to types and integer constants, pointers to
 functions and methods can be used as template arguments. We can use this to capture each pointer to method as a template
@@ -913,7 +913,7 @@ call Indices, an idea by Preney\cite{Preney} to handle the problem of passing th
 call. Indices are just a way to encode a sequence of numbers as a type. Because integers can be used to implement compile-time recursion,
 we are able to generate a type containing the numbers from 0 to N. If we capture the unexpanded pack of integers, we can use it to
 generates indices for the typelist and the vector at the same time. We use the expansion of an expression containing the indices to
-emplace the arguments at the correct place. The simplified templates can be seen in listing \ref{lst:listing8}
+emplace the arguments at the correct place. The simplified templates can be seen in Listing \ref{lst:listing8}
 
 \begin{listing}[H]
 \begin{minted}[linenos,fontsize=\footnotesize]{c++}
@@ -958,7 +958,7 @@ struct method_type<_Result(_Clazz::*)(Args...)> {
 
 Forwarding functions and constructor calls is simpler but uses the same mechanism, so for the sake of brevity we will not discuss them.
 In reality, the \texttt{method\_type} template has more specializations to detect if a method is const-qualified, volatile-qualified or static.
-The result of all this work is that we can call methods of objects of unknown types in a very natural way. An example usage can be seen in listing
+The result of all this work is that we can call methods of objects of unknown types in a very natural way. An example usage can be seen in Listing
 \ref{lst:listing9}.
 
 
@@ -998,7 +998,7 @@ parameters by value we would introduce an artificial copy that would render the 
 have references as formal parameters. With references we would be unable to pass temporaries of non-const variables as
 actual parameters. And finally with const references it would be impossible to call methods that have references as parameters
 in a clean way. With \texttt{rvalue} references \texttt{C++11} introduced a special rule for function template argument deductions.
-A formal argument that us declared as a \texttt{rvalue} reference to a template parameter is automatically resolved to a reference
+A formal argument that is declared as a \texttt{rvalue} reference to a template parameter is automatically resolved to a reference
 of the correct type. Actual const values cause the argument type to be a const reference, temporaries are passed by \texttt{rvalue}
 reference and other values are passed by reference. This new rule is being called perfect forwarding, and it enables us to
 provide a generic call API that is not overly cumbersome to use.
@@ -1195,7 +1195,7 @@ and extraction is also the most expensive one. In most cases we can use \texttt{
 step, but when class hierarchy downcast is required, we have to use the exception catching mechanism.
 To avoid always incurring in the cost of the general case, we adopted an incremental procedure where the cheapest type verifications are performed
 first and resort to the most expensive on only when needed. Additionally we \emph{memoize} the result of the more expensive conversion
-achieving a considerable speed-up. The general case is shown in listing \ref{lst:listing11} but we have omitted the complete code
+achieving a considerable speed-up. The general case is shown in Listing \ref{lst:listing11} but we have omitted the complete code
 with optimizations due its length.
 
 As the compiler and our library may apply different optimizations depending on the types that are involved, the cost of extracting a value
@@ -1255,7 +1255,7 @@ Object downcast & 366.3 & 408.8 & 482.6 & 478.1 & 532.9\\
 
 As we can see from the results, in most cases the generic call is one order of magnitude slower than the direct call, which is a fairly good result
 if we consider how many operations are involved. The worst case is the one involving a downcast of an object reference. This is precisely the case
-where the most expensive tests are performed and as a result the call can be two orders of magnitude slower. A fact not shown in this table is that
+where the most expensive tests are performed and, as a result, the call can be two orders of magnitude slower. A fact not shown in this table is that
 the time required for direct calls does not change significantly when more parameters are added, while in the generic call case we can see a
 constant increment for each added parameter.
 
@@ -1307,7 +1307,7 @@ We have presented a type introspection \texttt{API} for \texttt{C++}, similar to
 The reflection \texttt{API} makes heavy use of some features new to \texttt{C++}11, so compiler support may be an issue. We have successfully
 compiled the code with \texttt{g++} 4.7 and \texttt{clang++} 3.1.
 We also made a binding for \texttt{Lua} that enables us to instantiate and use \texttt{C++} objects.
-The usage in \texttt{C++} is very natural as it requires no manual "boxing" of parameter types into variants in method calls.
+The usage in \texttt{C++} is very natural as it requires no manual \emph{boxing} of parameter types into variants in method calls.
 No modifications of existing code are required and the meta-data can be compiled separately.
 The most serious problem is the space overhead incurred by the method call code if we consider that, in most situations,
 probably less than 10\% of these methods will be called. We believe that we have gone as far in reducing its size as possible

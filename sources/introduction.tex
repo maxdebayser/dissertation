@@ -28,7 +28,7 @@ needed rises quadratically. To address this problem, some solutions translate al
 which must be a functional subset of all supported formats, at the expense of expressivity \cite{Flores, Issarny, Bennaceur, Bromberg, Nakazawa}. While these solutions
 are certainly needed for the integration of legacy systems, they don`t address the source of the interoperability
 problem which is the tight coupling that most middleware platforms impose on distributed applications. If applications were
-easily portable between middlewares, then is would also be easy to open ports using several different communication
+easily portable between middlewares, then it would also be easy to open ports using several different communication
 protocols, reducing the need of message translation solutions.
 
 The recommended solution in software engineering is to build layers to insulate
@@ -38,17 +38,17 @@ who already struggle with short deadlines to deliver the code that really matter
 Ideally, the insulation layer would be generated automatically, and in fact it should not be too difficult. In order
 to un-marshal the arguments and call a method, the middleware only needs to know the method`s signature. On the
 other hand, the client could be independent of middleware if it called the remote object through an abstract
-interface. If the application was built using interface-based programming, \cite{Pugh} the interfaces could naturally
+interface. If the application was built using interface-based programming \cite{Pugh}, the interfaces could naturally
 be used by the middleware to set up the client and server stubs. like in \texttt{\texttt{Java} \texttt{RMI}}. The client stub would
 implement this interface and the server stub would call an user-supplied object that implements this same interface.
 
 The other problem left to solve is how a client would locate the right server object without resorting to middleware-specific \texttt{API}s.
 The answer is that it should not have to. Actively searching for services simply cannot be done in a platform-independent way.
-Applying the principle of dependency injection \cite{Fowler2} the client simply declares that it depends on a service implementing
-a certain interface and during the configuration phase it is supplied with a reference to a conforming service. In other words,
-the concern of composition and configuration is removed from application code.
+Applying the principle of dependency injection \cite{Fowler2}, the client simply declares that it depends on a service implementing
+a certain interface and during the configuration phase, it is supplied with a reference to a conforming service. In other words,
+the concern of composition and configuration is removed from the application code.
 
-Actually there is a middleware platform that separates the concerns of communication protocols and other infrastructures services
+Actually there is a middleware platform that separates the concerns of communication protocols and other infrastructure services
 in the way we have described. It is the \texttt{Java} implementation of the Service Component
 Architecture (\texttt{SCA}). An \texttt{SCA} application server reads a configuration file that states how services are to be configured
 and connected. The \texttt{RMI} technology used to connect the objects can be configured explicitly and can be changed without requiring
@@ -60,9 +60,9 @@ times are required.
 As Al-Gahmi and Cook \cite{Al-Gahmi}, we think that the difference in flexibility and ease of development in native languages is
 exacerbated by the lack of new developments in tools and runtime infrastructure during the 2000s. The reason is that managed
 languages such as \texttt{Java}, \texttt{C\#} and \texttt{Python}, that focus on flexibility and programmer productivity
-have been favored over traditional native languages such as \texttt{C} and \texttt{C++}. \footnote{We adopt the terms \emph{native}
+have been favored over traditional native languages such as \texttt{C} and \texttt{C++} \footnote{We adopt the terms \emph{native}
 and \emph{managed} languages as they capture more accurately the essence of the difference between languages like \texttt{C++} and
-\texttt{C\#}}According to Sutter \cite{CPPAndBeyond2011}, this has been possible because during the period from 90s to the mid 2000s
+\texttt{C\#}}. According to Sutter \cite{CPPAndBeyond2011}, this has been possible because during the period from 90s to the mid 2000s
 the only really widespread kind of computer was the personal computer. Also during this time hardware performance kept increasing.
 However, in the last few years, there has been dramatic change on two fronts: mobile computing and servers.
 
@@ -74,7 +74,7 @@ written in managed languages, such as \texttt{Java} or \texttt{C\#}. However, th
 which means applications written in C and \texttt{C++}.
 
 Moreover, with the explosion of web-based applications and cloud computing, significant demand has been placed on the server infrastructure.
-Most of these applications are supported by huge server farms which consume equally huge amounts of power. According to Hamilton, \cite{Hamilton}
+Most of these applications are supported by huge server farms which consume equally huge amounts of power. According to Hamilton \cite{Hamilton},
 88\% of a datacenter's cost is directly related to hardware and power expenses. Therefore, it becomes essential to maximize the performance per watt ratio.
 Facebook, for example has developed a PHP to \texttt{C++} compiler, \texttt{HipHop} \cite{HipHop}, in order to meet the increasing performance demands.
 According to Facebook engineers, with \texttt{HipHop}, the same workload can be handled with a 50\% reduction in \texttt{CPU} usage in comparison to PHP.
@@ -84,22 +84,22 @@ An interesting project that confirms the need for more performance and low-level
 The Native Client is an infrastructure embedded in Google's Chrome browser to enable the execution of \texttt{x86}, \texttt{x86-64} and \texttt{ARM}
 native code on the client's machine. The motivations behind this project are better performance and integration with local resources like graphics and audio. This infrastructure
 forces the developer to provide one version of his application for each hardware platform, but there is a research project at Google called the Portable
-Native Client \cite{pNaCl} that proposes to deliver the executables in the form of \texttt{LLVM} bytecode. This bytecode is then locally converted by LLVM to native bytecode.
+Native Client \cite{pNaCl} that proposes to deliver the executables in the form of \texttt{LLVM} bytecode. This bytecode is then locally converted from LLVM bytecode to native bytecode.
 
 In addition to these questions, there is another change that is worth pointing out. The shift to multi-core architectures means that the speed of
 execution of sequential code is now effectively limited, at least for the next years. While many important algorithms and applications can be
-paralelized efficiently on current hardware, many algorithms are inherently serial or can't be run efficiently in parallel \cite{Madriles}.
+parallelized efficiently on current hardware, many algorithms are inherently serial or can't be run efficiently in parallel \cite{Madriles}.
 For these applications the performance per cycle will be absolutely essential.
 
 Of course, managed languages have seen tremendous improvements in performance, using just-in-time compilation (JIT) \cite{Aycock}. But the
 addition to Java's standard library of facilities to directly manage memory buffers confirms that to extract even more performance out of
 these languages it is necessary to fight against the overhead imposed by an interpreter that hides the hardware too much.
-Indeed, memory access is a critical performance issue. JIT compilation can significantly improve CPU intensive micro-benchmarks,
+Indeed, memory access is a critical performance issue. JIT compilation can significantly improve CPU intensive micro-benchmarks
 in managed languages making them competitive with native languages in this aspect, but efficient memory access is inherently
 inefficient in languages where relationships between objects are restricted to references. In \texttt{C++}, in contrast,
 the programmer objects can contain other objects directly giving the programmer control of the memory layout of objects.
 
-In the past years we have seen huge improvements in processor speed but the RAM access speed has increased at
+In the past years, we have seen huge improvements in processor speed but the RAM access speed has increased at
 a smaller rate. To counter this problem modern processors typically have three levels of cache to increase
 memory access operation. Although caching improves performance, it also makes it very sensitive to the memory
 layout of data structures. High performance data structures have to maximize cache hits making use of
@@ -137,36 +137,36 @@ at a higher level of abstraction but suffers from several problems such as a ver
 makes it difficult to develop tooling and represents a steep learning curve. In addition it has no complete
 introspection support. Although the language can be difficult to master, the primary reason why it is difficult
 to develop reusable components in C++ is because the language encourages a strong coupling of application code
-to infrastructure \texttt{APIs}. Due to the difficulty of tool development and the lack of introspection
+to infrastructure \texttt{APIs}. Due to the difficulty of tool development and the lack of introspection,
 it is easier for framework developers to leave the development of glue code to the application
 programmer. To save time this glue code is usually tangled with application code instead of being an insulating
 layer. The result is that software in \texttt{C++} is usually tightly coupled to the infrastructure. In other languages
 such as \texttt{Java}, techniques relying on introspection make it possible to develop frameworks that adapt
 themselves to the business code instead of the other way around. The result is that business code can be kept
-clean of references to infrastructure code resulting on components that are portable between different frameworks and more reusable.
+clean of references to infrastructure code, resulting on components that are portable between different frameworks and more reusable.
 
 The present work attempts to improve the situation of \texttt{C++} component development by providing a portable
 introspection support on which non-invasive frameworks can be based. In 2011, a new \texttt{C++} standard was published
 \cite{CPP11} providing a few new features that were essential in the development of this introspection library.
 With this introspection framework we have developed a component container that supports the composition and configuration
-of components without requiring components to be explicitly developed for it. This container is base on an existing
-open-source implementation of \texttt{SCA} for \texttt{C++} which we extended to make component development as easy to use and as
+of components without requiring components to be explicitly developed for it. This container is based on an existing
+open-source implementation of \texttt{SCA} for \texttt{C++}, which we extended to make component development as easy to use and as
 flexible as the Java version.
 
 The contributions of this dissertation are a type-safe, standards conforming and non-intrusive reflection framework for \texttt{C++} and
-an extension of a Service Component Architecture implementation for \texttt{C++} to support dependency injection. In addition this
+an extension of a Service Component Architecture implementation for \texttt{C++} to support dependency injection. In addition, this
 dissertation contains an extended discussion of the dependency injection principle and its consequences on source code and 
-package design. As dependency injection was conceived by industry developers to simplify software composition there are few
+package design. As dependency injection was conceived by industry developers to simplify software composition, there are few
 formal sources discussing it. Indeed, the most cited source on dependency injection is Martin Fowler's personal web page.
 
-This work is organized as follows: In chapter \ref{chap:components} we discuss forms of software reuse and establish components
-as coarse-grained units that are self-contained both logically and and in terms of packaging. In chapter \ref{chap:ioc} we discuss the dependency
+This work is organized as follows: In Chapter \ref{chap:components}, we discuss forms of software reuse and establish components
+as coarse-grained units that are self-contained both logically and in terms of packaging. In Chapter \ref{chap:ioc}, we discuss the dependency
 injection principle and its relevance for building applications out of software components. We conclude this chapter by pointing
 out the necessity of computational introspection for the implementation of this principle. Chapter \ref{chap:reflection} discusses
 the history of computation reflection and introspection, and in particular the importance as the basis for meta-programming in
 strongly-typed languages as Java. The remainder of this chapter is dedicated to introduce the introspection support that we
-have designed. In chapter \ref{chap:sca} we describe the Service Component Architecture component model and how its use
-of dependency injection in languages with introspection support decouples components from the infrastructure consequently making
+have designed. In Chapter \ref{chap:sca}, we describe the Service Component Architecture component model and how its use
+of dependency injection in languages with introspection support decouples components from the infrastructure, consequently making
 them more reusable. We then proceed to show how we used our introspection framework to support dependency injection of
-native components written in C++, and what the consequences on source code are. And finally in chapter \ref{chap:conclusion} we
+native components written in C++, and what the consequences on source code are. And finally, in Chapter \ref{chap:conclusion}, we
 conclude with a few thoughts about the relations of our work with others and about future directions.
