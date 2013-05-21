@@ -547,7 +547,9 @@ Having seen the original component sample, let us now turn our attention to the 
 developed for our \texttt{C++} implementation extension. Listing \ref{lst:calcioccpp} shows the same
 component with a few modifications. The only header file inclusions left are for application-
 specific header files. We have added a pointer attribute to a \texttt{Divide*} object and a
-setter method. The division method now simply uses this pointer to call the division service.
+setter method. These two elements can be referenced in the configuration file to configure
+the \texttt{divideService} and \texttt{pi} attributes using setter injection and attribute injection respectively.
+The division method now simply uses this pointer to call the division service.
 When this component is created, the implementation extension takes the reference name and
 tries to find an attribute with the same name or a setter method whose name follows \texttt{Java}'s
 setter names rule. In this example, it will use the \texttt{setDivideService} method for
@@ -555,7 +557,8 @@ setter injection. We have also added a public attribute for a property just to d
 attribute injection. An important difference is that the runtime is now responsible for
 checking that properties and references are of the correct type. In our implementation, this
 is done at runtime. If the types do not match, an exception is thrown and the configuration
-phase is aborted.
+phase is aborted. We have omitted the source listings for the \texttt{Divide} interface and
+a possible implementation because they are trivial.
 
 \begin{listing}
 \begin{minted}[linenos,fontsize=\footnotesize]{c++}
@@ -738,7 +741,7 @@ require at most one introspective method call and would, therefore, be much more
 \label{tab:table2}
 \begin{tabular}{ll}
 \hline\noalign{\smallskip}
-Kind of method call & result\\
+Kind of method call & result (CPU cycles)\\
 \noalign{\smallskip}
 \hline
 \noalign{\smallskip}

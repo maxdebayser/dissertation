@@ -1099,54 +1099,31 @@ calculate this overhead is to look at the size of the compiled translation unit 
 the operating systems may never load the unused parts into working memory. As an example, we have
 generated the meta-data for qtextedit.h, a file shipped with Qt's \texttt{C++} SDK, once with forced template instantiation
 and once without. We have selectively suppressed the generation of certain kinds of meta-data to see how each one contributes
-on terms of space usage. The result can be seen in the tables \ref{tab:table1} and \ref{tab:table2}.
+on terms of space usage. The result can be seen table \ref{tab:table1}.
 In both tables, classes, methods, attributes and functions refer to the number of reflected entities of each kind.
 
 \begin{table}[ht]
-\begin{minipage}[b]{0.5\linewidth}
+
 \centering
-\caption{qtextedit.h with templates}
+\caption{Resulting compiled meta-data object file size}
 \label{tab:table1}
-\begin{tabular}{ll}
+\begin{tabular}{lll}
 \hline\noalign{\smallskip}
-Mesurement & result\\
+Mesurement & qtextedit.h with templates & qtextedit.h without templates\\
 \noalign{\smallskip}
 \hline
 \noalign{\smallskip}
-object file size & 2.9MB\\
-classes & 71\\
-public methods & 3262\\
-public attributes & 2\\
-functions & 0\\
-\texttt{rtti} & 486KB (16.5\%)\\
-method call code & 1.2MB (42.8\%)\\
-code per method & 395 bytes\\
-type spellings & 9KB (0.32\%)\\
+object file size & 2.9MB & 200KB\\
+classes & 71 & 3\\
+public methods & 3262 & 154\\
+public attributes & 2 & 2\\
+functions & 0 & 0\\
+\texttt{rtti} & 486KB (16.5\%) & 25KB (12.6\%)\\
+method call code & 1.2MB (42.8\%) & 101KB (42.8\%)\\
+code per method & 395 bytes & 675 bytes\\
+type spellings & 9KB (0.32\%) & 1KB (0.54\%)\\
 \hline
 \end{tabular}
-\end{minipage}
-\begin{minipage}[b]{0.5\linewidth}
-\centering
-\caption{qtextedit.h without templates}
-\label{tab:table2}
-\begin{tabular}{ll}
-\hline\noalign{\smallskip}
-Measurement & result\\
-\noalign{\smallskip}
-\hline
-\noalign{\smallskip}
-object file size & 200KB\\
-classes & 3\\
-public methods & 154\\
-public attributes & 2\\
-functions & 0\\
-\texttt{rtti} & 25KB (12.6\%)\\
-method call code & 101KB (42.8\%)\\
-code per method & 675 bytes\\
-type spellings & 1KB (0.54\%)\\
-\hline
-\end{tabular}
-\end{minipage}
 \end{table}
 \noindent
 
@@ -1216,42 +1193,33 @@ As we only want to measure the cost of the call, the test functions do nothing e
 actually made. All calls where executed 1000000000 times. The numbers in the result table \ref{tab:overhead} are the result of dividing the clock count of the generic call
 by the clock count of the direct call.
 
+\begin{landscape}
+ 
+
 \begin{table}
-\caption {Call overhead} \label{tab:overhead} 
+\caption {Call overhead in CPU cycles as returned by \texttt{clock()}} \label{tab:overhead} 
 
 \begin{center}
 
-\begin{tabular}{llllll}
+\begin{tabular}{lllllllllll}
 \hline\noalign{\smallskip}
-\#Arguments/Test & 0 & 1 & 2 & 3 & 4\\
+\#Arguments/Test & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9\\
 \noalign{\smallskip}
 \hline
 \noalign{\smallskip}
-No arguments & 7.4 &&&&\\
-Primitive type && 12.7 & 18.5 & 26.3 & 35.2\\
-Primitive type conversion && 12.53 &&&\\
-Struct by copy && 13.5 & 20.6 & 28.1 & 29.3\\
-Struct by reference && 13.5 & 20.2 & 27.5 & 34.3\\
-Object downcast && 75.8 & 139.0 & 206.5 & 304.7\\
-\noalign{\smallskip}
-\hline
-\noalign{\smallskip}
-\#Arguments/Test & 5 & 6 & 7 & 8 & 9\\
-\noalign{\smallskip}
-\hline
-\noalign{\smallskip}
-No arguments &&&&&\\
-Primitive type & 40.7 & 48.9 & 52.0 & 58.9 & 61.7\\
-Primitive type conversion &&&&&\\
-Struct by copy & 34.5 & 33.9 & 33.5 & 33.5 & 29.6\\
-Struct by reference & 40.4 & 48.0 & 38.3 & 50.1 & 59.7\\
-Object downcast & 366.3 & 408.8 & 482.6 & 478.1 & 532.9\\
+No arguments & 7.4 &&&&&&&&&\\
+Primitive type && 12.7 & 18.5 & 26.3 & 35.2 & 40.7 & 48.9 & 52.0 & 58.9 & 61.7\\
+Primitive type conversion && 12.53 &&&&&&&&\\
+Struct by copy && 13.5 & 20.6 & 28.1 & 29.3 & 34.5 & 33.9 & 33.5 & 33.5 & 29.6\\
+Struct by reference && 13.5 & 20.2 & 27.5 & 34.3 & 40.4 & 48.0 & 38.3 & 50.1 & 59.7\\
+Object downcast && 75.8 & 139.0 & 206.5 & 304.7 & 366.3 & 408.8 & 482.6 & 478.1 & 532.9\\
 \noalign{\smallskip}
 \hline
 \end{tabular}
 
 \end{center}
 \end{table}
+\end{landscape}
 
 As we can see from the results, in most cases the generic call is one order of magnitude slower than the direct call, which is a fairly good result
 if we consider how many operations are involved. The worst case is the one involving a downcast of an object reference. This is precisely the case

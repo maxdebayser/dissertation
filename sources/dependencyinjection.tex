@@ -78,7 +78,7 @@ Dependency injection is often called \emph{inversion of control}, but it is real
 Inversion of control happens when a programming framework calls the application code instead of the other way around.
 For example, in windowing frameworks, when the user pushes a button, the framework calls the application code.
 In contrast, in a command-line program it is the application code that initiates a request to read data from the standard input.
-Arguably, inversion of control is a defining features of frameworks, separating them from mere libraries.
+Arguably, inversion of control is a defining feature of frameworks, separating them from mere libraries.
 
 Dependency injection involves the inversion of control flow during the configuration of an object or component.
 The idea is that there is a special layer in the application that is responsible for the composition and configuration
@@ -124,13 +124,13 @@ Due to the requirement of introspection dependency injection frameworks are usua
 that support it, such as Java. There is, however, a framework for C++, \texttt{PocoCapsule}, that does a limited form of
 dependency injection \cite{PocoCapsule}. This framework has a tool that takes as input a configuration file, and
 the header files containing the class definitions and generates code for the instantiation and configuration
-of objects, but only for the constructors, attributes, and acessor methods explictluy mentioned in the configuration
+of objects, but only for the constructors, attributes, and accessor methods explictly mentioned in the configuration
 file. This approach allows to make small changes to the configuration file such as the change of parameter values
 but more extensive changes in configuration require recompilation.
 
 A popular feature of dependency injection frameworks for Java is \emph{auto-wiring}. The Java community has a
 long tradition of using standard naming schemes for classes, attributes and methods that makes it possible to
-use introspection for inversion of control, an approach called convention over configuration. For example,
+use introspection for inversion of control, an approach called \emph{convention over configuration}. For example,
 acessor methods for a variable called \texttt{foo} are always spelled \texttt{setFoo} and \texttt{getFoo}.
 Dependency injection frameworks such as Spring require that a name is given to identify each object. When
 auto-wiring is enabled, any object whose name happens to be \texttt{foo} is injected in every other object
