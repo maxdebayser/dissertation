@@ -136,9 +136,14 @@ Dependency injection frameworks such as Spring require that a name is given to i
 auto-wiring is enabled, any object whose name happens to be \texttt{foo} is injected in every other object
 that has a public attribute called \texttt{foo} or a \texttt{setFoo} setter method.
 
-The link between dependency injection and feature-based programming of product lines has not passed unnoticed.
+The link between dependency injection and feature-oriented programming (\texttt{FOP}) of product lines has not passed unnoticed.
+In \texttt{FOP}, each program of a product line is the result of a unique combination of several minor features.
+In many cases the selection and compostion of features happens at compile time \cite{Czarnecki98}. Dependency
+injection makes a similar approach possible during the initialization of a program. A configuration file can be used
+to select and components representing features from all components that are available after deployment and wire them
+in a specific way.
 Walraven and colleagues proposed the use of dependency injection to enable multi-tenancy in Software-as-a-Service
-(SaaS) applications \cite{Walraven} \cite{Truyen}. In their approach, service is offered with some feature variations.
+(SaaS) applications \cite{Walraven} \cite{Truyen}.
 To each customer, or tenant, a specific composition configuration is associated and is applied using dependency
 injection. Rosa and Lucena Jr. also propose the use of dependency injection to automatically configure a mobile
 application according to the execution platform \cite{Rosa}.
