@@ -114,14 +114,16 @@ define rerun-latex
 endef
 
 
+#uncomment the lines below to generate the nomeclature page
+
 define run-complete
 	$(run-latex)
-    $(MAKEINDEX) $(SRC:%.tex=%.nlo) -s nomencl.ist -o $(SRC:%.tex=%.nls)
-	( egrep -q $(MAKEIDX) $< > /dev/null && \
-    ! (cmp -s $(<:%.tex=%.idx) $(<:%.tex=%.idx.bak)) ) && ( \
-    $(MAKEINDEX) $(<:%.tex=%) 2>&1 | egrep -i "(lines|error)" ; $(run-latex) ) ; true
-	( for file in $(BIBFILE) ; do if [ $file -nt $(<:%.tex=%.bbl) ] ; then \
-    $(BIBTEX) $(<:%.tex=%) | egrep -i "(Database|error)" ; $(run-latex) ; break ; fi; done ; ) ; true
+#    $(MAKEINDEX) $(SRC:%.tex=%.nlo) -s nomencl.ist -o $(SRC:%.tex=%.nls)
+#	( egrep -q $(MAKEIDX) $< > /dev/null && \
+#    ! (cmp -s $(<:%.tex=%.idx) $(<:%.tex=%.idx.bak)) ) && ( \
+#    $(MAKEINDEX) $(<:%.tex=%) 2>&1 | egrep -i "(lines|error)" ; $(run-latex) ) ; true
+#	( for file in $(BIBFILE) ; do if [ $file -nt $(<:%.tex=%.bbl) ] ; then \
+#    $(BIBTEX) $(<:%.tex=%) | egrep -i "(Database|error)" ; $(run-latex) ; break ; fi; done ; ) ; true
   ( egrep -q $(RERUNBIB) $(<:%.tex=%.log) > /dev/null && \
     $(BIBTEX) $(<:%.tex=%) | egrep -i "(Database|error)" ; $(run-latex) ) ; true
 	egrep -q $(RERUN) $(<:%.tex=%.log) > /dev/null && $(run-latex) ; true

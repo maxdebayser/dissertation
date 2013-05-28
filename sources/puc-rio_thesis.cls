@@ -112,6 +112,11 @@ LaTeX document class for PUC-Rio theses written in english]
 \DeclareOption{mac}{\setboolean{puc@unix}{true}}
 \DeclareOption{win}{\setboolean{puc@unix}{false}}
 
+% twoside
+\newboolean{puc@links}
+\setboolean{puc@links}{false}
+\DeclareOption{links}{\setboolean{puc@links}{true}}
+
 \ProcessOptions\relax
 % -----------------------------------------------------------------
 
@@ -136,6 +141,16 @@ LaTeX document class for PUC-Rio theses written in english]
 % -----------------------------------------------------------------
 % required packages
 % -----------------------------------------------------------------
+
+\ifthenelse{\boolean{puc@links}}
+{
+  \RequirePackage[dvipdfm,colorlinks=false,bookmarksopen=true,breaklinks=true]{hyperref}
+}
+{
+  \RequirePackage[dvipdfm]{hyperref}
+  \RequirePackage{nohyperref}  % This makes hyperref commands do nothing without errors
+  \RequirePackage{url}
+}
 
 % fonts and symbols
 \RequirePackage{amsfonts}
@@ -184,9 +199,12 @@ LaTeX document class for PUC-Rio theses written in english]
 % number of pages
 \RequirePackage{lastpage}
 
+
+
+
 % hyperlink and pdf bookmarks
 %\ifpdf
-	\RequirePackage[dvipdfm,colorlinks=false,bookmarksopen=true,breaklinks=true]{hyperref} % backref,
+%	\RequirePackage[dvipdfm,colorlinks=false,bookmarksopen=true,breaklinks=true]{hyperref} % backref,
 	%linkcolor=blue,anchorcolor=black,citecolor=cyan,urlcolor=red,pagecolor=black,bookmarksnumbered=false,
 %\else
 %	\RequirePackage[colorlinks=false,bookmarksopen=true,breaklinks=true]{hyperref} % backref,
@@ -799,7 +817,7 @@ LaTeX document class for PUC-Rio theses written in english]
       \vspace*{\stretch{0.5}}
       \par
       \renewcommand{\baselinestretch}{1.0}
-      \puc@rightmargin{\Large \arial Postgraduate Program in \puc@program}
+      \puc@rightmargin{\Large \arial Programa de Pós-Graduação em \puc@program}
       \vspace*{\stretch{9}}
       \par
       \puc@rightmargin{\normalsize \arial \puc@city \\ \puc@month\ \puc@year}
@@ -867,19 +885,19 @@ LaTeX document class for PUC-Rio theses written in english]
       {
          \ifthenelse{ \boolean{puc@dsc} }
          {
-            \mbox{Thesis} \mbox{Proposal} \mbox{presented} to the \mbox{Postgraduate} \mbox{Program} in \puc@program\ of the Departamento de \puc@department\ do \puc@school\ da \puc@uni, as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Doutor} em \puc@programBR.
+            \mbox{Thesis} \mbox{Proposal} \mbox{presented} to the \mbox{Programa de Pós-Graduação} em \puc@program\ of the Departamento de \puc@department, \puc@uni\ as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Doutor} em \puc@programBR.
          }
          {
-            \mbox{Dissertation} \mbox{Proposal} \mbox{presented} to the \mbox{Postgraduate} \mbox{Program} in \puc@program\ of the Departamento de \puc@department\ do \puc@school\ da \puc@uni, as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Mestre} em \puc@programBR.
+            \mbox{Dissertation} \mbox{Proposal} \mbox{presented} to the \mbox{Programa de Pós-Graduação} em \puc@program\ of the Departamento de \puc@department, \puc@uni\ as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Mestre} em \puc@programBR.
          }
       }
       {
          \ifthenelse{ \boolean{puc@dsc} }
          {
-            \mbox{Thesis} \mbox{presented} to the \mbox{Postgraduate} \mbox{Program} in \puc@program\ of the Departamento de \puc@department\ do \puc@school\ da \puc@uni, as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Doutor}~em~\puc@programBR.
+            \mbox{Thesis} \mbox{presented} to the \mbox{Programa de Pós-Graduação} em \puc@program\ of the Departamento de \puc@department, \puc@uni\ as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Doutor}~em~\puc@programBR.
          }
          {
-            \mbox{Dissertation} \mbox{presented} to the \mbox{Postgraduate} \mbox{Program} in \puc@program\ of the Departamento de \puc@department\ do \puc@school\ da \puc@uni, as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Mestre}~em~\puc@programBR.
+            \mbox{Dissertation} \mbox{presented} to the \mbox{Programa de Pós-Graduação} em \puc@program\ of the Departamento de \puc@department, \puc@uni\ as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Mestre}~em~\puc@programBR.
          }
       }
    }
@@ -951,19 +969,19 @@ LaTeX document class for PUC-Rio theses written in english]
       {
          \ifthenelse{ \boolean{puc@dsc} }
          {
-            \mbox{Thesis} \mbox{Proposal} \mbox{presented} to the \mbox{Postgraduate} \mbox{Program} in \puc@program\ of the Departamento de \puc@department\ do \puc@school\ da \puc@uni, as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Doutor} em \puc@programBR.
+            \mbox{Thesis} \mbox{Proposal} \mbox{presented} to the \mbox{Programa de Pós-Graduação} em \puc@program\ of the Departamento de \puc@department, \puc@uni\ as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Doutor} em \puc@programBR.
          }
          {
-            \mbox{Dissertation} \mbox{Proposal} \mbox{presented} to the \mbox{Postgraduate} \mbox{Program} in \puc@program\ of the Departamento de \puc@department\ do \puc@school\ da \puc@uni, as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Mestre} em \puc@programBR.
+            \mbox{Dissertation} \mbox{Proposal} \mbox{presented} to the \mbox{Programa de Pós-Graduação} em \puc@program\ of the Departamento de \puc@department, \puc@uni\ as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Mestre} em \puc@programBR.
          }
       }
       {
          \ifthenelse{ \boolean{puc@dsc} }
          {
-            \mbox{Thesis} \mbox{presented} to the \mbox{Postgraduate} \mbox{Program} in \puc@program\ of the Departamento de \puc@department\ do \puc@school\ da \puc@uni, as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Doutor} em \puc@programBR.
+            \mbox{Thesis} \mbox{presented} to the \mbox{Programa de Pós-Graduação} em \puc@program\ of the Departamento de \puc@department, \puc@uni\ as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Doutor} em \puc@programBR.
          }
          {
-            \mbox{Dissertation} \mbox{presented} to the \mbox{Postgraduate} \mbox{Program} in \puc@program\ of the Departamento de \puc@department\ do \puc@school\ da \puc@uni, as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Mestre} em \puc@programBR.
+            \mbox{Dissertation} \mbox{presented} to the \mbox{Programa de Pós-Graduação} em \puc@program\ of the Departamento de \puc@department, \puc@uni\ as \mbox{partial} \mbox{fulfillment} of the \mbox{requirements} for the \mbox{degree} of \mbox{Mestre} em \puc@programBR.
          }
       }
       \mbox{Approved} by the \mbox{following} \mbox{commission:}
@@ -1143,20 +1161,22 @@ LaTeX document class for PUC-Rio theses written in english]
    \par\indent
    \begin{minipage}{12cm}
       \singlespacing
-      \puc@authorR; \puc@advisorR\ifthenelse{\equal{\puc@coadvisor}{}}{}{; \puc@coadvisorR}\ifthenelse{\equal{\puc@coadvisorII}{}}{}{; \puc@coadvisorIIR}\ifthenelse{\equal{\puc@coadvisorIII}{}}{}{; \puc@coadvisorIIIR}. \textbf{\puc@title}. \puc@city, \puc@year. \pageref{LastPage}p.   \ifthenelse{\boolean{puc@dsc}}{Tese de Doutorado}{Disserta\c{c}\~{a}o de Mestrado} --- \mbox{Departamento} de \puc@department, \puc@university.
+      \puc@authorR; \puc@advisorR\ (Advisor)\ifthenelse{\equal{\puc@coadvisor}{}}{}{; \puc@coadvisorR}\ifthenelse{\equal{\puc@coadvisorII}{}}{}{; \puc@coadvisorIIR}\ifthenelse{\equal{\puc@coadvisorIII}{}}{}{; \puc@coadvisorIIIR}. \textbf{\puc@title}. \puc@city, \puc@year. \pageref{LastPage}p.   \ifthenelse{\boolean{puc@dsc}}{Tese de Doutorado}{Disserta\c{c}\~{a}o de Mestrado} --- \mbox{Departamento} de \puc@department, \puc@university.
    \end{minipage}
    \onehalfspacing
    \vspace*{\stretch{1}}
    \par
    \noindent
    \begin{minipage}{13.5cm}
+      \setlength{\parindent}{1cm}
+      \indent
       \puc@abstract
    \end{minipage}
    \vspace*{\stretch{3}}
    \par
    \noindent \large \arial \textbf{Keywords} \normalfont \normalsize
    \par
-   \renewcommand{\key}[1]{##1.\hspace{3mm} }
+   \renewcommand{\key}[1]{##1;\hspace{3mm} }
    \indent \puc@keywords
    \vspace*{\stretch{4}}
    \par
@@ -1189,13 +1209,15 @@ LaTeX document class for PUC-Rio theses written in english]
    \par
    \noindent
    \begin{minipage}{13.5cm}
+      \setlength{\parindent}{1cm}
+      \indent
       \puc@abstractBR
    \end{minipage}
    \vspace*{\stretch{3}}
    \par
    \noindent \large \arial \textbf{Palavras--chave} \normalfont \normalsize
    \par
-   \renewcommand{\key}[1]{##1.\hspace{3mm} }
+   \renewcommand{\key}[1]{##1;\hspace{3mm} }
    \indent \puc@keywordsBR
    \vspace*{\stretch{4}}
    \par
@@ -1266,7 +1288,7 @@ LaTeX document class for PUC-Rio theses written in english]
    \hspace*{\stretch{1}}
    \par
    \begin{flushright}
-      \textbf{\puc@epigraphauthor}, \textit{\puc@epigraphbook}.
+      \textbf{\puc@epigraphauthor}\ifthenelse{\boolean{\puc@epigraphbook}}{, \textit{\puc@epigraphbook}}{}
    \end{flushright}
 }
 % -----------------------------------------------------------------
