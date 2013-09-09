@@ -692,7 +692,9 @@ using the specified base class.
 \begin{minted}[linenos,fontsize=\footnotesize]{c++}
 Class foo = Class::lookup("Foo");
 
-Method m = foo.findMethod([](const Method& m){ return m.name() == "method1"; });
+Method m = foo.findMethod([](const Method& m){
+    return m.name() == "method1";
+});
 
 Proxy proxy(foo);
 
@@ -941,8 +943,9 @@ struct method_type<_Result(_Clazz::*)(Args...)> {
 
   template< size_t... I, template< size_t...> class Ind, class RType>
   struct call_helper<Ind<I...>, RType> {
-    static VariantValue
-    call(ClazzRef object, ptr_to_method ptr, const vector<VariantValue>& args)
+    static VariantValue call(ClazzRef object,
+	                     ptr_to_method ptr,
+                             const vector<VariantValue>& args)
     {
       // This is where the magic happens
       return (object.*ptr)(args[I].

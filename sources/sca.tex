@@ -55,7 +55,7 @@ This component also depends on an external service that follows the contract rep
 The service is represented as a \texttt{Java} object that implements this interface, and its reference is also provided to the component
 by the way of setter injection.
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{java}
 @Remotable
 public interface CalculatorService {
@@ -86,7 +86,7 @@ public class CalculatorServiceImpl implements CalculatorService {
 \caption{A simple component}
 \label{lst:calcservice}
 \end{listing}
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0" name="CalculatorComposite">
 
@@ -120,7 +120,7 @@ type that loads a composite \texttt{XML} files, performs all the connections, an
 \ref{lst:composite}, at line 9, all there is to do is to use the \texttt{$<$implementation.composite$>$} element to instruct the runtime
 to load a composite.
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
 <composite xmlns="http://www.osoa.org/xmlns/sca/1.0" name="StoreComposite">
 
@@ -143,11 +143,13 @@ As services and references of a composite component, we can use selected service
 that were left unconnected. To instruct the runtime to expose a service for composition outside of the containing composite,
 we \emph{promote} as shown in Listing \ref{lst:calcservicexmlpromote}, line 3.
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
-<composite xmlns="http://www.osoa.org/xmlns/sca/1.0" name="CalculatorComposite">
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+ name="CalculatorComposite">
     ...
-    <service name="CalculatorService" promote="CalculatorComponent/CalculatorService">
+    <service name="CalculatorService"
+     promote="CalculatorComponent/CalculatorService" />
 </composite>
 \end{minted}
 \caption{Service Promotion}
@@ -159,9 +161,10 @@ but it can get unwieldy to list several connections inside the \texttt{$<$refere
 of \texttt{XML} configuration files, one can use the \texttt{$<$wire$>$} element to connect components, as shown in Listing 
 \ref{lst:calcservicexmlwires}
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
-<composite xmlns="http://www.osoa.org/xmlns/sca/1.0" name="CalculatorComposite">
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+           name="CalculatorComposite">
 
    <component name="DivideComponent">
       <implementation.java class="org.example.DivideServiceImpl" />
@@ -172,7 +175,8 @@ of \texttt{XML} configuration files, one can use the \texttt{$<$wire$>$} element
       <property name="coefficient">3.14</property>
    </component>
    
-   <wire source="CalculaterService/divideService" target="DivideComponent" />
+   <wire source="CalculaterService/divideService"
+         target="DivideComponent" />
 
 </composite>
 \end{minted}
@@ -192,11 +196,13 @@ connections are called bindings.
 When a binding is declared, details such as the address and the communication protocol must be known. For example, if we
 wanted to expose the \texttt{CalculaterService} as a web service we could do as shown in Listing \ref{lst:calcservicexmlbinding1}.
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
-<composite xmlns="http://www.osoa.org/xmlns/sca/1.0" name="CalculatorComposite">
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+           name="CalculatorComposite">
     ...
-    <service name="CalculatorService" promote="CalculatorComponent/CalculatorService">
+    <service name="CalculatorService"
+             promote="CalculatorComponent/CalculatorService">
       <binding.ws uri="http://math.com/services/calculator" />
     </service>
 </composite>
@@ -212,16 +218,18 @@ The configuration for reference bindings is very similar to the one for services
 continues with the \texttt{CalculatorService} example, but this time the calculator component uses an external service
 instead of the local \texttt{DivideComponent}.
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
-<composite xmlns="http://www.osoa.org/xmlns/sca/1.0" name="CalculatorComposite">
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+           name="CalculatorComposite">
 
    <component name="CalculatorComponent">
       <implementation.java class="org.example.CalculatorServiceImpl" />
       <property name="coefficient">3.14</property>
    </component>
    
-   <reference name="divideService" promote="CalculatorComponent/divideService">
+   <reference name="divideService"
+              promote="CalculatorComponent/divideService">
       <binding.ws uri="http://math.com/services/divide" />
    </reference>
    
@@ -238,9 +246,10 @@ are connected using the \texttt{SCA} default binding. This can be made explicit 
 The default binding can be overridden in the configuration file. For example, we can instruct the \texttt{SCA} runtime to
 connect to components using \texttt{Java RMI}, as shown in \ref{lst:calcservicexmlbinding3}
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
-<composite xmlns="http://www.osoa.org/xmlns/sca/1.0" name="CalculatorComposite">
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+           name="CalculatorComposite">
 
    <component name="DivideComponent">
       <implementation.java class="org.example.DivideServiceImpl" />
@@ -468,7 +477,7 @@ point to memory locations that are a few words apart. This problem can be avoide
 uses a \texttt{static\_cast} to convert the implementation class pointer to the interface pointer
 prior to its insertion in the \texttt{ComponentContext}.
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{c++}
 #include "Divide.h"
 #include "Calculator.h"
@@ -489,7 +498,9 @@ public:
     osoa::sca::ComponentContext myContext = 
       osoa::sca::ComponentContext::getCurrent();
 
-    Divide* divideService = reinterpret_cast<Divide*>(myContext.getService("divideService"));
+    Divide* divideService = reinterpret_cast<Divide*>(
+        myContext.getService("divideService")
+    );
 
     return divideService->divide(arg1, arg2);
   }
@@ -504,12 +515,15 @@ the original \texttt{C++} implementation extension is selected using the \texttt
 element. Also notice that the name given in the \texttt{$<$reference$>$} element is used by
 the runtime as a key in the \texttt{ComponentContext}
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
-<composite xmlns="http://www.osoa.org/xmlns/sca/1.0" name="sample.calculator">
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+           name="sample.calculator">
   <component name="CalculatorComponent">
     <implementation.cpp library="Calculator" header="CalculatorImpl.h"/>
-    <reference name="divideService">DivideComponent/DivideService</reference>
+    <reference name="divideService">
+        DivideComponent/DivideService
+    </reference>
   </component>
         
   <component name="DivideComponent">
@@ -526,7 +540,7 @@ This file contains a description of the component's services and references and 
 \ref{lst:calccppccomponenttype} shows the \texttt{componentType} file for the calculator component. Notice
 the \texttt{$<$interface.cpp$>$} element selecting the original \texttt{C++} interface extension.
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
 <componentType xmlns="http://www.osoa.org/xmlns/sca/1.0">
 
@@ -560,7 +574,7 @@ is done at runtime. If the types do not match, an exception is thrown and the co
 phase is aborted. We have omitted the source listings for the \texttt{Divide} interface and
 a possible implementation because they are trivial.
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{c++}
 #include "Divide.h"
 #include "Calculator.h"
@@ -574,8 +588,12 @@ public:
   virtual float add(float arg1, float arg2) { return arg1 + arg2; }
   virtual float sub(float arg1, float arg2) { return arg1 - arg2; }
   virtual float mul(float arg1, float arg2) { return arg1 * arg2; }
-  virtual float div(float arg1, float arg2) { return divideService->divide(arg1, arg2); }
-  virtual float circleArea(float radius)    { return pi*(radius*radius); }
+  virtual float div(float arg1, float arg2) {
+       return divideService->divide(arg1, arg2);
+  }
+  virtual float circleArea(float radius)    {
+      return pi*(radius*radius);
+  }
 
   // setter injection
   void setDivideService(Divide* d) { divideService = d; }
@@ -596,18 +614,21 @@ of this elements are the same except for the addition of the \texttt{class} attr
 contain the name of the implementation class that will be used to locate the class using the
 \texttt{SelfPortrait} reflection \texttt{API}.
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
-<composite xmlns="http://www.osoa.org/xmlns/sca/1.0" name="sample.calculator">
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+           name="sample.calculator">
 
   <component name="CalculatorComponent">
-    <implementation.ioc library="Calculator" metadata="Calculator-md" header="CalculatorImpl.h" class="CalculatorImpl"/>
+    <implementation.ioc library="Calculator" metadata="Calculator-md"
+                        header="CalculatorImpl.h" class="CalculatorImpl"/>
     <reference name="divideService">DivideComponent/DivideService</reference>
     <property name="pi">5</property>
   </component>
         
   <component name="DivideComponent">
-    <implementation.ioc library="Calculator" metadata="Calculator-md" header="DivideImpl.h" class="DivideImpl"/>
+    <implementation.ioc library="Calculator" metadata="Calculator-md"
+                        header="DivideImpl.h" class="DivideImpl"/>
   </component>
 
 </composite>
@@ -623,9 +644,10 @@ meta-object that represents it. This meta-object is used to build the dynamic pr
 component references. Also, the optional \texttt{metadata} attribute is used to load a separate shared library
 that contains the compiled meta-data.
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{xml}
-<componentType xmlns="http://www.osoa.org/xmlns/sca/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<componentType xmlns="http://www.osoa.org/xmlns/sca/1.0"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <service name="CalculatorService">
     <interface.ioc header="Calculator.h" class="Calculator"/>
@@ -649,7 +671,7 @@ libraries. The meta-data shared library depends only on our introspection librar
 not depend on the \texttt{Tuscany} runtime so it can be reused in other contexts as well.
 
 
-\begin{listing}
+\begin{listing}[!htbp]
 \begin{minted}[linenos,fontsize=\footnotesize]{text}
 # Original
 #> ldd libCalculator.so.0.0.0 
@@ -704,7 +726,7 @@ object file. Finally, for each type of method argument, an internal template of 
 is instantiated leading to more code generation. However, as more interfaces and methods are introspected, it is
 likely that the same type will be used many times, but generating code only once.
 
-\begin{table}[ht]
+\begin{table}[!htbp]
 \centering
 \caption{Space comparison}
 \label{tab:table1}
@@ -735,7 +757,7 @@ builds an introspective call frame. What makes this inefficient is that we must 
 representation of method calls and \texttt{Tuscany's}. Changing \texttt{Tuscany's} implementation, the call sequence would
 require at most one introspective method call and would, therefore, be much more efficient.
 
-\begin{table}[ht]
+\begin{table}[!htbp]
 \centering
 \caption{Division method call}
 \label{tab:table2}
