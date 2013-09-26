@@ -1150,6 +1150,7 @@ LaTeX document class for PUC-Rio theses written in english]
 % -----------------------------------------------------------------
 \newcommand{\puc@showabstract}
 {
+   \raggedright
    \cleardoublepage
    \puc@setmargins@dedication
    \markboth{Abstract}{Abstract}
@@ -1161,7 +1162,7 @@ LaTeX document class for PUC-Rio theses written in english]
    \par\indent
    \begin{minipage}{12cm}
       \singlespacing
-      \puc@authorR; \puc@advisorR\ (Advisor)\ifthenelse{\equal{\puc@coadvisor}{}}{}{; \puc@coadvisorR}\ifthenelse{\equal{\puc@coadvisorII}{}}{}{; \puc@coadvisorIIR}\ifthenelse{\equal{\puc@coadvisorIII}{}}{}{; \puc@coadvisorIIIR}. \textbf{\puc@title}. \puc@city, \puc@year. \pageref{LastPage}p.   \ifthenelse{\boolean{puc@dsc}}{Tese de Doutorado}{Disserta\c{c}\~{a}o de Mestrado} --- \mbox{Departamento} de \puc@department, \puc@university.
+      \raggedright{\puc@authorR; \puc@advisorR\ (Advisor)\ifthenelse{\equal{\puc@coadvisor}{}}{}{; \puc@coadvisorR}\ifthenelse{\equal{\puc@coadvisorII}{}}{}{; \puc@coadvisorIIR}\ifthenelse{\equal{\puc@coadvisorIII}{}}{}{; \puc@coadvisorIIIR}. \textbf{\puc@title}. \puc@city, \puc@year. \pageref{LastPage}p.   \ifthenelse{\boolean{puc@dsc}}{Tese de Doutorado}{MSc Dissertation} --- \mbox{Departamento} de \puc@department, \puc@university.}
    \end{minipage}
    \onehalfspacing
    \vspace*{\stretch{1}}
@@ -1170,14 +1171,14 @@ LaTeX document class for PUC-Rio theses written in english]
    \begin{minipage}{13.5cm}
       \setlength{\parindent}{1cm}
       \indent
-      \puc@abstract
+      \raggedright{\puc@abstract}
    \end{minipage}
    \vspace*{\stretch{3}}
    \par
    \noindent \large \arial \textbf{Keywords} \normalfont \normalsize
    \par
    \renewcommand{\key}[1]{##1;\hspace{3mm} }
-   \indent \puc@keywords
+   \indent \raggedright{\puc@keywords}
    \vspace*{\stretch{4}}
    \par
 }
@@ -1190,6 +1191,7 @@ LaTeX document class for PUC-Rio theses written in english]
 % -----------------------------------------------------------------
 \newcommand{\puc@showabstractBR}
 {
+   
    \selectlanguage{brazil}
    \cleardoublepage
    \puc@setmargins@dedication
@@ -1202,7 +1204,7 @@ LaTeX document class for PUC-Rio theses written in english]
    \par\indent
    \begin{minipage}{12cm}
       \singlespacing
-      \puc@authorR; \puc@advisorR\ifthenelse{\equal{\puc@coadvisor}{}}{}{; \puc@coadvisorR}\ifthenelse{\equal{\puc@coadvisorII}{}}{}{; \puc@coadvisorIIR}\ifthenelse{\equal{\puc@coadvisorIII}{}}{}{; \puc@coadvisorIIIR}. \textbf{\puc@titleBR}. \puc@city, \puc@year. \pageref{LastPage}p.   \ifthenelse{\boolean{puc@dsc}}{Tese de Doutorado}{Disserta\c{c}\~{a}o de Mestrado} --- \mbox{Departamento} de \puc@department, \puc@university.
+      \raggedright{\puc@authorR; \puc@advisorR\ifthenelse{\equal{\puc@coadvisor}{}}{}{; \puc@coadvisorR}\ifthenelse{\equal{\puc@coadvisorII}{}}{}{; \puc@coadvisorIIR}\ifthenelse{\equal{\puc@coadvisorIII}{}}{}{; \puc@coadvisorIIIR}. \textbf{\puc@titleBR}. \puc@city, \puc@year. \pageref{LastPage}p.   \ifthenelse{\boolean{puc@dsc}}{Tese de Doutorado}{Disserta\c{c}\~{a}o de Mestrado} --- \mbox{Departamento} de \puc@department, \puc@university.}
    \end{minipage}
    \onehalfspacing
    \vspace*{\stretch{1}}
@@ -1211,14 +1213,14 @@ LaTeX document class for PUC-Rio theses written in english]
    \begin{minipage}{13.5cm}
       \setlength{\parindent}{1cm}
       \indent
-      \puc@abstractBR
+      \raggedright{\puc@abstractBR}
    \end{minipage}
    \vspace*{\stretch{3}}
    \par
    \noindent \large \arial \textbf{Palavras--chave} \normalfont \normalsize
    \par
    \renewcommand{\key}[1]{##1;\hspace{3mm} }
-   \indent \puc@keywordsBR
+   \indent \raggedright{\puc@keywordsBR}
    \vspace*{\stretch{4}}
    \par
    \selectlanguage{english}
