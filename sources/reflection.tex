@@ -697,7 +697,6 @@ Method m = foo.findMethod([](const Method& m){
 });
 
 Proxy proxy(foo);
-
 proxy.addImplementation(m, [](const std::vector<VariantValue>& args){
   int first = args[0].value<int>();
   int second = args[1].value<int>();
@@ -705,7 +704,6 @@ proxy.addImplementation(m, [](const std::vector<VariantValue>& args){
 });
 
 VariantValue handle = proxy.reference(foo);
-
 Foo& stub = handle.convertTo<Foo&>();
 
 int result = stub.method1(3,5);

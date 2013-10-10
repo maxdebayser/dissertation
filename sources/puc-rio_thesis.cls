@@ -544,6 +544,8 @@ LaTeX document class for PUC-Rio theses written in english]
 \setcounter{tocdepth}{3}
 \setcounter{lofdepth}{1}
 \setcounter{lotdepth}{1}
+
+\renewcommand{\cftchappagefont}{\normalfont}
 \renewcommand{\cfttoctitlefont}{\large \arial \bfseries}
 \setlength{\cftbeforetoctitleskip}{0pt}
 \renewcommand{\cftloftitlefont}{\large \arial \bfseries}
@@ -567,7 +569,9 @@ LaTeX document class for PUC-Rio theses written in english]
 \renewcommand{\cftsubsecpresnum}{\blanktext}
 \renewcommand{\cftsubsecaftersnum}{\endcsname}
 \renewcommand{\cftsubsecfont}{\footnotesize\arial\itshape}
-\renewcommand{\cftsubsecpagefont}{\footnotesize\arial\itshape}
+\renewcommand{\cftsubsubsecfont}{\footnotesize\arial\itshape}
+%\renewcommand{\cftsubsecpagefont}{\footnotesize\arial\itshape}
+\renewcommand{\cftsubsecpagefont}{\normalfont}
 \renewcommand{\cftfigfont}{\arial}
 \renewcommand{\cfttabfont}{\arial}
 % -----------------------------------------------------------------
@@ -1150,7 +1154,7 @@ LaTeX document class for PUC-Rio theses written in english]
 % -----------------------------------------------------------------
 \newcommand{\puc@showabstract}
 {
-   \raggedright
+
    \cleardoublepage
    \puc@setmargins@dedication
    \markboth{Abstract}{Abstract}
@@ -1160,25 +1164,51 @@ LaTeX document class for PUC-Rio theses written in english]
    \noindent \large \arial \textbf{Abstract} \normalfont \normalsize
    \vspace{\stretch{3}}
    \par\indent
-   \begin{minipage}{12cm}
+   
+   \setlength{\parindent}{1cm}
+   \begin{minipage}{12.5cm}
+      \tolerance=1
+      \emergencystretch=\maxdimen
+      \hyphenpenalty=10000
+      \hbadness=10000
+      \setlength{\parindent}{1cm}
       \singlespacing
-      \raggedright{\puc@authorR; \puc@advisorR\ (Advisor)\ifthenelse{\equal{\puc@coadvisor}{}}{}{; \puc@coadvisorR}\ifthenelse{\equal{\puc@coadvisorII}{}}{}{; \puc@coadvisorIIR}\ifthenelse{\equal{\puc@coadvisorIII}{}}{}{; \puc@coadvisorIIIR}. \textbf{\puc@title}. \puc@city, \puc@year. \pageref{LastPage}p.   \ifthenelse{\boolean{puc@dsc}}{Tese de Doutorado}{MSc Dissertation} --- \mbox{Departamento} de \puc@department, \puc@university.}
+      \noindent \puc@authorR; \puc@advisorR\ (Advisor)\ifthenelse{\equal{\puc@coadvisor}{}}{}{; \puc@coadvisorR}\ifthenelse{\equal{\puc@coadvisorII}{}}{}{; \puc@coadvisorIIR}\ifthenelse{\equal{\puc@coadvisorIII}{}}{}{; \puc@coadvisorIIIR}. \textbf{\puc@title}. \puc@city, \puc@year. \pageref{LastPage}p.   \ifthenelse{\boolean{puc@dsc}}{Tese de Doutorado}{MSc Dissertation} --- \mbox{Departamento} de \puc@department, \puc@university.
    \end{minipage}
    \onehalfspacing
    \vspace*{\stretch{1}}
    \par
    \noindent
    \begin{minipage}{13.5cm}
+      \tolerance=1
+      \emergencystretch=\maxdimen
+      \hyphenpenalty=10000
+      \hbadness=10000
+      \setlength{\parindent}{1cm}
+      
       \setlength{\parindent}{1cm}
       \indent
-      \raggedright{\puc@abstract}
+      \puc@abstract
    \end{minipage}
    \vspace*{\stretch{3}}
    \par
+   \noindent 
+   \begin{minipage}{13.5cm}
+   
+   \tolerance=1
+      \emergencystretch=\maxdimen
+      \hyphenpenalty=10000
+      \hbadness=10000
+      \setlength{\parindent}{1cm}
+      
    \noindent \large \arial \textbf{Keywords} \normalfont \normalsize
    \par
    \renewcommand{\key}[1]{##1;\hspace{3mm} }
-   \indent \raggedright{\puc@keywords}
+   \par   
+   \setlength{\parindent}{1cm}
+   \indent \puc@keywords
+   \end{minipage}
+   
    \vspace*{\stretch{4}}
    \par
 }
@@ -1202,25 +1232,53 @@ LaTeX document class for PUC-Rio theses written in english]
    \noindent \large \arial \textbf{Resumo} \normalfont \normalsize
    \vspace{\stretch{3}}
    \par\indent
-   \begin{minipage}{12cm}
+   
+   \setlength{\parindent}{1.1cm}
+   \begin{minipage}{12.5cm}
+      \tolerance=1
+      \emergencystretch=\maxdimen
+      \hyphenpenalty=10000
+      \hbadness=10000
       \singlespacing
-      \raggedright{\puc@authorR; \puc@advisorR\ifthenelse{\equal{\puc@coadvisor}{}}{}{; \puc@coadvisorR}\ifthenelse{\equal{\puc@coadvisorII}{}}{}{; \puc@coadvisorIIR}\ifthenelse{\equal{\puc@coadvisorIII}{}}{}{; \puc@coadvisorIIIR}. \textbf{\puc@titleBR}. \puc@city, \puc@year. \pageref{LastPage}p.   \ifthenelse{\boolean{puc@dsc}}{Tese de Doutorado}{Disserta\c{c}\~{a}o de Mestrado} --- \mbox{Departamento} de \puc@department, \puc@university.}
+      \puc@authorR; \puc@advisorR\ifthenelse{\equal{\puc@coadvisor}{}}{}{; \puc@coadvisorR}\ifthenelse{\equal{\puc@coadvisorII}{}}{}{; \puc@coadvisorIIR}\ifthenelse{\equal{\puc@coadvisorIII}{}}{}{; \puc@coadvisorIIIR}. \textbf{\puc@titleBR}. \puc@city, \puc@year. \pageref{LastPage}p.   \ifthenelse{\boolean{puc@dsc}}{Tese de Doutorado}{Disserta\c{c}\~{a}o de Mestrado} --- \mbox{Departamento} de \puc@department, \puc@university.
    \end{minipage}
    \onehalfspacing
    \vspace*{\stretch{1}}
    \par
    \noindent
    \begin{minipage}{13.5cm}
+      \tolerance=1
+      \emergencystretch=\maxdimen
+      \hyphenpenalty=10000
+      \hbadness=10000
       \setlength{\parindent}{1cm}
       \indent
-      \raggedright{\puc@abstractBR}
+      \puc@abstractBR
    \end{minipage}
    \vspace*{\stretch{3}}
    \par
+   \noindent 
+   \begin{minipage}{13.5cm}
+   
+   \tolerance=1
+   \emergencystretch=\maxdimen
+   \hyphenpenalty=10000
+   \hbadness=10000
+   \setlength{\parindent}{1cm}
+      
    \noindent \large \arial \textbf{Palavras--chave} \normalfont \normalsize
    \par
    \renewcommand{\key}[1]{##1;\hspace{3mm} }
-   \indent \raggedright{\puc@keywordsBR}
+   \par   
+   \setlength{\parindent}{1cm}
+   \indent \puc@keywordsBR
+   \end{minipage}
+   %\large \arial \textbf{Palavras--chave} \normalfont \normalsize
+   %\par
+   %\renewcommand{\key}[1]{##1;\hspace{3mm} }
+   %\indent \puc@keywordsBR
+   
+   
    \vspace*{\stretch{4}}
    \par
    \selectlanguage{english}
